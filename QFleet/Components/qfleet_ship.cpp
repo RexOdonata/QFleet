@@ -22,12 +22,12 @@ QFleet_Ship::QFleet_Ship(QJsonObject in) : qft_component<QFleet_Ship>(in.value(f
     fieldFromJson(in,field_signature,signature);
     fieldFromJson(in,field_thrust,thrust);
     fieldFromJson(in,field_hull,hull);
-    armor = QFleet_Armor(in.value(field_armor).toObject());
-    passive = QFleet_Armor(in.value(field_passive).toObject());
+    enumFromJson(in, field_armor, armor);
+    enumFromJson(in, field_passive, passive);
     fieldFromJson(in,field_PD,PD);
     fieldFromJson(in,field_groupL,groupL);
     fieldFromJson(in,field_groupH,groupH);
-    tonnage = QFleet_Tonnage(in.value(field_tonnage).toObject());
+    enumFromJson(in, field_tonnage, tonnage);
     fieldFromJson(in, field_special, specialRules);
     fieldFromJson(in, field_weapons, weapons);
     fieldFromJson(in, field_launch, launch);

@@ -14,8 +14,8 @@ QFleet_Weapon::QFleet_Weapon(const QString setName, const QString setID) : qft_c
 
 QFleet_Weapon::QFleet_Weapon(QJsonObject in) : qft_component<QFleet_Weapon>(in.value(field_name()).toString(), in.value(field_id()).toString())
 {
-    lock = QFleet_Lock(in.value(field_lock).toObject());
-    facing = QFleet_Arc(in.value(field_arc).toObject());
+    enumFromJson(in, field_arc, facing);
+    enumFromJson(in, field_lock, lock);
     fieldFromJson(in, field_attacks, attacks);
     fieldFromJson(in, field_damage, damage);
     fieldFromJson(in, field_specials, attacks);

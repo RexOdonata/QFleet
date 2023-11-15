@@ -3,6 +3,7 @@
 
 #include "qfleet_ship.h"
 #include "qfleet_option.h"
+#include "qfleet_faction.h"
 
 class QFleet_Ship_Shipyard : public QFleet_Ship
 {
@@ -21,6 +22,8 @@ public:
 
     // all options available to the ship
     QVector<QFleet_Option> options;
+
+    QVector<QFleet_Faction> factions;
 
 
 protected:

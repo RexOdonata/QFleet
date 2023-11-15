@@ -29,8 +29,7 @@ protected:
 
     void impl_toJson(QJsonObject& json)
     {
-        // whoopsie
-        // exception goes here
+        qFatal("base class impl call");
     }
 
     // variables
@@ -53,6 +52,19 @@ protected:
     // 2. vectors of components to/from json
     // 3. componenet ptrs or vectors of component ptrs to/from json
 
+    template <typename O>
+    void enumFromJson(QJsonObject& json, const QString field, O& val)
+    {
+        if (json.contains(field))
+        {
+            val = O(json.value(field).toString());
+        }
+        else
+        {
+            qFatal("No field found");
+        }
+    }
+
     void fieldToJson(QJsonObject& json, const QString field, const unsigned int val) const
     {
         json.insert(field, QVariant(val).toJsonValue());
@@ -66,7 +78,7 @@ protected:
         }
         else
         {
-            // exception goes here
+            qFatal("No field found");
         }
     }
 
@@ -83,7 +95,7 @@ protected:
         }
         else
         {
-            // exception goes here
+            qFatal("No field found");
         }
     }
 
@@ -100,7 +112,7 @@ protected:
         }
         else
         {
-            // exception goes here
+            qFatal("No field found");
         }
     }
 
@@ -177,7 +189,7 @@ protected:
         }
         else
         {
-            // exception goes here
+            qFatal("No field found");
         }
     }
 
@@ -196,7 +208,7 @@ protected:
         }
         else
         {
-            // exception goes here
+            qFatal("No field found");
         }
     }
 
@@ -214,7 +226,7 @@ protected:
         }
         else
         {
-            // exception goes here
+            qFatal("No field found");
         }
     }
 
@@ -236,7 +248,7 @@ protected:
         }
         else
         {
-            // exception goes here
+            qFatal("No field found");
         }
     }
 
