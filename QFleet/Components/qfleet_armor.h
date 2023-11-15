@@ -19,6 +19,8 @@ enum class armor
 
 class QFleet_Armor : public qft_enum<QFleet_Armor>
 {
+    friend class qft_enum<QFleet_Armor>;
+
 public:
     QFleet_Armor(const QString set) : value(s2e[set])
     {
@@ -47,6 +49,11 @@ public:
             return e2s[*value];
         else
             return 0;
+    }
+
+    QFleet_Armor()
+    {
+        value = {};
     }
 
 

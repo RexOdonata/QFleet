@@ -3,8 +3,13 @@
 
 #include "qft_component.h"
 
+// Represents a launch profile element of ship stats.
+// Does not contain the actual launch stats
+
 class QFleet_launchProfile : public qft_component<QFleet_launchProfile>
 {
+    friend class qft_component<QFleet_launchProfile>;
+
 public:
     QFleet_launchProfile(const QString setName, const QString setID);
 

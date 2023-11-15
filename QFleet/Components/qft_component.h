@@ -47,7 +47,13 @@ protected:
         return "id";
     }
 
-    void intToJson(QJsonObject& json, const QString field, const unsigned int val) const
+    // Enter the hellscape that is member variable to json helpers
+    // these generally come in a few flavors
+    // 1. Built in types to/from json
+    // 2. vectors of components to/from json
+    // 3. componenet ptrs or vectors of component ptrs to/from json
+
+    void fieldToJson(QJsonObject& json, const QString field, const unsigned int val) const
     {
         json.insert(field, QVariant(val).toJsonValue());
     }
@@ -112,16 +118,48 @@ protected:
     }
 
     template<typename O>
-    void fieldToJson(QJsonObject& json, const QString field, const QVector<O> vals) const
+    void fieldToJson(QJsonObject& json, const QString field, QVector<O>& vals) const
     {
         QJsonArray jsonArr;
 
         for (auto& element : vals)
         {
-            jsonArr.push_back(element.toJson().toJsonValue());
+            jsonArr.push_back(element.toJson());
         }
 
         json.insert(field, jsonArr);
+    }
+
+    template<typename O>
+    void fieldToJson(QJsonObject& json, const QString field, std::shared_ptr<QVector<O>> vals) const
+    {
+        QJsonArray jsonArr;
+
+        if (vals)
+        {
+            for (auto& element : *vals)
+            {
+                jsonArr.push_back(element.toJson());
+            }
+        }
+
+        json.insert(field, jsonArr);
+    }
+
+    template<typename O>
+    void fieldToJson(QJsonObject& json, const QString field, std::shared_ptr<O> val) const
+    {
+        QJsonArray jsonArr;
+
+        if (val)
+        {
+            json.insert(field, val->toJson());
+        }
+        else
+        {
+            json.insert(field, QJsonValue::Null);
+        }
+
     }
 
     template <typename O>
@@ -143,6 +181,25 @@ protected:
         }
     }
 
+    template <typename O>
+    void fieldFromJson(QJsonObject& json, const QString field, std::shared_ptr<QVector<O>> vals)
+    {
+        vals->clear();
+
+
+        if (json.contains(field))
+        {
+            for (auto element : json.value(field).toArray())
+            {
+                vals->push_back(O(element.toObject()));
+            }
+        }
+        else
+        {
+            // exception goes here
+        }
+    }
+
     void fieldFromJson(QJsonObject& json, const QString field, QVector<QString>& vals)
     {
         vals.clear();
@@ -154,6 +211,28 @@ protected:
             {
                 vals.push_back(element.toString());
             }
+        }
+        else
+        {
+            // exception goes here
+        }
+    }
+
+    template <typename O>
+    void fieldFromJson(QJsonObject& json, const QString field, std::shared_ptr<O> ptr)
+    {
+
+        if (json.contains(field))
+        {
+            if (!json.value(field).isNull())
+            {
+                ptr = std::make_shared<O>(json.value(field).toObject());
+            }
+            else
+            {
+                ptr = NULL;
+            }
+
         }
         else
         {

@@ -5,6 +5,7 @@
 
 #include "qft_enum.h"
 #include <QMap>
+#include <optional>
 
 enum class tonnage
 {
@@ -19,6 +20,8 @@ enum class tonnage
 
 class QFleet_Tonnage : public qft_enum<QFleet_Tonnage>
 {
+    friend class qft_enum<QFleet_Tonnage>;
+
 public:
     QFleet_Tonnage(const QString set) : value(s2e[set])
     {
@@ -55,6 +58,11 @@ public:
             return e2u[*value];
         else
             return 0;
+    }
+
+    QFleet_Tonnage()
+    {
+        value = {};
     }
 
 protected:

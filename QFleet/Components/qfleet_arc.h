@@ -2,6 +2,7 @@
 #define QFLEET_ARC_H
 
 #include "qft_enum.h"
+#include <QMap>
 
 enum class arc
 {
@@ -17,6 +18,8 @@ enum class arc
 
 class QFleet_Arc : public qft_enum<QFleet_Arc>
 {
+    friend class qft_enum<QFleet_Arc>;
+
 public:
     QFleet_Arc(const QString set) : value(s2e[set])
     {

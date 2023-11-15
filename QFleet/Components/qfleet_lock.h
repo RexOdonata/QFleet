@@ -1,7 +1,5 @@
-#ifndef QFLEET_TONNAGE_H
-#define QFLEET_TONNAGE_H
-
-
+#ifndef QFLEET_LOCK_H
+#define QFLEET_LOCK_H
 
 #include "qft_enum.h"
 #include <QMap>
@@ -19,6 +17,8 @@ enum class lock
 
 class QFleet_Lock : public qft_enum<QFleet_Lock>
 {
+    friend class qft_enum<QFleet_Lock>;
+
 public:
     QFleet_Lock(const QString set) : value(s2e[set])
     {
