@@ -15,3 +15,4 @@ find_package(Qt${QT_VERSION_MAJOR} REQUIRED COMPONENTS Widgets)
 
 
 add_subdirectory(Components)
+add_subdirectory(ListParts)

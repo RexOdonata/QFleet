@@ -11,7 +11,7 @@ class QFleet_Weapon : public qft_component<QFleet_Weapon>
     friend class qft_component<QFleet_Weapon>;
 
 public:
-    QFleet_Weapon(const QString, const QString);
+    QFleet_Weapon(const QString);
 
     QFleet_Weapon(QJsonObject);
 

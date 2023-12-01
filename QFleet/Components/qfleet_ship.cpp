@@ -15,7 +15,8 @@ const QString QFleet_Ship::field_special = "special";
 const QString QFleet_Ship::field_weapons = "weapons";
 const QString QFleet_Ship::field_launch = "launch";
 
-QFleet_Ship::QFleet_Ship(QJsonObject in) : qft_component<QFleet_Ship>(in.value(field_name()).toString(), in.value(field_id()).toString())
+
+QFleet_Ship::QFleet_Ship(QJsonObject in) : qft_component<QFleet_Ship>(in.value(field_name()).toString())
 {
     fieldFromJson(in, field_points, points);
     fieldFromJson(in, field_scan, scan);
@@ -31,6 +32,11 @@ QFleet_Ship::QFleet_Ship(QJsonObject in) : qft_component<QFleet_Ship>(in.value(f
     fieldFromJson(in, field_special, specialRules);
     fieldFromJson(in, field_weapons, weapons);
     fieldFromJson(in, field_launch, launch);
+
+}
+
+QFleet_Ship::QFleet_Ship(const QString setName) : qft_component<QFleet_Ship>(setName)
+{
 
 }
 

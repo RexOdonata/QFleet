@@ -11,7 +11,7 @@ class QFleet_launchProfile : public qft_component<QFleet_launchProfile>
     friend class qft_component<QFleet_launchProfile>;
 
 public:
-    QFleet_launchProfile(const QString setName, const QString setID);
+    QFleet_launchProfile(const QString setName);
 
     QFleet_launchProfile(QJsonObject in);
 

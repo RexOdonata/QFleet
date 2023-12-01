@@ -7,12 +7,12 @@ const QString QFleet_Weapon::field_attacks="attacks";
 const QString QFleet_Weapon::field_damage="damage";
 const QString QFleet_Weapon::field_specials="specials";
 
-QFleet_Weapon::QFleet_Weapon(const QString setName, const QString setID) : qft_component<QFleet_Weapon>(setName, setID), lock(QFleet_Lock()), facing(QFleet_Arc())
+QFleet_Weapon::QFleet_Weapon(const QString setName) : qft_component<QFleet_Weapon>(setName), lock(QFleet_Lock()), facing(QFleet_Arc())
 {
 
 }
 
-QFleet_Weapon::QFleet_Weapon(QJsonObject in) : qft_component<QFleet_Weapon>(in.value(field_name()).toString(), in.value(field_id()).toString())
+QFleet_Weapon::QFleet_Weapon(QJsonObject in) : qft_component<QFleet_Weapon>(in.value(field_name()).toString())
 {
     enumFromJson(in, field_arc, facing);
     enumFromJson(in, field_lock, lock);

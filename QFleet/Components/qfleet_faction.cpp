@@ -1,4 +1,4 @@
-#include "QFleet_Faction.h"
+#include "qfleet_faction.h"
 
 const QString QFleet_Faction::label = "faction";
 const QString QFleet_Faction::val_ucm = "ucm";

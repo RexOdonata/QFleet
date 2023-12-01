@@ -7,6 +7,7 @@
 #include "qfleet_faction.h"
 #include "qfleet_assettype.h"
 
+// represents the rules attached to a launch asset
 class QFleet_LaunchAsset : public qft_component<QFleet_LaunchAsset>
 {
     friend class qft_component<QFleet_LaunchAsset>;
@@ -14,7 +15,7 @@ class QFleet_LaunchAsset : public qft_component<QFleet_LaunchAsset>
 public:
     QFleet_LaunchAsset(QJsonObject);
 
-    QFleet_LaunchAsset(const QString setName, const QString setID);
+    QFleet_LaunchAsset(const QString setName);
 
     bool strikecraft;
 
@@ -40,6 +41,18 @@ public:
 
 protected:
 
+    void impl_toJson(QJsonObject&);
+
+    const static QString field_strikecraft;
+    const static QString field_launchcap;
+    const static QString field_thrust;
+    const static QString field_PD;
+    const static QString field_attacks;
+    const static QString field_damage;
+    const static QString field_lock;
+    const static QString field_special;
+    const static QString field_factions;
+    const static QString field_type;
 
 };
 

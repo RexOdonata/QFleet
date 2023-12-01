@@ -8,12 +8,12 @@ const QString QFleet_Option::field_statBonus="statBonus";
 const QString QFleet_Option::field_broadside="broadside";
 const QString QFleet_Option::field_oneOnly="oneOnly";
 
-QFleet_Option::QFleet_Option(const QString setName, const QString setID) : qft_component<QFleet_Option>(setName, setID)
+QFleet_Option::QFleet_Option(const QString setName) : qft_component<QFleet_Option>(setName)
 {
 
 }
 QFleet_Option::QFleet_Option(QJsonObject in) : qft_component<QFleet_Option>
-    (in.value(field_name()).toString(), in.value(field_id()).toString())
+    (in.value(field_name()).toString())
 {
     fieldFromJson(in, field_broadside, broadside);
     fieldFromJson(in, field_oneOnly, oneOnly);

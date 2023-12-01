@@ -19,6 +19,7 @@ class QFleet_Ship : public qft_component<QFleet_Ship>
 
 public:
     QFleet_Ship(QJsonObject in);
+    QFleet_Ship(const QString);
 
     // VARS
 
@@ -38,9 +39,15 @@ public:
     QVector<QFleet_Weapon> weapons;
     QVector<QFleet_launchProfile> launch;
 
-private:
+    // admiral stuff
 
-    void ShipToJson(QJsonObject&);
+    unsigned int admiralDiscount;
+
+    bool admiralForced;
+
+    bool admiralAllowed;
+
+
 
 protected:
 
@@ -48,6 +55,9 @@ protected:
     // FXs
 
     virtual void impl_toJson(QJsonObject& json);
+
+    // used by child classes
+    void ShipToJson(QJsonObject&);
 
 
     // STRINGS

@@ -10,7 +10,7 @@ class qft_component
 {
 public:
 
-    qft_component(const QString set_name, const QString set_id) : name(set_name), id(set_id)
+    qft_component(const QString set_name) : name(set_name)
     {
         // nothing needs to happen here
     }
@@ -20,10 +20,11 @@ public:
     {
         QJsonObject json;
         json.insert(field_name(), name);
-        json.insert(field_id(), id);
         static_cast<T*>(this)->impl_toJson(json);
         return json;
     }
+
+    const QString name;
 
 protected:
 
@@ -33,19 +34,12 @@ protected:
     }
 
     // variables
-    const QString name;
-    const QString id;
+
 
     inline static const QString field_name()
     {
         return "name";
     }
-
-    inline static const QString field_id()
-    {
-        return "id";
-    }
-
     // Enter the hellscape that is member variable to json helpers
     // these generally come in a few flavors
     // 1. Built in types to/from json
@@ -75,6 +69,18 @@ protected:
         if (json.contains(field))
         {
             val = json.value(field).toInt();
+        }
+        else
+        {
+            qFatal("No field found");
+        }
+    }
+    template <typename O>
+    void fieldFromJson(QJsonObject& json, const QString field, O& val)
+    {
+        if (json.contains(field))
+        {
+            val = O(json);
         }
         else
         {
@@ -161,8 +167,6 @@ protected:
     template<typename O>
     void fieldToJson(QJsonObject& json, const QString field, std::shared_ptr<O> val) const
     {
-        QJsonArray jsonArr;
-
         if (val)
         {
             json.insert(field, val->toJson());
@@ -171,6 +175,13 @@ protected:
         {
             json.insert(field, QJsonValue::Null);
         }
+    }
+
+    template<typename O>
+    void fieldToJson(QJsonObject& json, const QString field, O& val) const
+    {
+
+        json.insert(field, val->toJson());
 
     }
 
@@ -199,7 +210,7 @@ protected:
         vals->clear();
 
 
-        if (json.contains(field))
+        if (json.contains(field) && vals)
         {
             for (auto element : json.value(field).toArray())
             {
@@ -234,7 +245,7 @@ protected:
     void fieldFromJson(QJsonObject& json, const QString field, std::shared_ptr<O> ptr)
     {
 
-        if (json.contains(field))
+        if (json.contains(field) && ptr)
         {
             if (!json.value(field).isNull())
             {

@@ -10,10 +10,9 @@
 class QFleet_Option : public qft_component<QFleet_Option>
 {
 public:
-    QFleet_Option(const QString, const QString);
+    QFleet_Option(const QString);
 
     QFleet_Option(QJsonObject);
-
 
     // VARS
     // this are pts because they may or not be defined for a given option

@@ -10,7 +10,7 @@ class QFleet_Ship_Shipyard : public QFleet_Ship
 public:
     QFleet_Ship_Shipyard(QJsonObject);
 
-    QFleet_Ship_Shipyard(const QString, const QString);
+    QFleet_Ship_Shipyard(const QString);
 
     // VARS
 
@@ -36,6 +36,7 @@ protected:
     const static QString field_admiralForced;
     const static QString field_admiralAllowed;
     const static QString field_options;
+    const static QString field_factions;
 
 };
 
