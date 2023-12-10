@@ -1,6 +1,10 @@
 #include "qfleet_launchprofile.h"
 
 const QString QFleet_launchProfile::label = "launchProfile";
+const QString QFleet_launchProfile::field_count="count";
+const QString QFleet_launchProfile::field_strike="strike";
+const QString QFleet_launchProfile::field_limited="limited";
+const QString QFleet_launchProfile::field_assets="assets";
 
 QFleet_launchProfile::QFleet_launchProfile(const QString setName) : qft_component<QFleet_launchProfile>(setName)
 {

@@ -18,38 +18,21 @@ enum class tonnage
 };
 
 
-class QFleet_Tonnage : public qft_enum<QFleet_Tonnage>
+class QFleet_Tonnage : public qft_enum<QFleet_Tonnage, tonnage>
 {
-    friend class qft_enum<QFleet_Tonnage>;
+    friend class qft_enum<QFleet_Tonnage, tonnage>;
 
 public:
-    QFleet_Tonnage(const QString set) : value(s2e[set])
+    QFleet_Tonnage(const QString set) : qft_enum<QFleet_Tonnage, tonnage>(set)
     {
-
     }
 
-    QFleet_Tonnage(const tonnage set) : value(set)
+    QFleet_Tonnage(const tonnage set) : qft_enum<QFleet_Tonnage, tonnage>(set)
     {
-
     }
 
-    QFleet_Tonnage(QJsonObject in)
+    QFleet_Tonnage(QJsonObject in) : qft_enum<QFleet_Tonnage, tonnage>(in)
     {
-        if (in.contains(label))
-            value = s2e[in.value(label).toString()];
-        else
-            //exception goes here
-        {
-
-        }
-    }
-
-    QString getString()
-    {
-        if (value)
-            return e2s[*value];
-        else
-            return 0;
     }
 
     unsigned int getIntValue()
@@ -61,8 +44,7 @@ public:
     }
 
     QFleet_Tonnage()
-    {
-        value = {};
+    {        
     }
 
 protected:
@@ -72,13 +54,28 @@ protected:
     QJsonObject impl_toJson()
     {
         QJsonObject json;
-        json.insert(label, this->getString());
+        json.insert(label, this->toString());
         return json;
+    }
+
+    QString impl_getLabel()
+    {
+        return label;
     }
 
     QVector<QString> impl_getEnumStrings()
     {
         return QVector<QString>{val_L,val_L2,val_M,val_H,val_S,val_S2};
+    }
+
+    tonnage impl_string_to_enum(const QString in)
+    {
+        return s2e[in];
+    }
+
+    QString impl_enum_to_string(const tonnage in)
+    {
+        return e2s[in];
     }
 
 private:

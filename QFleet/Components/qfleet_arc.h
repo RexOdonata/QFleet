@@ -16,55 +16,54 @@ enum class arc
     R,
 };
 
-class QFleet_Arc : public qft_enum<QFleet_Arc>
+class QFleet_Arc : public qft_enum<QFleet_Arc, arc>
 {
-    friend class qft_enum<QFleet_Arc>;
+    friend class qft_enum<QFleet_Arc, arc>;
 
 public:
-    QFleet_Arc(const QString set) : value(s2e[set])
+    QFleet_Arc(const QString set) : qft_enum<QFleet_Arc, arc>(set)
     {
 
     }
 
-    QFleet_Arc(const arc set) : value(set)
+    QFleet_Arc(const arc set) : qft_enum<QFleet_Arc, arc>(set)
     {
 
     }
 
-    QFleet_Arc(QJsonObject in)
+    QFleet_Arc(QJsonObject in) : qft_enum<QFleet_Arc, arc>(in)
     {
-        if (in.contains(label))
-            value = s2e[in.value(label).toString()];
-        else
-        //exception goes here
-        {
 
-        }
-    }
-
-    QString getString()
-    {
-        if (value)
-            return e2s[*value];
-        else
-            return 0;
     }
 
     QFleet_Arc()
     {
-        value = {};
+
     }
 
 
 protected:
 
-    std::optional<arc> value;
-
     QJsonObject impl_toJson()
     {
         QJsonObject json;
-        json.insert(label, this->getString());
+        json.insert(label, this->toString());
         return json;
+    }
+
+    QString impl_getLabel()
+    {
+        return label;
+    }
+
+    arc impl_string_to_enum(const QString in)
+    {
+        return s2e[in];
+    }
+
+    QString impl_enum_to_string(const arc in)
+    {
+        return e2s[in];
     }
 
     QVector<QString> impl_getEnumStrings()

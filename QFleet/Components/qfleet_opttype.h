@@ -11,55 +11,56 @@ enum class optType
     SPECIAL
 };
 
-class QFleet_OptType : public qft_enum<QFleet_OptType>
+class QFleet_OptType : public qft_enum<QFleet_OptType, optType>
 {
+    friend class qft_enum<QFleet_OptType, optType>;
+
 public:
-    QFleet_OptType();
-
-    QFleet_OptType(const QString set) : value(s2e[set])
+    QFleet_OptType()
     {
 
     }
 
-    QFleet_OptType(const optType set) : value(set)
+    QFleet_OptType(const QString set) : qft_enum<QFleet_OptType, optType>(set)
     {
-
     }
 
-    QFleet_OptType(QJsonObject in)
+    QFleet_OptType(const optType set) : qft_enum<QFleet_OptType, optType>(set)
     {
-        if (in.contains(label))
-            value = s2e[in.value(label).toString()];
-        else
-        //exception goes here
-        {
-
-        }
     }
 
-    QString getString()
+    QFleet_OptType(QJsonObject in) : qft_enum<QFleet_OptType, optType>(in)
     {
-        if (value)
-            return e2s[*value];
-        else
-            return 0;
     }
 
 
 protected:
 
-    std::optional<optType> value;
-
     QJsonObject impl_toJson()
     {
         QJsonObject json;
-        json.insert(label, this->getString());
+        json.insert(label, this->toString());
         return json;
+    }
+
+    QString impl_getLabel()
+    {
+        return label;
     }
 
     QVector<QString> impl_getEnumStrings()
     {
         return QVector<QString>{val_weapon,val_launch,val_stat,val_special};
+    }
+
+    optType impl_string_to_enum(const QString in)
+    {
+        return s2e[in];
+    }
+
+    QString impl_enum_to_string(const optType in)
+    {
+        return e2s[in];
     }
 
 private:

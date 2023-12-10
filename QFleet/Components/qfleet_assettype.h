@@ -12,55 +12,50 @@ enum class assetType
     drop
 };
 
-class QFleet_AssetType : public qft_enum<QFleet_AssetType>
+class QFleet_AssetType : public qft_enum<QFleet_AssetType, assetType>
 {
-    friend class qft_enum<QFleet_AssetType>;
+    friend class qft_enum<QFleet_AssetType, assetType>;
 
 public:
-    QFleet_AssetType(const QString set) : value(s2e[set])
+    QFleet_AssetType(const QString set) : qft_enum<QFleet_AssetType, assetType>(set)
     {
-
     }
 
-    QFleet_AssetType(const assetType set) : value(set)
+    QFleet_AssetType(const assetType set) : qft_enum<QFleet_AssetType, assetType>(set)
     {
-
     }
 
-    QFleet_AssetType(QJsonObject in)
+    QFleet_AssetType(QJsonObject in) : qft_enum<QFleet_AssetType, assetType>(in)
     {
-        if (in.contains(label))
-            value = s2e[in.value(label).toString()];
-        else
-        //exception goes here
-        {
-
-        }
-    }
-
-    QString getString()
-    {
-        if (value)
-            return e2s[*value];
-        else
-            return 0;
     }
 
     QFleet_AssetType()
-    {
-        value = {};
+    {        
     }
 
 
 protected:
 
-    std::optional<assetType> value;
-
     QJsonObject impl_toJson()
     {
         QJsonObject json;
-        json.insert(label, this->getString());
+        json.insert(label, this->toString());
         return json;
+    }
+
+    QString impl_getLabel()
+    {
+        return label;
+    }
+
+    assetType impl_string_to_enum(const QString in)
+    {
+        return s2e[in];
+    }
+
+    QString impl_enum_to_string(const assetType in)
+    {
+        return e2s[in];
     }
 
     QVector<QString> impl_getEnumStrings()

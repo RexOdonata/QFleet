@@ -15,6 +15,7 @@ add_library(QF_ListParts SHARED
   qfleet_cost.h qfleet_cost.cpp
   qfleet_group.h qfleet_group.cpp
   qfleet_battlegroup.h qfleet_battlegroup.cpp
+  qfleet_list.h qfleet_list.cpp
 )
 
 target_link_libraries(QF_ListParts PRIVATE QF_Components Qt${QT_VERSION_MAJOR}::Core)

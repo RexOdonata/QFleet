@@ -8,34 +8,38 @@
 
 class QFleet_Group : public qft_component<QFleet_Group>
 {
+    friend class qft_component<QFleet_Group>;
+
 public:
     QFleet_Group(QJsonObject);
 
-    QFleet_Group(const QString);
-    
-    QFleet_Cost cost;
-    
+    QFleet_Group(QFleet_Ship_Fleet, const QString);
+
     std::shared_ptr<QFleet_Ship_Fleet> ship = NULL;
-    
-    unsigned int number;
 
     // admiral poss
     
-    bool admiralForced;
+    bool admiralForced = false;
     
     bool admiralAllowed;
     
-    unsigned int admiralDiscount;
+    unsigned int admiralDiscount = 0;
 
     // admiral actual
     
-    unsigned int admiralLevel;
+    unsigned int admiralLevel = 0;
 
     // FXs
 
+    void update();
     void updateCost(const unsigned int);
+    unsigned int getNumber() const;
+    QFleet_Cost getCost() const;
     
 protected:
+
+    QFleet_Cost cost;
+    unsigned int number;
 
     const static QString label;
     const static QString field_cost;

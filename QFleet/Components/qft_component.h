@@ -26,6 +26,11 @@ public:
 
     const QString name;
 
+    const QString getName() const
+    {
+        return name;
+    }
+
 protected:
 
     void impl_toJson(QJsonObject& json)
@@ -46,18 +51,6 @@ protected:
     // 2. vectors of components to/from json
     // 3. componenet ptrs or vectors of component ptrs to/from json
 
-    template <typename O>
-    void enumFromJson(QJsonObject& json, const QString field, O& val)
-    {
-        if (json.contains(field))
-        {
-            val = O(json.value(field).toString());
-        }
-        else
-        {
-            qFatal("No field found");
-        }
-    }
 
     void fieldToJson(QJsonObject& json, const QString field, const unsigned int val) const
     {
@@ -80,7 +73,7 @@ protected:
     {
         if (json.contains(field))
         {
-            val = O(json);
+            val = O(json[field].toObject());
         }
         else
         {
@@ -149,6 +142,38 @@ protected:
     }
 
     template<typename O>
+    void fieldToJson(QJsonObject& json, const QString field, QVector<std::shared_ptr<O>>& vals)
+    {
+        QJsonArray jsonArr;
+
+        for (auto& element : vals)
+        {
+            jsonArr.push_back(element->toJson());
+        }
+
+        json.insert(field, jsonArr);
+    }
+
+    template<typename O>
+    void fieldFromJson(QJsonObject& json, const QString field, QVector<std::shared_ptr<O>>& vals)
+    {
+        vals.clear();
+
+        if (json.contains(field))
+        {
+            for (auto element : json.value(field).toArray())
+            {
+                auto newObj = std::make_shared<O>(element.toObject());
+                vals.push_back(newObj);
+            }
+        }
+        else
+        {
+            qFatal("No field found");
+        }
+    }
+
+    template<typename O>
     void fieldToJson(QJsonObject& json, const QString field, std::shared_ptr<QVector<O>> vals) const
     {
         QJsonArray jsonArr;
@@ -181,7 +206,7 @@ protected:
     void fieldToJson(QJsonObject& json, const QString field, O& val) const
     {
 
-        json.insert(field, val->toJson());
+        json.insert(field, val.toJson());
 
     }
 

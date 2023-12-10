@@ -17,54 +17,52 @@ enum class faction
 };
 
 
-class QFleet_Faction : public qft_enum<QFleet_Faction>
+class QFleet_Faction : public qft_enum<QFleet_Faction, faction>
 {
-    friend class qft_enum<QFleet_Faction>;
+    friend class qft_enum<QFleet_Faction, faction>;
 
 public:
-    QFleet_Faction(const QString set) : value(s2e[set])
+    QFleet_Faction(const QString set) : qft_enum<QFleet_Faction, faction>(set)
     {
 
     }
 
-    QFleet_Faction(const faction set) : value(set)
+    QFleet_Faction(const faction set) : qft_enum<QFleet_Faction, faction>(set)
     {
 
     }
 
-    QFleet_Faction(QJsonObject in)
+    QFleet_Faction(QJsonObject in) : qft_enum<QFleet_Faction, faction>(in)
     {
-        if (in.contains(label))
-            value = s2e[in.value(label).toString()];
-        else
-            //exception goes here
-        {
-
-        }
-    }
-
-    QString getString()
-    {
-        if (value)
-            return e2s[*value];
-        else
-            return 0;
     }
 
     QFleet_Faction()
     {
-        value = {};
+
     }
 
 protected:
 
-    std::optional<faction> value;
-
     QJsonObject impl_toJson()
     {
         QJsonObject json;
-        json.insert(label, this->getString());
+        json.insert(label, this->toString());
         return json;
+    }
+
+    QString impl_getLabel()
+    {
+        return label;
+    }
+
+    faction impl_string_to_enum(const QString in)
+    {
+        return s2e[in];
+    }
+
+    QString impl_enum_to_string(const faction in)
+    {
+        return e2s[in];
     }
 
     QVector<QString> impl_getEnumStrings()

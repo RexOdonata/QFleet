@@ -17,55 +17,50 @@ enum class armor
 };
 
 
-class QFleet_Armor : public qft_enum<QFleet_Armor>
+class QFleet_Armor : public qft_enum<QFleet_Armor, armor>
 {
-    friend class qft_enum<QFleet_Armor>;
+    friend class qft_enum<QFleet_Armor,armor>;
 
 public:
-    QFleet_Armor(const QString set) : value(s2e[set])
+    QFleet_Armor(const QString set) : qft_enum<QFleet_Armor, armor>(set)
     {
-
     }
 
-    QFleet_Armor(const armor set) : value(set)
+    QFleet_Armor(const armor set) : qft_enum<QFleet_Armor, armor>(set)
     {
-
     }
 
-    QFleet_Armor(QJsonObject in)
+    QFleet_Armor(QJsonObject in) : qft_enum<QFleet_Armor, armor>(in)
     {
-        if (in.contains(label))
-            value = s2e[in.value(label).toString()];
-        else
-        //exception goes here
-        {
-
-        }
-    }
-
-    QString getString()
-    {
-        if (value)
-            return e2s[*value];
-        else
-            return 0;
     }
 
     QFleet_Armor()
     {
-        value = {};
     }
 
 
-protected:
-
-    std::optional<armor> value;
+protected:    
 
     QJsonObject impl_toJson()
     {
         QJsonObject json;
-        json.insert(label, this->getString());
+        json.insert(label, this->toString());
         return json;
+    }
+
+    QString impl_getLabel()
+    {
+        return label;
+    }
+
+    armor impl_string_to_enum(const QString in)
+    {
+        return s2e[in];
+    }
+
+    QString impl_enum_to_string(const armor in)
+    {
+        return e2s[in];
     }
 
     QVector<QString> impl_getEnumStrings()

@@ -9,6 +9,8 @@
 
 class QFleet_Option : public qft_component<QFleet_Option>
 {
+    friend class qft_component<QFleet_Option>;
+
 public:
     QFleet_Option(const QString);
 

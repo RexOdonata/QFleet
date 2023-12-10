@@ -15,54 +15,49 @@ enum class lock
 };
 
 
-class QFleet_Lock : public qft_enum<QFleet_Lock>
+class QFleet_Lock : public qft_enum<QFleet_Lock, lock>
 {
-    friend class qft_enum<QFleet_Lock>;
+    friend class qft_enum<QFleet_Lock, lock>;
 
 public:
-    QFleet_Lock(const QString set) : value(s2e[set])
+    QFleet_Lock(const QString set) : qft_enum<QFleet_Lock, lock>(set)
     {
-
     }
 
-    QFleet_Lock(const lock set) : value(set)
+    QFleet_Lock(const lock set) : qft_enum<QFleet_Lock, lock>(set)
     {
-
     }
 
     QFleet_Lock()
     {
-        value = {};
     }
 
-    QFleet_Lock(QJsonObject in)
+    QFleet_Lock(QJsonObject in) : qft_enum<QFleet_Lock, lock>(in)
     {
-        if (in.contains(label))
-            value = s2e[in.value(label).toString()];
-        else
-        //exception goes here
-        {
-
-        }
     }
 
-    QString getString()
-    {
-        if (value)
-            return e2s[*value];
-        else
-            return 0;
-    }
-
-protected:
-
-    std::optional<lock> value;
+protected:   
 
     QJsonObject impl_toJson()
     {
         QJsonObject json;
-        json.insert(label, this->getString());
+        json.insert(label, this->toString());
         return json;
+    }
+
+    QString impl_getLabel()
+    {
+        return label;
+    }
+
+    lock impl_string_to_enum(const QString in)
+    {
+        return s2e[in];
+    }
+
+    QString impl_enum_to_string(const lock in)
+    {
+        return e2s[in];
     }
 
     QVector<QString> impl_getEnumStrings()

@@ -7,6 +7,7 @@
 
 class QFleet_Ship_Shipyard : public QFleet_Ship
 {
+
 public:
     QFleet_Ship_Shipyard(QJsonObject);
 

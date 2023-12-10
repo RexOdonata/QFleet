@@ -54,7 +54,7 @@ protected:
 
     // FXs
 
-    virtual void impl_toJson(QJsonObject& json);
+    void impl_toJson(QJsonObject& json);
 
     // used by child classes
     void ShipToJson(QJsonObject&);

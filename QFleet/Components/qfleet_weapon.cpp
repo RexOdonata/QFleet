@@ -14,8 +14,8 @@ QFleet_Weapon::QFleet_Weapon(const QString setName) : qft_component<QFleet_Weapo
 
 QFleet_Weapon::QFleet_Weapon(QJsonObject in) : qft_component<QFleet_Weapon>(in.value(field_name()).toString())
 {
-    enumFromJson(in, field_arc, facing);
-    enumFromJson(in, field_lock, lock);
+    fieldFromJson(in, field_arc, facing);
+    fieldFromJson(in, field_lock, lock);
     fieldFromJson(in, field_attacks, attacks);
     fieldFromJson(in, field_damage, damage);
     fieldFromJson(in, field_specials, attacks);
@@ -28,8 +28,8 @@ void QFleet_Weapon::impl_toJson(QJsonObject& json)
     fieldToJson(json, field_attacks, attacks);
     fieldToJson(json, field_damage, damage);
     fieldToJson(json, field_specials, specials);
-    json.insert(field_arc, facing.toJson());
-    json.insert(field_lock, lock.toJson());
+    fieldToJson(json, field_arc, facing);
+    fieldToJson(json, field_lock, lock);
 }
 
 

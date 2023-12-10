@@ -23,12 +23,12 @@ QFleet_Ship::QFleet_Ship(QJsonObject in) : qft_component<QFleet_Ship>(in.value(f
     fieldFromJson(in,field_signature,signature);
     fieldFromJson(in,field_thrust,thrust);
     fieldFromJson(in,field_hull,hull);
-    enumFromJson(in, field_armor, armor);
-    enumFromJson(in, field_passive, passive);
+    fieldFromJson(in, field_armor, armor);
+    fieldFromJson(in, field_passive, passive);
     fieldFromJson(in,field_PD,PD);
     fieldFromJson(in,field_groupL,groupL);
     fieldFromJson(in,field_groupH,groupH);
-    enumFromJson(in, field_tonnage, tonnage);
+    fieldFromJson(in, field_tonnage, tonnage);
     fieldFromJson(in, field_special, specialRules);
     fieldFromJson(in, field_weapons, weapons);
     fieldFromJson(in, field_launch, launch);
@@ -47,12 +47,30 @@ void QFleet_Ship::ShipToJson(QJsonObject& json)
     fieldToJson(json, field_signature,signature);
     fieldToJson(json, field_thrust,thrust);
     fieldToJson(json, field_hull,hull);
-    json.insert(field_armor, armor.toJson());
-    json.insert(field_passive, passive.toJson());
+    fieldToJson(json, field_armor, armor);
+    fieldToJson(json, field_passive, passive);
     fieldToJson(json,field_PD,PD);
     fieldToJson(json,field_groupL,groupL);
     fieldToJson(json,field_groupH,groupH);
-    json.insert(field_tonnage, tonnage.toJson());
+    fieldToJson(json, field_tonnage, tonnage);
+    fieldToJson(json,field_special,specialRules);
+    fieldToJson(json,field_weapons,weapons);
+    fieldToJson(json,field_launch,launch);
+}
+
+void QFleet_Ship::impl_toJson(QJsonObject& json)
+{
+    fieldToJson(json, field_points, points);
+    fieldToJson(json, field_scan,scan);
+    fieldToJson(json, field_signature,signature);
+    fieldToJson(json, field_thrust,thrust);
+    fieldToJson(json, field_hull,hull);
+    fieldToJson(json, field_armor, armor);
+    fieldToJson(json, field_passive, passive);
+    fieldToJson(json,field_PD,PD);
+    fieldToJson(json,field_groupL,groupL);
+    fieldToJson(json,field_groupH,groupH);
+    fieldToJson(json, field_tonnage, tonnage);
     fieldToJson(json,field_special,specialRules);
     fieldToJson(json,field_weapons,weapons);
     fieldToJson(json,field_launch,launch);

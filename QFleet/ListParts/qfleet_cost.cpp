@@ -25,7 +25,21 @@ void QFleet_Cost::impl_toJson(QJsonObject& json)
     fieldToJson(json, field_SR, SR);
 }
 
-void QFleet_Cost::operator+(QFleet_Cost const& obj)
+void QFleet_Cost::operator+(const QFleet_Cost & obj)
+{
+    this->SR += obj.SR;
+    this->LC += obj.LC;
+    this->points += obj.points;
+}
+
+void QFleet_Cost::zero()
+{
+    this->SR = 0;
+    this->LC = 0;
+    this->points = 0;
+}
+
+void QFleet_Cost::operator=(const QFleet_Cost& obj)
 {
     this->SR += obj.SR;
     this->LC += obj.LC;

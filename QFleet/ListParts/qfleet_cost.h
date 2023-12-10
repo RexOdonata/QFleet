@@ -17,7 +17,11 @@ public:
     unsigned int points;
     unsigned int LC;
 
-    void operator+(QFleet_Cost const&);
+    void zero();
+
+    void operator+(const QFleet_Cost&);
+
+    void operator=(const QFleet_Cost&);
 
 protected:
 

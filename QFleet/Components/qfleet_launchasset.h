@@ -17,6 +17,8 @@ public:
 
     QFleet_LaunchAsset(const QString setName);
 
+    QFleet_LaunchAsset();
+
     bool strikecraft;
 
     bool launchCap;
@@ -37,7 +39,7 @@ public:
 
     QFleet_AssetType type;
 
-
+    void operator=(const QFleet_LaunchAsset&);
 
 protected:
 
