@@ -22,7 +22,7 @@ public:
         QString label = static_cast<T*>(this)->impl_getLabel();
 
         val = static_cast<T*>(this)->impl_string_to_enum(json.value(label).toString());
-    }   
+    }
 
     QVector<QString> getEnumStrings()
     {
@@ -38,7 +38,7 @@ public:
     {
     }
 
-    qft_enum() : val({})
+    qft_enum() : val(std::nullopt)
     {
 
     }

@@ -16,7 +16,7 @@ class QFleet_OptType : public qft_enum<QFleet_OptType, optType>
     friend class qft_enum<QFleet_OptType, optType>;
 
 public:
-    QFleet_OptType()
+    QFleet_OptType() : qft_enum<QFleet_OptType, optType>()
     {
 
     }

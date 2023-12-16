@@ -26,6 +26,10 @@ public:
 
     QVector<QFleet_Faction> factions;
 
+    unsigned int maxOptions;
+    unsigned int minOptions;
+    unsigned int maxBroadsides;
+
 
 protected:
 
@@ -38,6 +42,10 @@ protected:
     const static QString field_admiralAllowed;
     const static QString field_options;
     const static QString field_factions;
+    const static QString field_maxOptions;
+    const static QString field_minOptions;
+    const static QString field_maxBroadsides;
+
 
 };
 

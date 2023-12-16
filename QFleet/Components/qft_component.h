@@ -24,7 +24,7 @@ public:
         return json;
     }
 
-    const QString name;
+    QString name;
 
     const QString getName() const
     {

@@ -34,6 +34,8 @@ public:
 
     QString getSelected();
 
+    QVector<QString> getMultiSelect();
+
     void setLabel(const QString);
 
 
@@ -57,6 +59,8 @@ public:
     void setList(const QStringList in);
 
     QString getSelected();
+
+    QVector<QString> getMultiSelect();
 
     void setLabel(const QString);
 
@@ -160,6 +164,22 @@ class dvs_Data
         else
             return {};
     }
+
+    QVector<T> getMultiSelected() const
+    {
+        auto selIDs = widgetPtr->getMultiSelect();
+
+        QVector<T> objs;
+
+        for (auto& str : selIDs)
+            if (data.contains(str))
+                objs.push_back(data[str]);
+
+        return objs;
+
+    }
+
+
 
     void convertToRef()
     {

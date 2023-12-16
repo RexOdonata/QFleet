@@ -7,24 +7,56 @@ const QString QFleet_Option::field_specialRule="specialRule";
 const QString QFleet_Option::field_statBonus="statBonus";
 const QString QFleet_Option::field_broadside="broadside";
 const QString QFleet_Option::field_oneOnly="oneOnly";
+const QString QFleet_Option::field_statType="statID";
+const QString QFleet_Option::field_points="points";
+const QString QFleet_Option::field_optType="optType";
 
-QFleet_Option::QFleet_Option(const QString setName) : qft_component<QFleet_Option>(setName)
+QFleet_Option::QFleet_Option(const QString setName) : qft_component<QFleet_Option>(setName), type(QFleet_OptType())
 {
-
+    points = 0;
+    broadside = false;
+    oneOnly = false;
 }
+
+QFleet_Option::QFleet_Option() : qft_component<QFleet_Option>("newOption"), type(QFleet_OptType())
+{
+    points = 0;
+    broadside = false;
+    oneOnly = false;
+}
+
 QFleet_Option::QFleet_Option(QJsonObject in) : qft_component<QFleet_Option>
     (in.value(field_name()).toString())
 {
     fieldFromJson(in, field_broadside, broadside);
     fieldFromJson(in, field_oneOnly, oneOnly);
-    fieldFromJson(in, field_statBonus, statBonus);
+    fieldFromJson(in, field_optType, type);
+    fieldFromJson(in, field_points, points);
 
-    weaponPtr = std::make_shared<QVector<QFleet_Weapon>>();
-    fieldFromJson(in, field_weapons, weaponPtr);
+    optType lt = type.getVal();
+    if (lt == optType::WEAPONS)
+    {
+        weaponVecPtr = std::make_shared<QVector<QFleet_Weapon>>();
+        fieldFromJson(in, field_weapons, *weaponVecPtr);
+    }
+    else if (lt == optType::LAUNCH)
+    {
+        launchProfilePtr = std::make_shared<QFleet_launchProfile>();
+        fieldFromJson(in, field_launchProfile, *launchProfilePtr);
+    }
+    else if (lt == optType::STAT)
+    {
+        statBonusPtr = std::make_shared<unsigned int>();
+        statTypePtr= std::make_shared<QFleet_StatID>();
 
-
-    fieldFromJson(in, field_launchProfile, launchProfilePtr);
-
+        fieldFromJson(in, field_statBonus, *statBonusPtr);
+        fieldFromJson(in, field_statType, *statTypePtr);
+    }
+    else if (lt == optType::SPECIAL)
+    {
+        specialPtr = std::make_shared<QString>();
+        fieldFromJson(in, field_specialRule, *specialPtr);
+    }
 
 }
 
@@ -32,9 +64,25 @@ void QFleet_Option::impl_toJson(QJsonObject& json)
 {
     fieldToJson(json, field_broadside, broadside);
     fieldToJson(json, field_oneOnly, oneOnly);
-    fieldToJson(json, field_statBonus, statBonus);
-    fieldToJson(json, field_specialRule, specialRule);
+    fieldToJson(json, field_optType, type);
+    fieldToJson(json, field_points, points);
 
-    fieldToJson(json, field_weapons, weaponPtr);
-    fieldToJson(json, field_launchProfile, launchProfilePtr);
+    optType lt = type.getVal();
+    if (lt == optType::WEAPONS)
+    {
+        fieldToJson(json, field_weapons, *weaponVecPtr);
+    }
+    else if (lt == optType::LAUNCH)
+    {
+        fieldToJson(json,field_launchProfile,*launchProfilePtr);
+    }
+    else if (lt == optType::STAT)
+    {
+        fieldToJson(json,field_statBonus,*statBonusPtr);
+        fieldToJson(json,field_statType,*statTypePtr);
+    }
+    else if (lt == optType::SPECIAL)
+    {
+        fieldToJson(json,field_specialRule,*specialPtr);
+    }
 }

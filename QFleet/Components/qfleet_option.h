@@ -6,6 +6,8 @@
 
 #include "qfleet_weapon.h"
 #include "qfleet_launchprofile.h"
+#include "qfleet_statid.h"
+#include "qfleet_opttype.h"
 
 class QFleet_Option : public qft_component<QFleet_Option>
 {
@@ -16,23 +18,32 @@ public:
 
     QFleet_Option(QJsonObject);
 
-    // VARS
-    // this are pts because they may or not be defined for a given option
-    std::shared_ptr<QVector<QFleet_Weapon>> weaponPtr = NULL;
-    std::shared_ptr<QFleet_launchProfile> launchProfilePtr = NULL;
-    QString specialRule;
-    unsigned int statBonus;
+    QFleet_Option();
+
+    // MANDATORY VARS
+
+    QFleet_OptType type;
 
     bool broadside;
     bool oneOnly;
 
     unsigned int points;
 
+    // OPT VARS
+
+    std::shared_ptr<QVector<QFleet_Weapon>> weaponVecPtr = NULL;
+
+    std::shared_ptr<QFleet_launchProfile> launchProfilePtr = NULL;
+
+    std::shared_ptr<unsigned int> statBonusPtr = NULL;
+    std::shared_ptr<QFleet_StatID> statTypePtr = NULL;
+
+    std::shared_ptr<QString> specialPtr = NULL;
+
+
+
 
 private:
-
-
-
 
 
     // STRINGS
@@ -44,6 +55,9 @@ private:
     const static QString field_statBonus;
     const static QString field_broadside;
     const static QString field_oneOnly;
+    const static QString field_statType;
+    const static QString field_points;
+    const static QString field_optType;
 
     // FX
 

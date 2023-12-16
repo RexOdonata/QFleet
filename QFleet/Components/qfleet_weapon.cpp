@@ -12,6 +12,11 @@ QFleet_Weapon::QFleet_Weapon(const QString setName) : qft_component<QFleet_Weapo
 
 }
 
+QFleet_Weapon::QFleet_Weapon() : qft_component<QFleet_Weapon>("new weapon"), lock(QFleet_Lock()), facing(QFleet_Arc())
+{
+
+}
+
 QFleet_Weapon::QFleet_Weapon(QJsonObject in) : qft_component<QFleet_Weapon>(in.value(field_name()).toString())
 {
     fieldFromJson(in, field_arc, facing);

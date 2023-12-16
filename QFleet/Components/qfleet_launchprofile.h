@@ -15,6 +15,8 @@ public:
 
     QFleet_launchProfile(QJsonObject in);
 
+    QFleet_launchProfile();
+
     void setCount(const unsigned int);
 
     void setStrike(const bool);

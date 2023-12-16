@@ -11,6 +11,11 @@ QFleet_launchProfile::QFleet_launchProfile(const QString setName) : qft_componen
 
 }
 
+QFleet_launchProfile::QFleet_launchProfile() : qft_component<QFleet_launchProfile>("newLP")
+{
+
+}
+
 QFleet_launchProfile::QFleet_launchProfile(QJsonObject in) : qft_component<QFleet_launchProfile>(in.value(field_name()).toString())
 {
     fieldFromJson(in, field_assets, assetNames);

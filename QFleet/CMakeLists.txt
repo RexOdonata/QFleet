@@ -18,3 +18,5 @@ add_subdirectory(Components)
 add_subdirectory(ListParts)
 add_subdirectory(common)
 add_subdirectory(Hangarbay)
+add_subdirectory(Shipyard)
+

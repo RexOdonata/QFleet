@@ -12,6 +12,7 @@
 #include <exception>
 
 
+
 namespace{
     template<typename T>
     struct listModel_Vector_pair
@@ -92,8 +93,7 @@ namespace{
 
                     for (auto object : objects)
                     {
-                        T obj;
-                        obj.fromJson(object.toObject());
+                        T obj(object.toObject());
                         vec.push_back(obj);
                     }
                 }

@@ -15,6 +15,8 @@ public:
 
     QFleet_Weapon(QJsonObject);
 
+    QFleet_Weapon();
+
     // VARS
 
     QFleet_Lock lock;

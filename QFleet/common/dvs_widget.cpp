@@ -44,6 +44,23 @@ QString dvsx_Widget::getSelected()
     return "";
 }
 
+QVector<QString> dvsx_Widget::getMultiSelect()
+{
+    if (ui->listView->selectionModel()->selectedIndexes().size() > 0)
+    {
+        auto selectedIndices = ui->listView->selectionModel()->selectedIndexes();
+
+        QVector<QString> strs;
+        for (auto index : selectedIndices)
+
+            strs.push_back(index.data().toString());
+
+        return strs;
+    }
+    else
+        return QVector<QString>();
+}
+
 void dvsx_Widget::setLabel(const QString in)
 {
     ui->label->setText(in);
@@ -89,6 +106,24 @@ QString dvs_Widget::getSelected()
 
     return "";
 }
+
+QVector<QString> dvs_Widget::getMultiSelect()
+{
+    if (ui->listView->selectionModel()->selectedIndexes().size() > 0)
+    {
+        auto selectedIndices = ui->listView->selectionModel()->selectedIndexes();
+
+        QVector<QString> strs;
+        for (auto index : selectedIndices)
+
+            strs.push_back(index.data().toString());
+
+        return strs;
+    }
+    else
+        return QVector<QString>();
+}
+
 
 void dvs_Widget::setLabel(const QString in)
 {

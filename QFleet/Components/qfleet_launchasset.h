@@ -19,8 +19,6 @@ public:
 
     QFleet_LaunchAsset();
 
-    bool strikecraft;
-
     bool launchCap;
 
     unsigned int thrust;
@@ -45,7 +43,6 @@ protected:
 
     void impl_toJson(QJsonObject&);
 
-    const static QString field_strikecraft;
     const static QString field_launchcap;
     const static QString field_thrust;
     const static QString field_PD;

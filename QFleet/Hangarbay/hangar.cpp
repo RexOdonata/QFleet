@@ -1,6 +1,7 @@
 #include "hangar.h"
 #include "./ui_hangar.h"
 #include "fileTypes.h"
+#include "../Components/qfu_specialrules.h"
 
 Hangar::Hangar(QWidget *parent)
     : QMainWindow(parent)
@@ -9,12 +10,11 @@ Hangar::Hangar(QWidget *parent)
     ui->setupUi(this);
 
     {
-        ui->special_combo->addItem("Scald");
-        ui->special_combo->addItem("Crippling");
-        ui->special_combo->addItem("Corruptor");
-        ui->special_combo->addItem("Flash");
-        ui->special_combo->addItem("May not double thrust");
-        ui->special_combo->addItem("May only drop infantry assets");
+        qfu_specialRules specialRules;
+
+        for (auto& rule : specialRules.weaponRules)
+            ui->special_combo->addItem(rule);
+
     }
 
     {
@@ -74,12 +74,7 @@ QFleet_LaunchAsset Hangar::saveLaunch()
     else
         newAsset.launchCap = false;
 
-    if (launchType == assetType::fighter || launchType == assetType::bomber)
-        newAsset.strikecraft = true;
-    else
-        newAsset.launchCap = false;
-
-    QVector<QFleet_Faction> factions;
+   QVector<QFleet_Faction> factions;
     if (ui->UCM_check->isChecked())
         factions.push_back(QFleet_Faction(faction::UCM));
     if (ui->PHR_check->isChecked())
