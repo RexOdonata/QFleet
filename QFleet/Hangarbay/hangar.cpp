@@ -103,11 +103,12 @@ void Hangar::on_loadWeapon_button_clicked()
 {
     auto launch = launchRoster->getSelected();
 
-    specialRules->clear();
+    
 
     if (launch)
     {
 
+        specialRules->clear();
 
         ui->name_edit->clear();
         ui->name_edit->insert(launch->getName());

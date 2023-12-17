@@ -6,7 +6,7 @@
 Arsenal::Arsenal(QWidget *parent, std::shared_ptr<QFleet_Weapon> weaponPtr) :
     QDialog(parent),
     ui(new Ui::Arsenal), weapon(weaponPtr),
-    specialWidget(std::make_shared<dvs_Widget>(parent))
+    specialWidget(new dvs_Widget(parent))
 {
     ui->setupUi(this);
     {
@@ -18,8 +18,8 @@ Arsenal::Arsenal(QWidget *parent, std::shared_ptr<QFleet_Weapon> weaponPtr) :
     }
 
     // create the special rules container
-    ui->specialRulesLayout->addWidget(specialWidget.get());
-    specialRoster = std::make_shared<dvs_Data<QString, dvs_Widget>>(specialWidget.get());
+    ui->specialRulesLayout->addWidget(specialWidget);
+    specialRoster = new dvs_Data<QString, dvs_Widget>(specialWidget);
     specialWidget->setLabel("Special Rules");
 
     // add random attack dice options
@@ -94,7 +94,12 @@ Arsenal::Arsenal(QWidget *parent, std::shared_ptr<QFleet_Weapon> weaponPtr) :
 
 Arsenal::~Arsenal()
 {
+    delete specialWidget;
+
+    delete specialRoster;
+
     delete ui;
+
 }
 
 void Arsenal::on_addSpecialButton_clicked()
@@ -162,7 +167,8 @@ void Arsenal::on_saveButton_clicked()
 
     weapon->specials = specialRoster->getData();
 
-    done(QDialog::Accepted);   
+    this->done(QDialog::Accepted);
+
 
 }
 

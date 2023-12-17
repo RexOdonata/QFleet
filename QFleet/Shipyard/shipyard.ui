@@ -6,8 +6,8 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>1362</width>
-    <height>920</height>
+    <width>1295</width>
+    <height>980</height>
    </rect>
   </property>
   <property name="windowTitle">
@@ -48,6 +48,70 @@
          </layout>
         </item>
         <item>
+         <layout class="QHBoxLayout" name="horizontalLayout_14">
+          <item>
+           <layout class="QVBoxLayout" name="verticalLayout_4">
+            <item>
+             <widget class="QCheckBox" name="ucmCheck">
+              <property name="text">
+               <string>UCM</string>
+              </property>
+             </widget>
+            </item>
+            <item>
+             <widget class="QCheckBox" name="scourgeCheck">
+              <property name="text">
+               <string>Scourge</string>
+              </property>
+             </widget>
+            </item>
+            <item>
+             <widget class="QCheckBox" name="phrCheck">
+              <property name="text">
+               <string>PHR</string>
+              </property>
+             </widget>
+            </item>
+            <item>
+             <widget class="QCheckBox" name="shaltariCheck">
+              <property name="text">
+               <string>Shaltari</string>
+              </property>
+             </widget>
+            </item>
+            <item>
+             <widget class="QCheckBox" name="resistanceCheck">
+              <property name="text">
+               <string>Resistance</string>
+              </property>
+             </widget>
+            </item>
+           </layout>
+          </item>
+          <item>
+           <layout class="QVBoxLayout" name="verticalLayout_3">
+            <item>
+             <widget class="QLabel" name="label_18">
+              <property name="text">
+               <string>Admiral Discount</string>
+              </property>
+              <property name="alignment">
+               <set>Qt::AlignCenter</set>
+              </property>
+             </widget>
+            </item>
+            <item>
+             <widget class="QSpinBox" name="admiralDiscountSpin">
+              <property name="maximum">
+               <number>5</number>
+              </property>
+             </widget>
+            </item>
+           </layout>
+          </item>
+         </layout>
+        </item>
+        <item>
          <layout class="QHBoxLayout" name="attrBox">
           <item>
            <layout class="QVBoxLayout" name="verticalLayout_2">
@@ -62,7 +126,7 @@
              </widget>
             </item>
             <item>
-             <widget class="QSpinBox" name="spinBox_6"/>
+             <widget class="QSpinBox" name="scanSpin"/>
             </item>
            </layout>
           </item>
@@ -79,7 +143,7 @@
              </widget>
             </item>
             <item>
-             <widget class="QSpinBox" name="spinBox_13"/>
+             <widget class="QSpinBox" name="sigSpin"/>
             </item>
            </layout>
           </item>
@@ -96,7 +160,7 @@
              </widget>
             </item>
             <item>
-             <widget class="QSpinBox" name="spinBox_12"/>
+             <widget class="QSpinBox" name="thrustSpin"/>
             </item>
            </layout>
           </item>
@@ -113,7 +177,7 @@
              </widget>
             </item>
             <item>
-             <widget class="QSpinBox" name="spinBox_11"/>
+             <widget class="QSpinBox" name="hullSpin"/>
             </item>
            </layout>
           </item>
@@ -160,7 +224,7 @@
              </widget>
             </item>
             <item>
-             <widget class="QSpinBox" name="spinBox_9"/>
+             <widget class="QSpinBox" name="pdSpin"/>
             </item>
            </layout>
           </item>
@@ -177,7 +241,7 @@
              </widget>
             </item>
             <item>
-             <widget class="QSpinBox" name="spinBox_15"/>
+             <widget class="QSpinBox" name="glSpin"/>
             </item>
             <item>
              <widget class="QLabel" name="label_17">
@@ -190,7 +254,7 @@
              </widget>
             </item>
             <item>
-             <widget class="QSpinBox" name="spinBox_14"/>
+             <widget class="QSpinBox" name="ghSpin"/>
             </item>
            </layout>
           </item>
@@ -405,7 +469,7 @@
              </widget>
             </item>
             <item>
-             <widget class="QSpinBox" name="spinBox_3"/>
+             <widget class="QSpinBox" name="maxBroadsideSpin"/>
             </item>
            </layout>
           </item>
@@ -419,7 +483,7 @@
              </widget>
             </item>
             <item>
-             <widget class="QSpinBox" name="spinBox_2"/>
+             <widget class="QSpinBox" name="minOptionsSpin"/>
             </item>
            </layout>
           </item>
@@ -433,7 +497,7 @@
              </widget>
             </item>
             <item>
-             <widget class="QSpinBox" name="spinBox"/>
+             <widget class="QSpinBox" name="maxOptionsSpin"/>
             </item>
            </layout>
           </item>
@@ -478,7 +542,7 @@
     <rect>
      <x>0</x>
      <y>0</y>
-     <width>1362</width>
+     <width>1295</width>
      <height>26</height>
     </rect>
    </property>

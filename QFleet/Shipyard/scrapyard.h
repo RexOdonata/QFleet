@@ -43,17 +43,17 @@ private:
 
     std::shared_ptr<QFleet_Option> option = NULL;
 
-    std::shared_ptr<dvs_Data<QFleet_Weapon, dvs_Widget>> weaponRoster;
-    std::shared_ptr<dvs_Widget> weaponWidget;
+    dvs_Data<QFleet_Weapon, dvs_Widget> * weaponRoster;
+    dvs_Widget * weaponWidget;
 
-    std::shared_ptr<dvs_Data<QFleet_LaunchAsset, dvs_Widget>> launchAssetRoster;
-    std::shared_ptr<dvs_Widget> launchAssetWidget;
+    dvs_Data<QFleet_LaunchAsset, dvs_Widget> * launchAssetRoster;
+    dvs_Widget * launchAssetWidget;
 
-    std::shared_ptr<dvs_Data<QFleet_launchProfile, dvs_Widget>> launchProfileRoster;
-    std::shared_ptr<dvs_Widget> launchProfileWidget;
+    dvs_Data<QFleet_launchProfile, dvs_Widget> * launchProfileRoster;
+    dvs_Widget * launchProfileWidget;
 
-    std::shared_ptr<dvs_Data<QString, dvs_Widget>> specialRoster;
-    std::shared_ptr<dvs_Widget> specialWidget;
+    dvs_Data<QString, dvs_Widget>  * specialRoster;
+    dvs_Widget * specialWidget;
 
 };
 

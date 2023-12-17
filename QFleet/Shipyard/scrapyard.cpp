@@ -9,38 +9,37 @@
 Scrapyard::Scrapyard(QWidget *parent, std::shared_ptr<QFleet_Option> optionPtr, QVector<QFleet_LaunchAsset> * assetVec) :
     QDialog(parent),
     ui(new Ui::Scrapyard),
-    weaponWidget(std::make_shared<dvs_Widget>(parent)),
-    launchAssetWidget(std::make_shared<dvs_Widget>(parent)),
-    launchProfileWidget(std::make_shared<dvs_Widget>(parent)),
-    option(optionPtr),
-    specialWidget(std::make_shared<dvs_Widget>(parent))
+    weaponWidget(new dvs_Widget(parent)),
+    launchAssetWidget(new dvs_Widget(parent)),
+    launchProfileWidget(new dvs_Widget(parent)),
+    specialWidget(new dvs_Widget(parent)),
+    option(optionPtr)
+
 {
     ui->setupUi(this);
 
     // create the launchAssets container
-    ui->launchAssetLayout->addWidget(launchAssetWidget.get());
-    launchAssetRoster = std::make_shared<dvs_Data<QFleet_LaunchAsset, dvs_Widget>>(launchAssetWidget.get());
+    ui->launchAssetLayout->addWidget(launchAssetWidget);
+    launchAssetRoster = new dvs_Data<QFleet_LaunchAsset, dvs_Widget>(launchAssetWidget);
     launchAssetWidget->setLabel("Launch Assets ");
 
     launchAssetRoster->add(*assetVec);
 
     // create the LaunchProfile container
-    ui->launchProfileLayout->addWidget(launchProfileWidget.get());
-    launchProfileRoster = std::make_shared<dvs_Data<QFleet_launchProfile, dvs_Widget>>(launchProfileWidget.get());
+    ui->launchProfileLayout->addWidget(launchProfileWidget);
+    launchProfileRoster = new dvs_Data<QFleet_launchProfile, dvs_Widget>(launchProfileWidget);
     launchProfileWidget->setLabel("Special Rules");
 
     // create the special rules container
-    ui->specialRosterLayout->addWidget(specialWidget.get());
-    specialRoster = std::make_shared<dvs_Data<QString, dvs_Widget>>(specialWidget.get());
+    ui->specialRosterLayout->addWidget(specialWidget);
+    specialRoster = new dvs_Data<QString, dvs_Widget>(specialWidget);
     specialWidget->setLabel("Launch profile");
 
     // create the weapon container
-    ui->weaponLayout->addWidget(weaponWidget.get());
-    weaponRoster = std::make_shared<dvs_Data<QFleet_Weapon, dvs_Widget>>(weaponWidget.get());
+    ui->weaponLayout->addWidget(weaponWidget);
+    weaponRoster = new dvs_Data<QFleet_Weapon, dvs_Widget>(weaponWidget);
     weaponWidget->setLabel("Weapon");
 
-
-    ui->setupUi(this);
     {
         qfu_specialRules specialRules;
 
@@ -108,6 +107,26 @@ Scrapyard::Scrapyard(QWidget *parent, std::shared_ptr<QFleet_Option> optionPtr, 
 
 Scrapyard::~Scrapyard()
 {
+    // widgets
+
+    delete weaponWidget;
+
+    delete launchAssetWidget;
+
+    delete launchProfileWidget;
+
+    delete specialWidget;
+
+    // data
+
+    delete weaponRoster;
+
+    delete launchAssetRoster;
+
+    delete launchProfileRoster;
+
+    delete specialRoster;
+
     delete ui;
 }
 
@@ -196,7 +215,7 @@ void Scrapyard::on_saveButton_clicked()
         *(newOpt.launchProfilePtr) = lp;
     }
     else if (ui->typeStatRadio->isChecked())
-    {
+    {this->done(QDialog::Accepted);
         type = QFleet_OptType(optType::STAT);
 
         newOpt.statTypePtr = std::make_shared<QFleet_StatID>();
@@ -232,6 +251,8 @@ void Scrapyard::on_saveButton_clicked()
     newOpt.oneOnly = ui->singleCheck->isChecked();
 
     *option = newOpt;
+
+    this->done(QDialog::Accepted);
 }
 
 
@@ -248,7 +269,6 @@ void Scrapyard::on_newWeaponButton_clicked()
     if (r == QDialog::Accepted)
         weaponRoster->add(*newWeaponPtr);
 
-    arsenalWindow->close();
 }
 
 
@@ -272,14 +292,14 @@ void Scrapyard::on_editWeaponbutton_clicked()
 
         Arsenal * arsenalWindow = new Arsenal(this, newWeaponPtr);
 
+        arsenalWindow->setAttribute(Qt::WA_DeleteOnClose);
+
         int r = arsenalWindow->exec();
 
         if (r == QDialog::Accepted)
             weaponRoster->add(*newWeaponPtr);
         else
-            weaponRoster->add(*sel);
-
-        delete arsenalWindow;
+            weaponRoster->add(*sel);        
 
     }
 }
@@ -297,10 +317,12 @@ void Scrapyard::on_CopyWeaponButton_clicked()
 
         int r = arsenalWindow->exec();
 
+        arsenalWindow->setAttribute(Qt::WA_DeleteOnClose);
+
         if (r == QDialog::Accepted)
             weaponRoster->add(*clonedWeaponPtr);
 
-        delete arsenalWindow;
+
     }
 }
 

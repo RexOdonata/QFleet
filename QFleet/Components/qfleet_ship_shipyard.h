@@ -13,13 +13,11 @@ public:
 
     QFleet_Ship_Shipyard(const QString);
 
+    QFleet_Ship_Shipyard();
+
     // VARS
 
     unsigned int admiralDiscount;
-
-    bool admiralForced;
-
-    bool admiralAllowed;
 
     // all options available to the ship
     QVector<QFleet_Option> options;

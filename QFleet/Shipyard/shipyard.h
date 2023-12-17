@@ -57,23 +57,23 @@ private slots:
 private:
     Ui::Shipyard *ui;
 
-    std::shared_ptr<dvs_Data<QFleet_Weapon, dvsx_Widget>> weaponRoster;
-    std::shared_ptr<dvsx_Widget> weaponWidget;
+    dvs_Data<QFleet_Weapon, dvsx_Widget> * weaponRoster;
+    dvsx_Widget * weaponWidget;
 
-    std::shared_ptr<dvs_Data<QFleet_Ship_Shipyard, dvsx_Widget>> shipRoster;
-    std::shared_ptr<dvsx_Widget> shipWidget;
+    dvs_Data<QFleet_Ship_Shipyard, dvsx_Widget> * shipRoster;
+    dvsx_Widget * shipWidget;
 
-    std::shared_ptr<dvs_Data<QFleet_Option, dvsx_Widget>> optionRoster;
-    std::shared_ptr<dvsx_Widget> optionWidget;
+    dvs_Data<QFleet_Option, dvsx_Widget> * optionRoster;
+    dvsx_Widget * optionWidget;
 
-    std::shared_ptr<dvs_Data<QString, dvs_Widget>> specialRoster;
-    std::shared_ptr<dvs_Widget> specialWidget;
+    dvs_Data<QString, dvs_Widget> * specialRoster;
+    dvs_Widget * specialWidget;
 
-    std::shared_ptr<dvs_Data<QFleet_launchProfile, dvs_Widget>> launchRoster;
-    std::shared_ptr<dvs_Widget> launchWidget;
+    dvs_Data<QFleet_launchProfile, dvs_Widget> * launchRoster;
+    dvs_Widget * launchWidget;
 
-    std::shared_ptr<dvs_Data<QFleet_LaunchAsset, dvs_Widget>> launchSelect;
-    std::shared_ptr<dvs_Widget> launchSelectWidget;
+    dvs_Data<QFleet_LaunchAsset, dvs_Widget> * launchSelect;
+    dvs_Widget * launchSelectWidget;
 
 
 };

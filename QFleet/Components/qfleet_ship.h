@@ -39,15 +39,6 @@ public:
     QVector<QFleet_Weapon> weapons;
     QVector<QFleet_launchProfile> launch;
 
-    // admiral stuff
-
-    unsigned int admiralDiscount;
-
-    bool admiralForced;
-
-    bool admiralAllowed;
-
-
 
 protected:
 

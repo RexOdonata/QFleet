@@ -41,6 +41,7 @@ public:
 
 private:
 
+    // is this being double deleted?
     Ui::dvs_Widget *ui;
     QStringListModel  * listModel;
 
@@ -259,10 +260,9 @@ class dvs_Data
             file.close();
         }
     }
-
     private:
 
-    std::shared_ptr<U> widgetPtr;
+    U * widgetPtr;
 
     QMap<QString, T> data;
 

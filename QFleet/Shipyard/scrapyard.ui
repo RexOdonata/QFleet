@@ -13,7 +13,7 @@
   <property name="windowTitle">
    <string>Dialog</string>
   </property>
-  <layout class="QFormLayout" name="formLayout">
+  <layout class="QGridLayout" name="gridLayout_2">
    <item row="0" column="0">
     <layout class="QGridLayout" name="gridLayout">
      <item row="0" column="0">
@@ -354,7 +354,7 @@
  <resources/>
  <connections/>
  <buttongroups>
-  <buttongroup name="statTypeRadioGroup"/>
   <buttongroup name="optTypeRadioGroup"/>
+  <buttongroup name="statTypeRadioGroup"/>
  </buttongroups>
 </ui>

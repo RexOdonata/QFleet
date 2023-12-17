@@ -32,8 +32,8 @@ private:
 
     std::shared_ptr<QFleet_Weapon> weapon = NULL;
 
-    std::shared_ptr<dvs_Data<QString, dvs_Widget>> specialRoster;
-    std::shared_ptr<dvs_Widget> specialWidget;
+    dvs_Data<QString, dvs_Widget> * specialRoster;
+    dvs_Widget * specialWidget;
 };
 
 #endif // ARSENAL_H
