@@ -5,8 +5,10 @@
 #include "qfleet_option.h"
 
 
-class QFleet_Ship_Fleet : public QFleet_Ship
+class QFleet_Ship_Fleet : public QFleet_Ship<QFleet_Ship_Fleet>
 {
+    friend class QFleet_Ship<QFleet_Ship_Fleet>;
+
 public:
     QFleet_Ship_Fleet(QJsonObject);
 

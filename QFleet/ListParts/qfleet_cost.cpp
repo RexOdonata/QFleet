@@ -6,7 +6,7 @@ const QString QFleet_Cost::field_LC="LC";
 
 const QString QFleet_Cost::label="cost";
 
-QFleet_Cost::QFleet_Cost(QJsonObject in) : qft_component<QFleet_Cost>(in.value(field_name()).toString())
+QFleet_Cost::QFleet_Cost(QJsonObject in) : qft_component<QFleet_Cost>(in.value(field_name).toString())
 {
     fieldFromJson(in, field_LC, LC);
     fieldFromJson(in, field_points, points);

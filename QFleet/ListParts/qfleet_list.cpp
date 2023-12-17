@@ -12,7 +12,7 @@ const std::array<unsigned int, 12> QFleet_List::cardLimitMatrix =
     3,4,3,2
 };
 
-QFleet_List::QFleet_List(QJsonObject json) : qft_component<QFleet_List>(json.value(field_name()).toString()), cost(QFleet_Cost("Cost"))
+QFleet_List::QFleet_List(QJsonObject json) : qft_component<QFleet_List>(json.value(field_name).toString()), cost(QFleet_Cost("Cost"))
 {
     fieldFromJson(json, field_cards, cards);
     fieldFromJson(json, field_pointsLimit, pointsLimit);

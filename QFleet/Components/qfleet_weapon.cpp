@@ -17,7 +17,7 @@ QFleet_Weapon::QFleet_Weapon() : qft_component<QFleet_Weapon>("new weapon"), loc
 
 }
 
-QFleet_Weapon::QFleet_Weapon(QJsonObject in) : qft_component<QFleet_Weapon>(in.value(field_name()).toString())
+QFleet_Weapon::QFleet_Weapon(QJsonObject in) : qft_component<QFleet_Weapon>(in.value(field_name).toString())
 {
     fieldFromJson(in, field_arc, facing);
     fieldFromJson(in, field_lock, lock);

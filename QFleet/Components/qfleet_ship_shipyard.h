@@ -4,9 +4,11 @@
 #include "qfleet_ship.h"
 #include "qfleet_option.h"
 #include "qfleet_faction.h"
+#include "qft_component.h"
 
-class QFleet_Ship_Shipyard : public QFleet_Ship
+class QFleet_Ship_Shipyard : public QFleet_Ship<QFleet_Ship_Shipyard>
 {
+    friend class QFleet_Ship<QFleet_Ship_Shipyard>;
 
 public:
     QFleet_Ship_Shipyard(QJsonObject);

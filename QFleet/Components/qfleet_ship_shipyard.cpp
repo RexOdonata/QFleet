@@ -36,7 +36,6 @@ QFleet_Ship_Shipyard::QFleet_Ship_Shipyard(QJsonObject in) : QFleet_Ship(in)
 
 void QFleet_Ship_Shipyard::impl_toJson(QJsonObject& in)
 {
-    this->ShipToJson(in);
 
     fieldToJson(in, field_admiralDiscount, admiralDiscount);
 

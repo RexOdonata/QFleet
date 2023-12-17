@@ -10,7 +10,7 @@ const QString QFleet_LaunchAsset::field_special="special";
 const QString QFleet_LaunchAsset::field_factions="factions";
 const QString QFleet_LaunchAsset::field_type="type";
 
-QFleet_LaunchAsset::QFleet_LaunchAsset(QJsonObject in) : qft_component<QFleet_LaunchAsset>(in.value(field_name()).toString())
+QFleet_LaunchAsset::QFleet_LaunchAsset(QJsonObject in) : qft_component<QFleet_LaunchAsset>(in.value(field_name).toString())
 {
 
     fieldFromJson(in,field_launchcap,launchCap);

@@ -16,7 +16,7 @@ QFleet_launchProfile::QFleet_launchProfile() : qft_component<QFleet_launchProfil
 
 }
 
-QFleet_launchProfile::QFleet_launchProfile(QJsonObject in) : qft_component<QFleet_launchProfile>(in.value(field_name()).toString())
+QFleet_launchProfile::QFleet_launchProfile(QJsonObject in) : qft_component<QFleet_launchProfile>(in.value(field_name).toString())
 {
     fieldFromJson(in, field_assets, assetNames);
     fieldFromJson(in, field_count, count);

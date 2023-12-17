@@ -26,7 +26,7 @@ QFleet_Option::QFleet_Option() : qft_component<QFleet_Option>("newOption"), type
 }
 
 QFleet_Option::QFleet_Option(QJsonObject in) : qft_component<QFleet_Option>
-    (in.value(field_name()).toString())
+    (in.value(field_name).toString())
 {
     fieldFromJson(in, field_broadside, broadside);
     fieldFromJson(in, field_oneOnly, oneOnly);

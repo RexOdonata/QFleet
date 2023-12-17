@@ -30,7 +30,7 @@ QFleet_Group::QFleet_Group(QFleet_Ship_Fleet ship, const QString setName) : qft_
 
 }
 
-QFleet_Group::QFleet_Group(QJsonObject json) : qft_component<QFleet_Group>(json.value(field_name()).toString()), cost(QFleet_Cost("GroupCost"))
+QFleet_Group::QFleet_Group(QJsonObject json) : qft_component<QFleet_Group>(json.value(field_name).toString()), cost(QFleet_Cost("GroupCost"))
 {
     fieldFromJson(json, field_cost, cost);
     fieldFromJson(json, field_ship, ship);

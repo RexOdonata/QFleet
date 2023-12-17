@@ -14,7 +14,7 @@ const std::array<unsigned int, 16> QFleet_Battlegroup::groupLimitMatrix =
 };
 
 QFleet_Battlegroup::QFleet_Battlegroup(QJsonObject in) :
-    qft_component<QFleet_Battlegroup>(in.value(field_name()).toString()),
+    qft_component<QFleet_Battlegroup>(in.value(field_name).toString()),
     type(in[field_type].toObject()),
     cost(in[field_cost].toObject())
 {

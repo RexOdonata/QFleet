@@ -19,7 +19,7 @@ public:
     QJsonObject toJson()
     {
         QJsonObject json;
-        json.insert(field_name(), name);
+        json.insert(field_name, name);
         static_cast<T*>(this)->impl_toJson(json);
         return json;
     }
@@ -41,10 +41,8 @@ protected:
     // variables
 
 
-    inline static const QString field_name()
-    {
-        return "name";
-    }
+    inline static const QString field_name="name";
+
     // Enter the hellscape that is member variable to json helpers
     // these generally come in a few flavors
     // 1. Built in types to/from json

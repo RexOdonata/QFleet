@@ -408,7 +408,6 @@ void Shipyard::on_loadShipButton_clicked()
 
     if (loadShip)
     {
-        std::cout<<"Ship Data Size: "<<sizeof(*loadShip);
 
         weaponRoster->clear();
         specialRoster->clear();
