@@ -1,8 +1,8 @@
 #include "qfleet_ship_shipyard.h"
 
-const QString QFleet_Ship_Shipyard::field_admiralAllowed="Admiral.allowed";
+
 const QString QFleet_Ship_Shipyard::field_admiralDiscount="Admiral.discount";
-const QString QFleet_Ship_Shipyard::field_admiralForced="Admiral.forced";
+
 const QString QFleet_Ship_Shipyard::field_factions="factions";
 const QString QFleet_Ship_Shipyard::field_options="options";
 const QString QFleet_Ship_Shipyard::field_maxOptions="maxOptions";

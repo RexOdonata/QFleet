@@ -43,22 +43,22 @@ protected:
         return json;
     }
 
-    QString impl_getLabel()
+    QString impl_getLabel() const
     {
         return label;
     }
 
-    assetType impl_string_to_enum(const QString in)
+    assetType impl_string_to_enum(const QString in) const
     {
         return s2e[in];
     }
 
-    QString impl_enum_to_string(const assetType in)
+    QString impl_enum_to_string(const assetType in) const
     {
         return e2s[in];
     }
 
-    QVector<QString> impl_getEnumStrings()
+    QVector<QString> impl_getEnumStrings() const
     {
         return QVector<QString>{val_fighter, val_bomber, val_torpedo, val_drop};
     }

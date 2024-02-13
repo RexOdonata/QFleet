@@ -25,6 +25,8 @@ public:
     QFleet_Arc facing;
     QVector<QString> specials;
 
+    QString getSpecialString() const;
+
 protected:
 
 

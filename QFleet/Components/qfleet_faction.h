@@ -50,22 +50,22 @@ protected:
         return json;
     }
 
-    QString impl_getLabel()
+    QString impl_getLabel() const
     {
         return label;
     }
 
-    faction impl_string_to_enum(const QString in)
+    faction impl_string_to_enum(const QString in) const
     {
         return s2e[in];
     }
 
-    QString impl_enum_to_string(const faction in)
+    QString impl_enum_to_string(const faction in) const
     {
         return e2s[in];
     }
 
-    QVector<QString> impl_getEnumStrings()
+    QVector<QString> impl_getEnumStrings() const
     {
         return QVector<QString>{val_ucm, val_scourge, val_phr, val_shaltari, val_resistance};
     }

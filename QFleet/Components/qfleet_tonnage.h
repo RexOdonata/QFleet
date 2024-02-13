@@ -35,7 +35,7 @@ public:
     {
     }
 
-    unsigned int getIntValue()
+    unsigned int getIntValue() const
     {
         if (value)
             return e2u[*value];
@@ -58,22 +58,22 @@ protected:
         return json;
     }
 
-    QString impl_getLabel()
+    QString impl_getLabel() const
     {
         return label;
     }
 
-    QVector<QString> impl_getEnumStrings()
+    QVector<QString> impl_getEnumStrings() const
     {
         return QVector<QString>{val_L,val_L2,val_M,val_H,val_S,val_S2};
     }
 
-    tonnage impl_string_to_enum(const QString in)
+    tonnage impl_string_to_enum(const QString in) const
     {
         return s2e[in];
     }
 
-    QString impl_enum_to_string(const tonnage in)
+    QString impl_enum_to_string(const tonnage in) const
     {
         return e2s[in];
     }

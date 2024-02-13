@@ -50,17 +50,17 @@ protected:
         return label;
     }
 
-    lock impl_string_to_enum(const QString in)
+    lock impl_string_to_enum(const QString in) const
     {
         return s2e[in];
     }
 
-    QString impl_enum_to_string(const lock in)
+    QString impl_enum_to_string(const lock in) const
     {
         return e2s[in];
     }
 
-    QVector<QString> impl_getEnumStrings()
+    QVector<QString> impl_getEnumStrings() const
     {
         return QVector<QString>{val_2,val_3,val_4,val_5,val_6,val_x};
        }

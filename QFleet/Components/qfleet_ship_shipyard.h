@@ -6,6 +6,7 @@
 #include "qfleet_faction.h"
 #include "qft_component.h"
 
+// output of shipyard, used to load details in fleet builder
 class QFleet_Ship_Shipyard : public QFleet_Ship<QFleet_Ship_Shipyard>
 {
     friend class QFleet_Ship<QFleet_Ship_Shipyard>;
@@ -17,13 +18,10 @@ public:
 
     QFleet_Ship_Shipyard();
 
-    // VARS
-
-    unsigned int admiralDiscount;
-
     // all options available to the ship
     QVector<QFleet_Option> options;
 
+    // all factions the ship is available in
     QVector<QFleet_Faction> factions;
 
     unsigned int maxOptions;
@@ -38,10 +36,10 @@ protected:
 
     const static QString label;
     const static QString field_admiralDiscount;
-    const static QString field_admiralForced;
-    const static QString field_admiralAllowed;
+
     const static QString field_options;
     const static QString field_factions;
+
     const static QString field_maxOptions;
     const static QString field_minOptions;
     const static QString field_maxBroadsides;

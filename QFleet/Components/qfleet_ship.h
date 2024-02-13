@@ -26,6 +26,7 @@ public:
         this->fieldFromJson(in,   field_points, points);
         this->fieldFromJson(in,   field_scan, scan);
         this->fieldFromJson(in,   field_signature,signature);
+        this->fieldFromJson(in,   field_altsig,altSig);
         this->fieldFromJson(in,   field_thrust,thrust);
         this->fieldFromJson(in,   field_hull,hull);
         this->fieldFromJson(in,   field_armor, armor);
@@ -37,6 +38,7 @@ public:
         this->fieldFromJson(in,   field_special, specialRules);
         this->fieldFromJson(in,   field_weapons, weapons);
         this->fieldFromJson(in,   field_launch, launch);
+        this->fieldFromJson(in,   field_admiralDiscount, admiralDiscount);
     }
 
     QFleet_Ship(QString setName) : qft_component<QFleet_Ship>(setName)
@@ -49,6 +51,7 @@ public:
     unsigned int points;
     unsigned int scan;
     unsigned int signature;
+    unsigned int altSig;
     unsigned int thrust;
     unsigned int hull;
     QFleet_Armor armor;
@@ -62,6 +65,8 @@ public:
     QVector<QFleet_Weapon> weapons;
     QVector<QFleet_launchProfile> launch;
 
+    unsigned int admiralDiscount;
+
 
 protected:
     // FXs
@@ -71,6 +76,7 @@ protected:
         this->fieldToJson(json,   field_points, points);
         this->fieldToJson(json,   field_scan,scan);
         this->fieldToJson(json,   field_signature,signature);
+        this->fieldToJson(json,   field_altsig,altSig);
         this->fieldToJson(json,   field_thrust,thrust);
         this->fieldToJson(json,   field_hull,hull);
         this->fieldToJson(json,   field_armor, armor);
@@ -82,6 +88,8 @@ protected:
         this->fieldToJson(json,   field_special,specialRules);
         this->fieldToJson(json,   field_weapons,weapons);
         this->fieldToJson(json,   field_launch,launch);
+        this->fieldToJson(json,   field_admiralDiscount,admiralDiscount);
+
 
         // call specialization encode
         static_cast<T*>(this)->impl_toJson(json);
@@ -93,6 +101,7 @@ protected:
     inline const static QString field_points = "points";
     inline const static QString field_scan = "scan";
     inline const static QString field_signature = "signature";
+    inline const static QString field_altsig = "altignature";
     inline const static QString field_thrust = "thrust";
     inline const static QString field_hull = "hull";
     inline const static QString field_armor = "armor";
@@ -104,6 +113,7 @@ protected:
     inline const static QString field_special = "special";
     inline const static QString field_weapons = "weapons";
     inline const static QString field_launch = "launch";
+    inline const static QString field_admiralDiscount = "admiralDiscount";
 
 };
 

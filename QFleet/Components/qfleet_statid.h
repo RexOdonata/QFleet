@@ -48,22 +48,22 @@ protected:
         return json;
     }
 
-    QString impl_getLabel()
+    QString impl_getLabel() const
     {
         return label;
     }
 
-    statID impl_string_to_enum(const QString in)
+    statID impl_string_to_enum(const QString in) const
     {
         return s2e[in];
     }
 
-    QString impl_enum_to_string(const statID in)
+    QString impl_enum_to_string(const statID in) const
     {
         return e2s[in];
     }
 
-    QVector<QString> impl_getEnumStrings()
+    QVector<QString> impl_getEnumStrings() const
     {
         return QVector<QString>{val_scan, val_sig, val_thrust, val_hull, val_PD};
     }

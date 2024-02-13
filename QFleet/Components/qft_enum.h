@@ -51,7 +51,7 @@ public:
             return false;
     }
 
-    B getVal()
+    B getVal() const
     {
         if (val)
             return *val;
@@ -59,10 +59,14 @@ public:
             qFatal("Opened empty enum instance");
     }
 
-    QString toString()
+    QString toString() const
     {
         if (val)
-            return static_cast<T*>(this)->impl_enum_to_string(*val);
+            {
+                return static_cast<const T*>(this)->impl_enum_to_string(*val);
+            }
+
+
         else
             return "{empty}";
     }

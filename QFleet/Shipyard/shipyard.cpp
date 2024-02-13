@@ -328,6 +328,8 @@ void Shipyard::on_saveShipButton_clicked()
 
     newShip.signature = ui->sigSpin->value();
 
+    newShip.altSig = ui->altSig_spin->value();
+
     newShip.thrust = ui->sigSpin->value();
 
     newShip.hull = ui->hullSpin->value();
@@ -423,6 +425,8 @@ void Shipyard::on_loadShipButton_clicked()
         ui->scanSpin->setValue(loadShip->scan);
 
         ui->sigSpin->setValue(loadShip->signature);
+
+        ui->altSig_spin->setValue(loadShip->altSig);
 
         ui->hullSpin->setValue(loadShip->hull);
 

@@ -37,4 +37,19 @@ void QFleet_Weapon::impl_toJson(QJsonObject& json)
     fieldToJson(json, field_lock, lock);
 }
 
+QString QFleet_Weapon::getSpecialString() const
+{
+    QString str;
+
+    for (auto& special : specials)
+    {
+        str.append(special);
+
+        if (special != specials.back())
+            str.append(",");
+    }
+
+    return str;
+}
+
 

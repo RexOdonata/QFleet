@@ -148,6 +148,20 @@
            </layout>
           </item>
           <item>
+           <layout class="QVBoxLayout" name="verticalLayout_14">
+            <item>
+             <widget class="QLabel" name="label_19">
+              <property name="text">
+               <string>altSig</string>
+              </property>
+             </widget>
+            </item>
+            <item>
+             <widget class="QSpinBox" name="altSig_spin"/>
+            </item>
+           </layout>
+          </item>
+          <item>
            <layout class="QVBoxLayout" name="verticalLayout_10">
             <item>
              <widget class="QLabel" name="label_12">

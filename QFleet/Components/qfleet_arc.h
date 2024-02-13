@@ -51,22 +51,22 @@ protected:
         return json;
     }
 
-    QString impl_getLabel()
+    QString impl_getLabel() const
     {
         return label;
     }
 
-    arc impl_string_to_enum(const QString in)
+    arc impl_string_to_enum(const QString in) const
     {
         return s2e[in];
     }
 
-    QString impl_enum_to_string(const arc in)
+    QString impl_enum_to_string(const arc in) const
     {
         return e2s[in];
     }
 
-    QVector<QString> impl_getEnumStrings()
+    QVector<QString> impl_getEnumStrings() const
     {
         return QVector<QString>{val_FN, val_F, val_FS, val_FSl, val_FSr, val_FSR, val_L, val_R};
     }

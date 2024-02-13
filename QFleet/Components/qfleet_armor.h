@@ -48,17 +48,17 @@ protected:
         return json;
     }
 
-    QString impl_getLabel()
+    QString impl_getLabel() const
     {
         return label;
     }
 
-    armor impl_string_to_enum(const QString in)
+    armor impl_string_to_enum(const QString in) const
     {
         return s2e[in];
     }
 
-    QString impl_enum_to_string(const armor in)
+    QString impl_enum_to_string(const armor in) const
     {
         return e2s[in];
     }
