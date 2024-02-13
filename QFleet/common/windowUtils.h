@@ -106,6 +106,45 @@ namespace{
     }
 
     template<typename T>
+    void loadMapFromJsonFile(QWidget * parentWindow, QMap<QString, T>& data,const QString fileType)
+    {
+        data.clear();
+
+        QString filename = QFileDialog::getOpenFileName(parentWindow, "open content", QDir::currentPath());
+
+        QFile file(filename);
+
+        if (file.open(QIODevice::ReadOnly | QIODevice::Text))
+        {
+            QByteArray bytes = file.readAll();
+
+            file.close();
+
+            QJsonParseError err;
+
+            QJsonDocument jsonData = QJsonDocument::fromJson(bytes, &err);
+
+            QJsonObject wrapperObj = jsonData.object();
+
+            if (wrapperObj.contains(fileType))
+            {
+                QJsonArray objects = wrapperObj[fileType].toArray();
+
+                for (auto object : objects)
+                {                    
+                    T newObj(object.toObject());
+                    data.insert(newObj.getName(), newObj);
+                }
+            }
+            else
+            {
+                throw std::invalid_argument("Invalid File Type");
+            }
+
+        }
+    }
+
+    template<typename T>
     void saveVectorToJsonFile(QWidget * parentWindow, QVector<T>& vec, const QString fileType)
     {
         QString filename = QFileDialog::getSaveFileName(parentWindow, "save content", QDir::currentPath());

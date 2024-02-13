@@ -2,6 +2,7 @@
 #define QFLEET_LIST_H
 
 #include "qfleet_battlegroup.h"
+#include "../Components/qfleet_faction.h"
 
 #include "../Components/qft_component.h"
 class QFleet_List : public qft_component<QFleet_List>
@@ -14,6 +15,12 @@ public:
     void setPointsLimit(unsigned int);
 
     unsigned int getPointsLimit() const;
+
+    unsigned int getLaunchLimit() const;
+
+    void setFaction(faction);
+
+    faction getFaction() const;
 
     QFleet_Cost getCost();
 
@@ -36,6 +43,8 @@ private:
 
     unsigned int pointsLimit;
 
+    QFleet_Faction listFaction;
+
     QFleet_Cost cost;
 
     unsigned int maxBattleGroups;
@@ -47,6 +56,7 @@ private:
     const static QString field_pointsLimit;
     const static QString field_cost;
     const static QString field_cards;
+    const static QString field_faction;
 
     const static std::array<unsigned int, 12> cardLimitMatrix;
 

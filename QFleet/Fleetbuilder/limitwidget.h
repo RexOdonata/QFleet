@@ -15,8 +15,18 @@ public:
     explicit limitWidget(QWidget *parent = nullptr);
     ~limitWidget();
 
+    void setLimit(unsigned int);
+
+    void setValue(unsigned int);
+
+    bool isValid() const;
+
 private:
     Ui::limitWidget *ui;
+
+    unsigned int limit;
+    unsigned int value;
+
 };
 
 #endif // LIMITWIDGET_H

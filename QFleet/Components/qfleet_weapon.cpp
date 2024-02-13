@@ -23,7 +23,7 @@ QFleet_Weapon::QFleet_Weapon(QJsonObject in) : qft_component<QFleet_Weapon>(in.v
     fieldFromJson(in, field_lock, lock);
     fieldFromJson(in, field_attacks, attacks);
     fieldFromJson(in, field_damage, damage);
-    fieldFromJson(in, field_specials, attacks);
+    fieldFromJson(in, field_specials, specials);
 
 
 }

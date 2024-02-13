@@ -37,8 +37,8 @@ public:
 
     unsigned int getIntValue() const
     {
-        if (value)
-            return e2u[*value];
+        if (val)
+            return e2u[*val];
         else
             return 0;
     }
@@ -48,8 +48,6 @@ public:
     }
 
 protected:
-
-    std::optional<tonnage> value;
 
     QJsonObject impl_toJson()
     {
