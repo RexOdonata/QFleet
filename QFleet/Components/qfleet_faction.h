@@ -17,6 +17,7 @@ enum class faction
 };
 
 
+
 class QFleet_Faction : public qft_enum<QFleet_Faction, faction>
 {
     friend class qft_enum<QFleet_Faction, faction>;
@@ -40,6 +41,7 @@ public:
     {
 
     }
+
 
 protected:
 
@@ -81,5 +83,14 @@ private:
     const static QMap<QString, faction> s2e;
     const static QMap<faction, QString> e2s;
 };
+
+inline bool operator==(const QFleet_Faction& A, const QFleet_Faction& B)
+{
+    if ( A.getVal() ==B.getVal())
+        return true;
+    else
+        return false;
+}
+
 
 #endif // QFleet_Faction_H

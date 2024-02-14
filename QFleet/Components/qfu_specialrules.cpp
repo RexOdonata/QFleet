@@ -35,13 +35,15 @@ QVector<QString> qfu_specialRules::populateWeaponRules()
     "Re-Entry",
     "Scald",
     "Squadron-X",
+    "Subsystem Network",
     "Unstable"};
 };
 
 QVector<QString> qfu_specialRules::populateShipRules()
 {
     return QVector<QString>
-    {"Aegis-X",
+    {"Ablative Armor",
+    "Aegis-X",
     "Atmospheric",
     "Beast",
     "Detector",

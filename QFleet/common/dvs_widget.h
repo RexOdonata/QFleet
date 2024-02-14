@@ -138,6 +138,7 @@ class dvs_Data
         refresh();
     }
 
+    // removes the selected item
     void remove()
     {
         auto opt = this->getSelected();

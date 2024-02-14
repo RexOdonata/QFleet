@@ -85,6 +85,8 @@ Shipyard::Shipyard(QWidget *parent)
     strike.launchCap = true;
     launchSelect->add(strike);
 
+    ui->passiveCombo->setCurrentIndex(5);
+
 }
 
 Shipyard::~Shipyard()

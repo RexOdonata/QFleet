@@ -149,14 +149,13 @@
             <item>
              <widget class="QSpinBox" name="sigSpin"/>
             </item>
-           </layout>
-          </item>
-          <item>
-           <layout class="QVBoxLayout" name="verticalLayout_14">
             <item>
              <widget class="QLabel" name="label_19">
               <property name="text">
                <string>altSig</string>
+              </property>
+              <property name="alignment">
+               <set>Qt::AlignCenter</set>
               </property>
              </widget>
             </item>

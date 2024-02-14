@@ -6,6 +6,7 @@
 #include <QTreeView>
 #include "shipview.h"
 #include <array>
+#include "shipHook.h"
 
 namespace Ui {
 class shipSelect;
@@ -16,13 +17,17 @@ class shipSelect : public QDialog
     Q_OBJECT
 
 public:
-    explicit shipSelect(QWidget *parent = nullptr, const QMap<QString, QFleet_Ship_Shipyard> * shipData = NULL, QFleet_Ship_Fleet * selectedShip = NULL);
+    explicit shipSelect(QWidget *parent = nullptr, const QMap<QString, QFleet_Ship_Shipyard> * shipData = NULL, shipHook * selectedShip = NULL);
     ~shipSelect();
 
 private slots:
     void on_treeView_clicked(const QModelIndex &index);
 
     void on_treeView_activated(const QModelIndex &index);
+
+    void on_pushButton_clicked();
+
+    void on_selectOptionsButton_clicked();
 
 private:
     Ui::shipSelect *ui;
@@ -31,7 +36,7 @@ private:
 
     const QMap<QString, QFleet_Ship_Shipyard> * shipData;
 
-    QFleet_Ship_Fleet * selectedShip;
+    shipHook * selectedShip;
 
     QStandardItemModel * shipTreeModel;
 
@@ -44,6 +49,8 @@ private:
     // FXs
 
     void insertShip(std::array<QStandardItem *,5> model, const QString);
+
+    bool checkMinOpts(const QFleet_Ship_Shipyard&);
 
     // take a ship from source and convert into a fleet ship.
     QFleet_Ship_Fleet createShip(const QFleet_Ship_Shipyard&, QVector<QFleet_Option>&);

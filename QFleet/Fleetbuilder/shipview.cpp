@@ -46,6 +46,8 @@ void shipView::loadShip(const QFleet_Ship_Fleet& ship)
 
     // populate the statline
 
+    ui->nameLabel->setText(ship.name);
+
     ui->scanLabel->setText(QString::number(ship.scan));
 
     ui->sigLabel->setText(ship.getArmorString());

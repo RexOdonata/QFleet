@@ -172,3 +172,8 @@ faction QFleet_List::getFaction() const
 {
     return listFaction.getVal();
 }
+
+QFleet_Cost QFleet_List::getCost()
+{
+    return cost;
+}

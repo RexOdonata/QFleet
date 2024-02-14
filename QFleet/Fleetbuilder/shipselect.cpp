@@ -1,7 +1,9 @@
 #include "shipselect.h"
 #include "ui_shipselect.h"
 
-shipSelect::shipSelect(QWidget *parent, const QMap<QString,QFleet_Ship_Shipyard> * setShipData, QFleet_Ship_Fleet * setSelectedShip) :
+#include "optselect.h"
+
+shipSelect::shipSelect(QWidget *parent, const QMap<QString,QFleet_Ship_Shipyard> * setShipData, shipHook * setSelectedShip) :
     QDialog(parent),
     ui(new Ui::shipSelect),
     shipData(setShipData),
@@ -43,6 +45,8 @@ shipSelect::shipSelect(QWidget *parent, const QMap<QString,QFleet_Ship_Shipyard>
     }
 
     ui->treeView->setModel(shipTreeModel);
+
+    ui->validCheck->setEnabled(false);
 }
 
 void shipSelect::insertShip(std::array<QStandardItem *,5> models, const QString shipName)
@@ -87,10 +91,11 @@ void shipSelect::insertShip(std::array<QStandardItem *,5> models, const QString 
 
 shipSelect::~shipSelect()
 {
+    selectedShip->valid = false;
     delete ui;
 }
 
-// given the selected ship, load the ship view
+// given the selected ship, load the ship view andset that ship to be selected
 void shipSelect::on_treeView_activated(const QModelIndex &index)
 {
     QString shipName = shipTreeModel->itemFromIndex(index)->text();
@@ -103,7 +108,19 @@ void shipSelect::on_treeView_activated(const QModelIndex &index)
 
         QFleet_Ship_Fleet fleetShip = createShip(indexShip,blank);
 
-        selectedShip = new QFleet_Ship_Fleet(fleetShip);
+        selectedShip->ship = fleetShip;
+        // check if the selected ship has mandatory options which won't have been selected at this point
+        if (checkMinOpts(indexShip))
+        {
+            selectedShip->valid = true;
+            ui->validCheck->setChecked(Qt::Checked);
+        }
+        else
+        {
+            selectedShip->valid = false;
+            ui->validCheck->setChecked(Qt::Unchecked);
+        }
+
 
         shipViewWidget->loadShip(fleetShip);
     }
@@ -133,6 +150,8 @@ QFleet_Ship_Fleet shipSelect::createShip(const QFleet_Ship_Shipyard& shipSrc, QV
     // extract options into the ship
     for (auto& opt : opts)
     {
+        newShip.points += opt.points;
+
             switch(opt.type.getVal())
             {
                 case optType::WEAPONS:
@@ -182,5 +201,49 @@ QFleet_Ship_Fleet shipSelect::createShip(const QFleet_Ship_Shipyard& shipSrc, QV
 void shipSelect::on_treeView_clicked(const QModelIndex &index)
 {
     // this is just here to stop a compilation error, resetting moc files is annoying
+}
+
+bool shipSelect::checkMinOpts(const QFleet_Ship_Shipyard& ship)
+{
+    if (ship.minOptions > 0)
+            return false;
+    else
+            return true;
+}
+
+void shipSelect::on_selectOptionsButton_clicked()
+{
+    auto selectionIndex = ui->treeView->selectionModel()->selectedIndexes();
+
+    if (selectionIndex.size()>0)
+    {
+            auto selection = selectionIndex[0];
+
+            QString shipName = shipTreeModel->itemFromIndex(selection)->text();
+
+            QFleet_Ship_Shipyard indexShip = shipData->value(shipName);
+
+            QVector<QFleet_Option> options;
+
+            optSelect * dialog = new optSelect(this, &indexShip, &options);
+
+            dialog->setAttribute(Qt::WA_DeleteOnClose);
+
+            int r = dialog->exec();
+
+            if (r == QDialog::Accepted)
+            {
+                QFleet_Ship_Fleet fleetShip = createShip(indexShip, options);
+
+                selectedShip->ship = fleetShip;
+                selectedShip->valid = true;
+                ui->validCheck->setChecked(Qt::Checked);
+            }
+            else
+            {
+                selectedShip->valid = false;
+                ui->validCheck->setChecked(Qt::Unchecked);
+            }
+    }
 }
 
