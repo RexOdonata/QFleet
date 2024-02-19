@@ -34,12 +34,12 @@ QString QFleet_Ship_Fleet::getArmorString() const
 
 QString QFleet_Ship_Fleet::getSigString() const
 {
-    QString str = QString(this->signature);
+    QString str = QString::number(this->signature);
 
     if (this->altSig > 0)
     {
         str.append("/");
-        str.append(QString(this->altSig));
+        str.append(QString::number(this->altSig));
     }
 
     return str;
@@ -47,12 +47,12 @@ QString QFleet_Ship_Fleet::getSigString() const
 
 QString QFleet_Ship_Fleet::getGroupString() const
 {
-    QString str = QString(this->groupL);
+    QString str = QString::number(this->groupL);
 
     if (this->groupL != this->groupH)
     {
         str.append("-");
-        str.append(QString(this->groupH));
+        str.append(QString::number(this->groupH));
     }
 
     return str;

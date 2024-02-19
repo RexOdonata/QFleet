@@ -14,37 +14,31 @@
 Shipyard::Shipyard(QWidget *parent)
     : QMainWindow(parent)
     , ui(new Ui::Shipyard)
-    , weaponWidget(new dvsx_Widget(parent))
-    , shipWidget(new dvsx_Widget(parent))
-    , optionWidget(new dvsx_Widget(parent))
-    , specialWidget(new dvs_Widget(parent))
-    , launchWidget(new dvs_Widget(parent))
-    , launchSelectWidget(new dvs_Widget(parent))
+    , weaponWidget(new dvsx_Widget<QFleet_Weapon>(parent))
+    , shipWidget(new dvsx_Widget<QFleet_Ship_Shipyard>(parent))
+    , optionWidget(new dvsx_Widget<QFleet_Option>(parent))
+    , specialWidget(new dvs_Widget<QString>(parent))
+    , launchWidget(new dvs_Widget<QFleet_launchProfile>(parent))
+    , launchSelectWidget(new dvs_Widget<QFleet_LaunchAsset>(parent))
 {
     ui->setupUi(this);
 
     ui->weaponRosterLayout->addWidget(weaponWidget);
-    weaponRoster = new dvs_Data<QFleet_Weapon, dvsx_Widget>(weaponWidget);
     weaponWidget->setLabel("Weapons");
 
     ui->shipRosterLayout->addWidget(shipWidget);
-    shipRoster = new dvs_Data<QFleet_Ship_Shipyard, dvsx_Widget>(shipWidget);
     shipWidget->setLabel("Ships");
 
     ui->optionLayout->addWidget(optionWidget);
-    optionRoster = new dvs_Data<QFleet_Option, dvsx_Widget>(optionWidget);
     optionWidget->setLabel("Options");
 
     ui->specialLayout->addWidget(specialWidget);
-    specialRoster = new dvs_Data<QString, dvs_Widget>(specialWidget);
     specialWidget->setLabel("Special Rules");
 
     ui->launchProfileLayout->addWidget(launchWidget);
-    launchRoster = new dvs_Data<QFleet_launchProfile, dvs_Widget>(launchWidget);
     launchWidget->setLabel("Launch Profiles");
 
     ui->launchAssetLayout->addWidget(launchSelectWidget);
-    launchSelect = new dvs_Data<QFleet_LaunchAsset, dvs_Widget>(launchSelectWidget);
     launchSelectWidget->setLabel("Selected Assets");
 
     {
@@ -83,7 +77,7 @@ Shipyard::Shipyard(QWidget *parent)
 
     QFleet_LaunchAsset strike("Fighters and Bombers");
     strike.launchCap = true;
-    launchSelect->add(strike);
+    launchSelectWidget->add(strike);
 
     ui->passiveCombo->setCurrentIndex(5);
 
@@ -92,22 +86,16 @@ Shipyard::Shipyard(QWidget *parent)
 Shipyard::~Shipyard()
 {
     delete weaponWidget;
-    delete weaponRoster;
 
     delete shipWidget;
-    delete shipRoster;
 
     delete optionWidget;
-    delete optionRoster;
 
     delete specialWidget;
-    delete specialRoster;
 
     delete launchWidget;
-    delete launchRoster;
 
     delete launchSelectWidget;
-    delete launchSelect;
 
     delete ui;
 }
@@ -125,14 +113,14 @@ void Shipyard::on_newWeaponButton_clicked()
     int r = arsenalWindow->exec();    
 
     if (r == QDialog::Accepted)
-        weaponRoster->add(*newWeaponPtr);
+        weaponWidget->add(*newWeaponPtr);
 
 }
 
 
 void Shipyard::on_copyWeaponButton_clicked()
 {
-    auto sel = weaponRoster->getSelected();
+    auto sel = weaponWidget->getSelected();
 
     if (sel)
     {
@@ -145,7 +133,7 @@ void Shipyard::on_copyWeaponButton_clicked()
         int r = arsenalWindow->exec();        
 
         if (r == QDialog::Accepted)
-            weaponRoster->add(*clonedWeaponPtr);
+            weaponWidget->add(*clonedWeaponPtr);
 
     }
 
@@ -154,10 +142,10 @@ void Shipyard::on_copyWeaponButton_clicked()
 // works by removing the existing weapon and adding a copy of it after modifications back
 void Shipyard::on_editWeaponButton_clicked()
 {
-    auto sel = weaponRoster->getSelected();
+    auto sel = weaponWidget->getSelected();
     if (sel)
     {
-        weaponRoster->remove();
+        weaponWidget->remove();
 
         std::shared_ptr<QFleet_Weapon> newWeaponPtr = std::make_shared<QFleet_Weapon>(*sel);
 
@@ -169,9 +157,9 @@ void Shipyard::on_editWeaponButton_clicked()
 
 
         if (r == QDialog::Accepted)
-            weaponRoster->add(*newWeaponPtr);
+            weaponWidget->add(*newWeaponPtr);
         else
-            weaponRoster->add(*sel);
+            weaponWidget->add(*sel);
 
     }
 }
@@ -179,27 +167,27 @@ void Shipyard::on_editWeaponButton_clicked()
 
 void Shipyard::on_deleteWeaponButton_clicked()
 {
-    auto sel = weaponRoster->getSelected();
+    auto sel = weaponWidget->getSelected();
 
     if (sel)
-        weaponRoster->remove();
+        weaponWidget->remove();
 }
 
 void Shipyard::on_actionLoad_triggered()
 {
-    shipRoster->loadFromFile(this, fileType_shipData());
+    shipWidget->loadFromFile(this, fileType_shipData());
 }
 
 
 void Shipyard::on_actionSave_triggered()
 {
-    shipRoster->saveToFile(this, fileType_shipData());
+    shipWidget->saveToFile(this, fileType_shipData());
 }
 
 
 void Shipyard::on_launchAddButton_clicked()
 {
-    QVector<QFleet_LaunchAsset> assets = launchSelect->getMultiSelected();
+    QVector<QFleet_LaunchAsset> assets = launchSelectWidget->getMultiSelected();
 
 
     QFleet_launchProfile lp("newLP");
@@ -236,16 +224,16 @@ void Shipyard::on_launchAddButton_clicked()
 
     lp.name = newName;
 
-    launchRoster->add(lp);
+    launchWidget->add(lp);
 }
 
 
 void Shipyard::on_launchDeleteButton_clicked()
 {
-    auto sel = launchRoster->getSelected();
+    auto sel = launchWidget->getSelected();
 
     if (sel)
-        launchRoster->remove();
+        launchWidget->remove();
 
 }
 
@@ -256,13 +244,13 @@ void Shipyard::on_addSpecialButton_clicked()
 
     str = xrulesub(str, num);
 
-    specialRoster->add(str);
+    specialWidget->add(str);
 }
 
 
 void Shipyard::on_deleteSpecialCombo_clicked()
 {
-    specialRoster->remove();
+    specialWidget->remove();
 }
 
 
@@ -270,7 +258,7 @@ void Shipyard::on_newOptionButton_clicked()
 {
     std::shared_ptr<QFleet_Option> newOptionPtr = std::make_shared<QFleet_Option>("newOption");
 
-    auto launchAssetData = launchSelect->getData();
+    auto launchAssetData = launchSelectWidget->getData();
     Scrapyard * scrapyardWindow = new Scrapyard(this, newOptionPtr, &launchAssetData);
 
     scrapyardWindow->setAttribute(Qt::WA_DeleteOnClose);
@@ -280,22 +268,22 @@ void Shipyard::on_newOptionButton_clicked()
     scrapyardWindow->setAttribute(Qt::WA_DeleteOnClose);
 
     if (r == QDialog::Accepted)
-        optionRoster->add(*newOptionPtr);
+        optionWidget->add(*newOptionPtr);
 
 }
 
 
 void Shipyard::on_editOptionButton_clicked()
 {
-    auto sel = optionRoster->getSelected();
+    auto sel = optionWidget->getSelected();
 
     if (sel)
     {
-        optionRoster->remove();
+        optionWidget->remove();
 
         std::shared_ptr<QFleet_Option> newOptionPtr = std::make_shared<QFleet_Option>(*sel);
 
-        auto launchAssetData = launchSelect->getData();
+        auto launchAssetData = launchSelectWidget->getData();
         Scrapyard * scrapyardWindow = new Scrapyard(this, newOptionPtr, &launchAssetData);
 
         scrapyardWindow->setAttribute(Qt::WA_DeleteOnClose);
@@ -303,19 +291,19 @@ void Shipyard::on_editOptionButton_clicked()
         int r = scrapyardWindow->exec();
 
         if (r == QDialog::Accepted)
-            optionRoster->add(*newOptionPtr);
+            optionWidget->add(*newOptionPtr);
         else
-            optionRoster->add(*sel);        
+            optionWidget->add(*sel);
     }
 }
 
 
 void Shipyard::on_deleteOptionButton_clicked()
 {
-    auto sel = optionRoster->getSelected();
+    auto sel = optionWidget->getSelected();
 
     if (sel)
-        optionRoster->remove();
+        optionWidget->remove();
 }
 
 
@@ -349,21 +337,21 @@ void Shipyard::on_saveShipButton_clicked()
     newShip.passive = QFleet_Armor(ui->passiveCombo->currentText());
 
     {
-    auto weapons = weaponRoster->getData();
+    auto weapons = weaponWidget->getData();
 
         for (auto& weapon : weapons)
             newShip.weapons.push_back(weapon);
     }
 
     {
-        auto launchProfiles = launchRoster->getData();
+        auto launchProfiles = launchWidget->getData();
 
         for (auto& lp : launchProfiles)
             newShip.launch.push_back(lp);
     }
 
     {
-        auto options = optionRoster->getData();
+        auto options = optionWidget->getData();
 
         for (auto& opt : options)
             newShip.options.push_back(opt);
@@ -396,27 +384,27 @@ void Shipyard::on_saveShipButton_clicked()
     newShip.minOptions = ui->maxOptionsSpin->value();
 
     {
-        QVector<QString> specials = specialRoster->getData();
+        QVector<QString> specials = specialWidget->getData();
 
         newShip.specialRules = specials;
     }
 
 
-    shipRoster->add(newShip);
+    shipWidget->add(newShip);
 }
 
 
 void Shipyard::on_loadShipButton_clicked()
 {
-    auto loadShip = shipRoster->getSelected();
+    auto loadShip = shipWidget->getSelected();
 
     if (loadShip)
     {
 
-        weaponRoster->clear();
-        specialRoster->clear();
-        launchRoster->clear();
-        optionRoster->clear();
+        weaponWidget->clear();
+        specialWidget->clear();
+        launchWidget->clear();
+        optionWidget->clear();
 
         ui->nameEdit->setText(loadShip->name);
 
@@ -443,13 +431,13 @@ void Shipyard::on_loadShipButton_clicked()
 
         ui->tonnageCombo->setCurrentText(loadShip->tonnage.toString());
 
-        specialRoster->add(loadShip->specialRules);
+        specialWidget->add(loadShip->specialRules);
 
-        weaponRoster->add(loadShip->weapons);
+        weaponWidget->add(loadShip->weapons);
 
-        optionRoster->add(loadShip->options);
+        optionWidget->add(loadShip->options);
 
-        launchRoster->add(loadShip->launch);
+        launchWidget->add(loadShip->launch);
 
         ui->maxBroadsideSpin->setValue(loadShip->maxBroadsides);
 
@@ -486,6 +474,6 @@ void Shipyard::on_loadLaunchAssetsButton_clicked()
 
     loadVectorFromJsonFile(this, assets, fileType_launchData());
 
-    launchSelect->add(assets);
+    launchSelectWidget->add(assets);
 }
 

@@ -52,7 +52,17 @@
       </layout>
      </item>
      <item>
-      <layout class="QVBoxLayout" name="selectOptionsLayout"/>
+      <widget class="QLabel" name="label_3">
+       <property name="text">
+        <string>Selected Options:</string>
+       </property>
+       <property name="alignment">
+        <set>Qt::AlignCenter</set>
+       </property>
+      </widget>
+     </item>
+     <item>
+      <widget class="QListView" name="listView"/>
      </item>
      <item>
       <layout class="QHBoxLayout" name="numOptionsBox">

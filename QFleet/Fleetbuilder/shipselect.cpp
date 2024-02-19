@@ -235,6 +235,8 @@ void shipSelect::on_selectOptionsButton_clicked()
             {
                 QFleet_Ship_Fleet fleetShip = createShip(indexShip, options);
 
+                shipViewWidget->loadShip(fleetShip);
+
                 selectedShip->ship = fleetShip;
                 selectedShip->valid = true;
                 ui->validCheck->setChecked(Qt::Checked);

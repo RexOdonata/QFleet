@@ -24,12 +24,9 @@ public:
 private:
     Ui::Hangar *ui;
 
-    std::shared_ptr<dvs_Data<QFleet_LaunchAsset, dvsx_Widget>> launchRoster;
-    std::shared_ptr<dvsx_Widget> rosterWidget;
+    dvsx_Widget<QFleet_LaunchAsset> * rosterWidget;
 
-
-    std::shared_ptr<dvs_Data<QString, dvs_Widget>> specialRules;
-    std::shared_ptr<dvs_Widget> specialWidget;
+    dvs_Widget<QString> * specialWidget;
 
     QFleet_LaunchAsset saveLaunch();
 

@@ -2,6 +2,7 @@
 #define DVS_WIDGET_H
 
 
+#include "qlineedit.h"
 #include <QStringListModel>
 #include <memory>
 #include <QWidget>
@@ -12,92 +13,88 @@
 #include <QJsonObject>
 #include <optional>
 
-
 #include <type_traits>
 
 namespace Ui {
-class dvsx_Widget;
-class dvs_Widget;
+class dvs_WidgetBase;
 }
 
+// The QOBJECT macro and templates doen't fix apparently.
 
-// creates a view for a DVS data package, packaging a listView with utility fxs
-class dvs_Widget : public QWidget
+// provides the UI
+class dvs_WidgetBase : public QWidget
 {
     Q_OBJECT
 
 public:
-    explicit dvs_Widget(QWidget *parent = nullptr);
-    ~dvs_Widget();
-
-    void setList(const QStringList in);
-
-    QString getSelected();
-
-    QVector<QString> getMultiSelect();
+    explicit dvs_WidgetBase(QWidget *parent = nullptr);
+    ~dvs_WidgetBase();
 
     void setLabel(const QString);
 
+
+protected:
+
+    QStringListModel  * listModel;
+
+    void createSearchBar();
+
+    QString getSelectedStr() const;
+
+    QVector<QString> getMultiSelectStr() const;
 
 private:
 
     // is this being double deleted?
-    Ui::dvs_Widget *ui;
-    QStringListModel  * listModel;
+    Ui::dvs_WidgetBase *ui;
 
+    QCompleter * completer = NULL;
+
+    QLineEdit * searchLinePtr = NULL;
 
 };
 
-// same functionality as DVS with a search menu
-class dvsx_Widget : public QWidget
-{
-    Q_OBJECT
 
-public:
-    explicit dvsx_Widget(QWidget *parent = nullptr);
-    ~dvsx_Widget();
-
-    void setList(const QStringList in);
-
-    QString getSelected();
-
-    QVector<QString> getMultiSelect();
-
-    void setLabel(const QString);
-
-
-
-private:
-    Ui::dvsx_Widget *ui;
-    QCompleter * completer;
-    QStringListModel  * listModel;
-};
-
-
-QString getStr(const QString in);
-
-QString getStr(const QString in);
-
-
-template<typename T>
-QString getStr(const T in)
+template <typename T>
+inline QString getStr(const T in)
 {
     return in.getName();
 }
 
-
-// links to a DVS widget that it provides data for. Is the entrypoint for functions that modify the view
-template<typename T, typename U>
-class dvs_Data
+template <>
+inline QString getStr<QString>(const QString in)
 {
+    return in;
+}
+
+
+template <typename T>
+class dvs_Widget : public dvs_WidgetBase
+{
+    private:
+
+    void refresh()
+    {
+        QStringList strings;
+
+        for (auto& item : data)
+        {
+            strings.push_back(getStr(item));
+        }
+
+        this->listModel->setStringList(strings);
+    }
+
     public:
 
-    dvs_Data(U * ptr) : widgetPtr(ptr)
-    {}
+    dvs_Widget(QWidget *parent = nullptr) : dvs_WidgetBase(parent)
+    {
+
+    }
 
     void add(const T in)
     {
-        data.insert(getStr(in),in);
+        data.insert(getStr(in), in);
         refresh();
     }
 
@@ -138,7 +135,6 @@ class dvs_Data
         refresh();
     }
 
-    // removes the selected item
     void remove()
     {
         auto opt = this->getSelected();
@@ -153,14 +149,12 @@ class dvs_Data
         }
     }
 
-
     std::optional<T> getSelected() const
     {
-        auto selID = widgetPtr->getSelected();
+        auto selID = dvs_WidgetBase::getSelectedStr();
         if (data.contains(selID))
         {
             return data[selID];
-
         }
 
         else
@@ -169,7 +163,7 @@ class dvs_Data
 
     QVector<T> getMultiSelected() const
     {
-        auto selIDs = widgetPtr->getMultiSelect();
+        auto selIDs = dvs_WidgetBase::getMultiSelectStr();
 
         QVector<T> objs;
 
@@ -178,19 +172,7 @@ class dvs_Data
                 objs.push_back(data[str]);
 
         return objs;
-
     }
-
-
-
-    void convertToRef()
-    {
-        for (auto& element : data)
-        {
-            element.purgeValue();
-        }
-    }
-
 
     void loadFromFile(QWidget * parent, const QString fileType)
     {
@@ -217,7 +199,7 @@ class dvs_Data
                 QJsonArray objects = wrapperObj[fileType].toArray();
 
                 for (auto object : objects)
-                {                    
+                {
                     T newObj(object.toObject());
                     data.insert(newObj.getName(), newObj);
                 }
@@ -244,7 +226,7 @@ class dvs_Data
         {
             jsonData.append(QJsonValue(element.toJson()));
 
-       }
+        }
 
         QJsonObject wrapperObj;
 
@@ -261,25 +243,23 @@ class dvs_Data
             file.close();
         }
     }
+
+    protected:
+
+        QMap<QString, T> data;
+};
+
+template <typename T>
+class dvsx_Widget : public dvs_Widget<T>
+{
+    public:
+
+        dvsx_Widget(QWidget *parent = nullptr) : dvs_Widget<T>(parent)
+        {
+            this->createSearchBar();
+        }
     private:
 
-    U * widgetPtr;
-
-    QMap<QString, T> data;
-
-
-    void refresh()
-    {
-        QStringList strings;
-
-        for (auto& item : data)
-        {
-            strings.push_back(getStr(item));
-        }
-
-        widgetPtr->setList(strings);
-
-    }
 };
 
 

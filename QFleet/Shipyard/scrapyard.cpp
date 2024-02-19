@@ -9,10 +9,10 @@
 Scrapyard::Scrapyard(QWidget *parent, std::shared_ptr<QFleet_Option> optionPtr, QVector<QFleet_LaunchAsset> * assetVec) :
     QDialog(parent),
     ui(new Ui::Scrapyard),
-    weaponWidget(new dvs_Widget(parent)),
-    launchAssetWidget(new dvs_Widget(parent)),
-    launchProfileWidget(new dvs_Widget(parent)),
-    specialWidget(new dvs_Widget(parent)),
+    weaponWidget(new dvs_Widget<QFleet_Weapon>(parent)),
+    launchAssetWidget(new dvs_Widget<QFleet_LaunchAsset>(parent)),
+    launchProfileWidget(new dvs_Widget<QFleet_launchProfile>(parent)),
+    specialWidget(new dvs_Widget<QString>(parent)),
     option(optionPtr)
 
 {
@@ -20,24 +20,20 @@ Scrapyard::Scrapyard(QWidget *parent, std::shared_ptr<QFleet_Option> optionPtr, 
 
     // create the launchAssets container
     ui->launchAssetLayout->addWidget(launchAssetWidget);
-    launchAssetRoster = new dvs_Data<QFleet_LaunchAsset, dvs_Widget>(launchAssetWidget);
     launchAssetWidget->setLabel("Launch Assets ");
 
-    launchAssetRoster->add(*assetVec);
+    launchAssetWidget->add(*assetVec);
 
     // create the LaunchProfile container
     ui->launchProfileLayout->addWidget(launchProfileWidget);
-    launchProfileRoster = new dvs_Data<QFleet_launchProfile, dvs_Widget>(launchProfileWidget);
     launchProfileWidget->setLabel("Special Rules");
 
     // create the special rules container
     ui->specialRosterLayout->addWidget(specialWidget);
-    specialRoster = new dvs_Data<QString, dvs_Widget>(specialWidget);
     specialWidget->setLabel("Launch profile");
 
     // create the weapon container
     ui->weaponLayout->addWidget(weaponWidget);
-    weaponRoster = new dvs_Data<QFleet_Weapon, dvs_Widget>(weaponWidget);
     weaponWidget->setLabel("Weapon");
 
     {
@@ -62,11 +58,11 @@ Scrapyard::Scrapyard(QWidget *parent, std::shared_ptr<QFleet_Option> optionPtr, 
 
             if (type == optType::WEAPONS)
             {
-                weaponRoster->add(*option->weaponVecPtr);
+                weaponWidget->add(*option->weaponVecPtr);
             }
             else if (type == optType::LAUNCH)
             {
-                launchProfileRoster->add(*option->launchProfilePtr);
+                launchProfileWidget->add(*option->launchProfilePtr);
             }
             else if (type == optType::STAT)
             {
@@ -87,7 +83,7 @@ Scrapyard::Scrapyard(QWidget *parent, std::shared_ptr<QFleet_Option> optionPtr, 
             }
             else if (type == optType::SPECIAL)
             {
-                specialRoster->add(*option->specialPtr);
+                specialWidget->add(*option->specialPtr);
             }
         }
 
@@ -107,7 +103,7 @@ Scrapyard::Scrapyard(QWidget *parent, std::shared_ptr<QFleet_Option> optionPtr, 
 
 Scrapyard::~Scrapyard()
 {
-    // widgets
+    // dvs widgets
 
     delete weaponWidget;
 
@@ -117,23 +113,13 @@ Scrapyard::~Scrapyard()
 
     delete specialWidget;
 
-    // data
-
-    delete weaponRoster;
-
-    delete launchAssetRoster;
-
-    delete launchProfileRoster;
-
-    delete specialRoster;
-
     delete ui;
 }
 
 
 void Scrapyard::on_launchAddButton_clicked()
 {
-    QVector<QFleet_LaunchAsset> assets = launchAssetRoster->getMultiSelected();
+    QVector<QFleet_LaunchAsset> assets = launchAssetWidget->getMultiSelected();
 
 
     QFleet_launchProfile lp("newLP");
@@ -171,18 +157,18 @@ void Scrapyard::on_launchAddButton_clicked()
 
     lp.name = newName;
 
-    launchProfileRoster->clear();
+    launchProfileWidget->clear();
 
-    launchProfileRoster->add(lp);
+    launchProfileWidget->add(lp);
 }
 
 
 void Scrapyard::on_launchDeleteButton_clicked()
 {
-    auto sel = weaponRoster->getSelected();
+    auto sel = weaponWidget->getSelected();
 
     if (sel)
-        launchProfileRoster->remove();
+        launchProfileWidget->remove();
 }
 
 
@@ -199,7 +185,7 @@ void Scrapyard::on_saveButton_clicked()
 
         newOpt.weaponVecPtr = std::make_shared<QVector<QFleet_Weapon>>();
 
-        auto weapons = weaponRoster->getData();
+        auto weapons = weaponWidget->getData();
 
         for (auto& element : weapons)
             newOpt.weaponVecPtr->push_back(element);
@@ -210,7 +196,7 @@ void Scrapyard::on_saveButton_clicked()
 
         newOpt.launchProfilePtr = std::make_shared<QFleet_launchProfile>("blank");
 
-        auto lp = launchProfileRoster->getData().front();
+        auto lp = launchProfileWidget->getData().front();
 
         *(newOpt.launchProfilePtr) = lp;
     }
@@ -238,7 +224,7 @@ void Scrapyard::on_saveButton_clicked()
 
         newOpt.specialPtr =  std::make_shared<QString>();
 
-        QString special = specialRoster->getData().front();
+        QString special = specialWidget->getData().front();
 
         *(newOpt.specialPtr) = special;
     }
@@ -267,26 +253,26 @@ void Scrapyard::on_newWeaponButton_clicked()
     int r = arsenalWindow->exec();
 
     if (r == QDialog::Accepted)
-        weaponRoster->add(*newWeaponPtr);
+        weaponWidget->add(*newWeaponPtr);
 
 }
 
 
 void Scrapyard::on_deleteWeaponButton_clicked()
 {
-    auto sel = weaponRoster->getSelected();
+    auto sel = weaponWidget->getSelected();
 
     if (sel)
-        weaponRoster->remove();
+        weaponWidget->remove();
 }
 
 
 void Scrapyard::on_editWeaponbutton_clicked()
 {
-    auto sel = weaponRoster->getSelected();
+    auto sel = weaponWidget->getSelected();
     if (sel)
     {
-        weaponRoster->remove();
+        weaponWidget->remove();
 
         std::shared_ptr<QFleet_Weapon> newWeaponPtr = std::make_shared<QFleet_Weapon>(*sel);
 
@@ -297,9 +283,9 @@ void Scrapyard::on_editWeaponbutton_clicked()
         int r = arsenalWindow->exec();
 
         if (r == QDialog::Accepted)
-            weaponRoster->add(*newWeaponPtr);
+            weaponWidget->add(*newWeaponPtr);
         else
-            weaponRoster->add(*sel);        
+            weaponWidget->add(*sel);
 
     }
 }
@@ -307,7 +293,7 @@ void Scrapyard::on_editWeaponbutton_clicked()
 
 void Scrapyard::on_CopyWeaponButton_clicked()
 {
-    auto sel = weaponRoster->getSelected();
+    auto sel = weaponWidget->getSelected();
 
     if (sel)
     {
@@ -320,7 +306,7 @@ void Scrapyard::on_CopyWeaponButton_clicked()
         arsenalWindow->setAttribute(Qt::WA_DeleteOnClose);
 
         if (r == QDialog::Accepted)
-            weaponRoster->add(*clonedWeaponPtr);
+            weaponWidget->add(*clonedWeaponPtr);
 
 
     }
@@ -335,17 +321,17 @@ void Scrapyard::on_specialAddButton_clicked()
 
     str = xrulesub(str,num);
 
-    specialRoster->clear();
+    specialWidget->clear();
 
-    specialRoster->add(str);
+    specialWidget->add(str);
 }
 
 
 void Scrapyard::on_specialDeleteButton_clicked()
 {
-    auto sel = weaponRoster->getSelected();
+    auto sel = weaponWidget->getSelected();
 
     if (sel)
-        specialRoster->remove();
+        specialWidget->remove();
 }
 

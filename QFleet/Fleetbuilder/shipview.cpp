@@ -50,7 +50,7 @@ void shipView::loadShip(const QFleet_Ship_Fleet& ship)
 
     ui->scanLabel->setText(QString::number(ship.scan));
 
-    ui->sigLabel->setText(ship.getArmorString());
+    ui->sigLabel->setText(ship.getSigString());
 
     ui->thrustLabel->setText(QString::number(ship.thrust));
 

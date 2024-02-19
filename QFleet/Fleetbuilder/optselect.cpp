@@ -12,14 +12,13 @@
 optSelect::optSelect(QWidget *parent, const QFleet_Ship_Shipyard * refShip, QVector<QFleet_Option> * setOptionList) :
     QDialog(parent),
     ui(new Ui::optSelect),
-    optionList(setOptionList),
-    selectedOptionWidget(new dvs_Widget(parent))
+    optionList(setOptionList)
+
+
 {
     ui->setupUi(this);
 
-    ui->selectOptionsLayout->addWidget(selectedOptionWidget);
-    selectOptionsRoster = new dvs_Data<QFleet_Option, dvs_Widget>(selectedOptionWidget);
-    selectedOptionWidget->setLabel("Selected Options");
+    ui->listView->setModel(&listModel);
 
     ui->optionTableWidget->setColumnCount(4);
 
@@ -40,6 +39,8 @@ optSelect::optSelect(QWidget *parent, const QFleet_Ship_Shipyard * refShip, QVec
     for (auto& option : refShip->options)
     {
         optMap.insert(option.name, option);
+
+        selectedOptionsNum.insert(option.name, 0);
 
         auto index = ui->optionTableWidget->rowCount();
         ui->optionTableWidget->insertRow(index);
@@ -83,18 +84,25 @@ void optSelect::updateCounts()
     unsigned int broadsides = 0;
     unsigned int cost = 0;
 
-    for (auto& opt : selectOptionsRoster->getData())
+    for (auto key : selectedOptionsNum.keys())
     {
-        if (opt.broadside)
-            broadsides++;
 
-        cost += opt.points;
+        for (int i = 0; i < selectedOptionsNum[key]; i++)
+        {
+            auto opt = optMap.value(key);
+
+            if (opt.broadside)
+                broadsides++;
+
+            cost += opt.points;
+        }
+
     }
 
     this->broadsideCount = broadsides;
 
     ui->broadsideOptionsNumLabel->setText(QString::number(this->broadsideCount));
-    ui->selectedOptionNumLabel->setText(QString::number(selectOptionsRoster->getSize()));
+    ui->selectedOptionNumLabel->setText(QString::number(getSelectionCount()));
 
     ui->pointsLabel->setText(QString::number(cost));
 }
@@ -102,7 +110,7 @@ void optSelect::updateCounts()
 bool optSelect::checkAdd(const QFleet_Option& opt, QString& reason)
 {
     // if at max options count, can't add
-    if (selectOptionsRoster->getSize() == maxOptions)
+    if (getSelectionCount() == maxOptions)
     {
         reason = "hardpoints full";
         return false;
@@ -118,14 +126,12 @@ bool optSelect::checkAdd(const QFleet_Option& opt, QString& reason)
     // if there is already one of this ONEONLY option
     else if (opt.oneOnly)
     {
-        for (auto& selectedOption : selectOptionsRoster->getData())
+
+        if (selectedOptionsNum.value(opt.name) > 0)
         {
-            if (selectedOption.name == opt.name)
-            {
-                reason = "already has a ";
-                reason.append(opt.name);
-                return false;
-            }
+            reason = "already has a ";
+            reason.append(opt.name);
+            return false;
         }
     }
     else
@@ -137,9 +143,6 @@ bool optSelect::checkAdd(const QFleet_Option& opt, QString& reason)
 
 optSelect::~optSelect()
 {
-    delete selectOptionsRoster;
-
-    delete selectedOptionWidget;
 
     delete ui;
 }
@@ -162,7 +165,7 @@ void optSelect::on_addOptionButton_clicked()
 
     if (checkAdd(opt,reason))
     {
-        selectOptionsRoster->add(opt);
+        selectOption(opt);
         if (opt.broadside)
             broadsideCount++;
 
@@ -182,26 +185,25 @@ void optSelect::on_addOptionButton_clicked()
 
 void optSelect::on_removeOptionButton_clicked()
 {
-    auto selectedOpt = selectOptionsRoster->getSelected();
+    auto optID = getSelection();
 
-    if (!selectedOpt.has_value())
-        return;
+    if (optID)
+    {
+        selectedOptionsNum[optID.value()]--;
 
-    if (selectedOpt->broadside)
-        broadsideCount--;
+        refreshSelectionView();
 
-    selectOptionsRoster->remove();
+        updateCounts();
+    }
 }
 
 
 void optSelect::on_saveOptionsButton_clicked()
 {
 
-    if (selectOptionsRoster->getSize() >= minOptions)
+    if (getSelectionCount() >= minOptions)
     {
-        // add the selected options to the ship
-        for (auto& opt : selectOptionsRoster->getData())
-            optionList->push_back(opt);
+        expandSelectedOptions(*optionList);
 
         this->done(QDialog::Accepted);
     }
@@ -211,5 +213,66 @@ void optSelect::on_saveOptionsButton_clicked()
         msgBox.setText("Minimum hardpoints not filled");
         msgBox.exec();
     }
+}
+
+std::optional<QString> optSelect::getSelection()
+{
+    if (ui->listView->selectionModel()->selectedIndexes().size() > 0)
+    {
+        return ui->listView->selectionModel()->selectedIndexes().front().data().toString();
+    }
+    else
+        return {};
+}
+
+void optSelect::selectOption(const QFleet_Option& opt)
+{
+    QString optID = opt.name;
+
+    selectedOptionsNum[optID]++;
+
+    refreshSelectionView();
+}
+
+
+
+void optSelect::expandSelectedOptions(QVector<QFleet_Option>& vec)
+{
+    vec.clear();
+
+    for (auto key : selectedOptionsNum.keys())
+    {
+        for (unsigned int i = 0; i < selectedOptionsNum.value(key); i++)
+        {
+            vec.push_back(optMap.value(key));
+        }
+    }
+}
+
+
+void optSelect::refreshSelectionView()
+{
+    QStringList list;
+
+    for (auto key : selectedOptionsNum.keys())
+    {
+        for (unsigned int i = 0; i < selectedOptionsNum.value(key); i++)
+        {
+            list.push_back(key);
+        }
+    }
+
+    listModel.setStringList(list);
+}
+
+unsigned int optSelect::getSelectionCount()
+{
+    unsigned int total = 0;
+    for (auto& count : selectedOptionsNum)
+    {
+        total += count;
+    }
+
+    return total;
 }
 
