@@ -5,32 +5,29 @@
 #include "../Components/qfleet_faction.h"
 
 #include "../Components/qft_component.h"
+
+// represent a fleet list saved to file or loaded from file, or for printing
 class QFleet_List : public qft_component<QFleet_List>
 {
 public:
     QFleet_List(QJsonObject);
 
-    QFleet_List(const QString);
+    // used during UI->object encoding
+    QFleet_List(const QString, QFleet_Faction, unsigned int);
 
-    void setPointsLimit(unsigned int);
+    void addCard(QFleet_Battlegroup&);
+
 
     unsigned int getPointsLimit() const;
 
     unsigned int getLaunchLimit() const;
 
-    void setFaction(faction);
-
     faction getFaction() const;
 
-    QFleet_Cost getCost();
+    QFleet_Cost getCost() const;
 
-    void addCard(QFleet_BGT);
+    QVector<QFleet_Battlegroup> getCards() const;
 
-    void removeCard(QFleet_BGT);
-
-    std::shared_ptr<QFleet_Battlegroup> getCard(unsigned int);
-
-    bool checkLimits();
 
     void updateCost();
 
@@ -47,29 +44,12 @@ private:
 
     QFleet_Cost cost;
 
-    unsigned int maxBattleGroups;
-
-    unsigned int maxLC;
-
-    QVector<std::shared_ptr<QFleet_Battlegroup>> cards;
+    QVector<QFleet_Battlegroup> cards;
 
     const static QString field_pointsLimit;
     const static QString field_cost;
     const static QString field_cards;
     const static QString field_faction;
-
-    const static std::array<unsigned int, 12> cardLimitMatrix;
-
-    // allowed/actual
-    unsigned int allowedL=0;
-    unsigned int allowedM=0;
-    unsigned int allowedH=0;
-    unsigned int allowedSH=0;
-
-    unsigned int countL=0;
-    unsigned int countM=0;
-    unsigned int countH=0;
-    unsigned int countSH=0;
 
 };
 

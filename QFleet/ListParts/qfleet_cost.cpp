@@ -13,9 +13,24 @@ QFleet_Cost::QFleet_Cost(QJsonObject in) : qft_component<QFleet_Cost>(in.value(f
     fieldFromJson(in, field_SR, SR);
 }
 
-QFleet_Cost::QFleet_Cost(const QString setName) : qft_component<QFleet_Cost>(setName)
+QFleet_Cost::QFleet_Cost(const QString setName) :
+    qft_component<QFleet_Cost>(setName),
+    points(0), LC(0), SR(0)
 {
+}
 
+QFleet_Cost::QFleet_Cost(const QFleet_Ship_Fleet& srcShip) :
+    qft_component<QFleet_Cost>(srcShip.name + " cost"),
+    points(srcShip.points),
+    SR(srcShip.tonnage.getIntValue()),
+    LC(0)
+
+{
+    for (auto& launchProfile : srcShip.launch)
+    {
+        if (launchProfile.getStrike())
+            this->LC += launchProfile.getCount();
+    }
 }
 
 void QFleet_Cost::impl_toJson(QJsonObject& json)

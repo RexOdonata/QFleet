@@ -72,3 +72,31 @@ QString QFleet_Ship_Fleet::getSpecialString() const
 
     return str;
 }
+
+std::optional<unsigned int> QFleet_Ship_Fleet::admiralCost(unsigned int level)
+{
+    // return empty value if light - no admiral allowed
+    // likewise an AV1 admiral isn't allowed
+    if (this->tonnage.getIntValue() < 5)
+        return {};
+    else if (level == 0 || level == 1)
+        return 0;
+    // free admiral discount for UCM dreads
+    else if (this->admiralDiscount == 5)
+        return 0;
+    else
+    {
+        std::array<unsigned int, 4> costs{20,40,80,100};
+        unsigned int adjustedIndex = level - 2;
+
+        unsigned int discountCounter = this->admiralDiscount;
+
+        // decrement the cost of the admiral down one rank until it reaches base cost or the discount is expended
+        while (discountCounter > 0 && adjustedIndex > 0)
+        {
+            adjustedIndex --;
+            discountCounter --;
+        }
+        return costs[adjustedIndex];
+    }
+}

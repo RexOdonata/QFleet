@@ -2,6 +2,8 @@ cmake_minimum_required(VERSION 3.14)
 
 project(QF_ListParts LANGUAGES CXX)
 
+# These objects are components that are intended to save/load lists
+
 set(CMAKE_AUTOUIC ON)
 set(CMAKE_AUTOMOC ON)
 set(CMAKE_AUTORCC ON)
@@ -18,6 +20,6 @@ add_library(QF_ListParts SHARED
   qfleet_list.h qfleet_list.cpp
 )
 
-target_link_libraries(QF_ListParts PRIVATE QF_Components Qt${QT_VERSION_MAJOR}::Core)
+target_link_libraries(QF_ListParts PRIVATE Qt${QT_VERSION_MAJOR}::Core QF_Components)
 
 target_compile_definitions(QF_ListParts PRIVATE QF_LISTPARTS_LIBRARY)
