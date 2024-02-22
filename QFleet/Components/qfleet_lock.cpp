@@ -8,7 +8,7 @@ const QString QFleet_Lock::val_5 = "5+";
 const QString QFleet_Lock::val_6 = "6+";
 const QString QFleet_Lock::val_x = "X+";
 
-const QMap<lock,QString> QFleet_Lock::e2s =
+const QHash<lock,QString> QFleet_Lock::e2s =
     {
         {lock::lk2, val_2},
         {lock::lk3, val_3},
@@ -18,7 +18,7 @@ const QMap<lock,QString> QFleet_Lock::e2s =
         {lock::lkX, val_x}
 };
 
-const QMap<QString, lock> QFleet_Lock::s2e =
+const QHash<QString, lock> QFleet_Lock::s2e =
     {
         {val_2, lock::lk2},
         {val_3, lock::lk3},

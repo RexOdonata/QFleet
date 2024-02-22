@@ -9,7 +9,7 @@ const QString QFleet_Armor::val_6 = "6+";
 const QString QFleet_Armor::val_n = "-";
 
 
-const QMap<armor,QString> QFleet_Armor::e2s =
+const QHash<armor,QString> QFleet_Armor::e2s =
     {
     {armor::Arm2, val_2},
     {armor::Arm3, val_3},
@@ -19,7 +19,7 @@ const QMap<armor,QString> QFleet_Armor::e2s =
     {armor::none, val_n}
 };
 
-const QMap<QString, armor> QFleet_Armor::s2e =
+const QHash<QString, armor> QFleet_Armor::s2e =
     {
         {val_2, armor::Arm2},
         {val_3, armor::Arm3},

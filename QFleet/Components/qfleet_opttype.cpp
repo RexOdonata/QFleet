@@ -6,7 +6,7 @@ const QString QFleet_OptType::val_launch ="launch";
 const QString QFleet_OptType::val_stat ="stat";
 const QString QFleet_OptType::val_special ="special";
 
-const QMap<QString, optType> QFleet_OptType::s2e =
+const QHash<QString, optType> QFleet_OptType::s2e =
 {
     {QFleet_OptType::val_weapon, optType::WEAPONS},
     {QFleet_OptType::val_launch, optType::LAUNCH},
@@ -14,7 +14,7 @@ const QMap<QString, optType> QFleet_OptType::s2e =
     {QFleet_OptType::val_special, optType::SPECIAL},
 };
 
-const QMap<optType, QString> QFleet_OptType::e2s =
+const QHash<optType, QString> QFleet_OptType::e2s =
     {
         {optType::WEAPONS, QFleet_OptType::val_weapon},
         {optType::LAUNCH, QFleet_OptType::val_launch},

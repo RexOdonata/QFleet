@@ -8,7 +8,7 @@ const QString QFleet_StatID::val_thrust="thrust";
 const QString QFleet_StatID::val_hull="hull";
 const QString QFleet_StatID::val_PD="PD";
 
-const QMap<QString, statID> QFleet_StatID::s2e =
+const QHash<QString, statID> QFleet_StatID::s2e =
 {
     {val_scan,statID::scan},
     {val_sig,statID::sig},
@@ -17,7 +17,7 @@ const QMap<QString, statID> QFleet_StatID::s2e =
     {val_PD,statID::PD}
 };
 
-const QMap<statID, QString> QFleet_StatID::e2s =
+const QHash<statID, QString> QFleet_StatID::e2s =
     {
         {statID::scan,val_scan},
         {statID::sig,val_sig},

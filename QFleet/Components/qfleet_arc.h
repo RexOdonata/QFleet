@@ -2,19 +2,24 @@
 #define QFLEET_ARC_H
 
 #include "qft_enum.h"
-#include <QMap>
+
 
 enum class arc
 {
-    FN,
-    F,
-    FS,
-    FSl,
-    FSr,
-    FSR,
-    L,
-    R,
+    FN=0,
+    F=1,
+    FS=2,
+    FSl=3,
+    FSr=4,
+    FSR=5,
+    L=6,
+    R=7,
 };
+
+inline uint qHash(arc key, uint seed)
+{
+    return qHash(static_cast<uint>(key),seed);
+}
 
 class QFleet_Arc : public qft_enum<QFleet_Arc, arc>
 {
@@ -82,8 +87,8 @@ private:
     const static QString val_L;
     const static QString val_R;
 
-    const static QMap<QString, arc> s2e;
-    const static QMap<arc, QString> e2s;
+    const static QHash<QString, arc> s2e;
+    const static QHash<arc, QString> e2s;
 
 };
 

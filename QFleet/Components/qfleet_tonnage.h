@@ -7,15 +7,22 @@
 #include <QMap>
 #include <optional>
 
+#include "qfleet_bgt.h"
+
 enum class tonnage
 {
-    L,
-    L2,
-    M,
-    H,
-    S,
-    S2
+    L=0,
+    L2=1,
+    M=2,
+    H=3,
+    S=4,
+    S2=5
 };
+
+inline uint qHash(tonnage key, uint seed)
+{
+    return qHash(static_cast<uint>(key),seed);
+}
 
 
 class QFleet_Tonnage : public qft_enum<QFleet_Tonnage, tonnage>
@@ -45,6 +52,49 @@ public:
 
     QFleet_Tonnage()
     {        
+    }
+
+    // convert raw tonnage to BGT
+    QFleet_BGT convertToBGT() const
+    {
+        if (val)
+        {
+            switch (*val)
+            {
+            case tonnage::L:
+
+                return QFleet_BGT(bgt::PF);
+                break;
+
+            case tonnage::L2:
+
+                return QFleet_BGT(bgt::PF);
+                break;
+
+            case tonnage::M:
+
+                return QFleet_BGT(bgt::LN);
+                break;
+            case tonnage::H:
+
+                return QFleet_BGT(bgt::VG);
+                break;
+            case tonnage::S:
+
+                return QFleet_BGT(bgt::FL);
+                break;
+            case tonnage::S2:
+
+                return QFleet_BGT(bgt::FL);
+                break;
+            }
+        }
+        else
+        {
+            qFatal("Opened empty enum instance");
+            return QFleet_BGT(bgt::PF);
+        }
+
     }
 
 protected:

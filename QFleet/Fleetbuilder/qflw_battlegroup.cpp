@@ -14,11 +14,11 @@ const std::array<unsigned int, 16> QFLW_Battlegroup::groupLimitMatrix =
         1,0,0,2
 };
 
-QFLW_Battlegroup::QFLW_Battlegroup(QWidget *parent, std::optional<QFleet_BGT> bgt) :
+QFLW_Battlegroup::QFLW_Battlegroup(QWidget *parent, std::optional<QFleet_BGT> setType) :
     QWidget(parent),
     ui(new Ui::QFLW_Battlegroup),
     cost(QFleet_Cost("Card Cost")),
-    type(*bgt),
+    type(*setType),
     listWidgetPtr(parent)
 {
     ui->setupUi(this);
@@ -36,33 +36,15 @@ QFLW_Battlegroup::QFLW_Battlegroup(QWidget *parent, std::optional<QFleet_BGT> bg
             this, &QFLW_Battlegroup::recieveSelectedShip);
 
 
-    ui->typeLabel->setText(type.toString());
+    ui->typeLabel->setText(type.toLongString());
+
+    QString tempName = type.toLongString() + " " + QString::number((listPtr->getBGN(*setType)));
+
+    ui->nameEdit->setText(tempName);
 
     refreshCostLabels();
 
-    unsigned int index = 0;
-
-    switch (bgt->getVal())
-    {
-    case bgt::PF:
-
-        index = 0;
-        break;
-
-    case bgt::LN:
-
-        index = 1;
-        break;
-
-    case bgt::VG:
-
-        index = 2;
-        break;
-    case bgt::FL:
-
-        index = 3;
-        break;
-    }
+    unsigned int index = setType.value().convertToIndex();
 
     allowedL = groupLimitMatrix[4*index];
     allowedM = groupLimitMatrix[4*index + 1];
@@ -157,67 +139,10 @@ bool QFLW_Battlegroup::canAdd(const QFleet_Tonnage tonnageVal) const
 {
 
     // first, get the type of ship L/M/H/S from its tonnage
-    QFleet_BGT shipBGT;
+    QFleet_BGT shipBGT = tonnageVal.convertToBGT();
 
-    tonnage groupType = tonnageVal.getVal();
-
-    switch (groupType)
-    {
-        case tonnage::L:
-
-            shipBGT = QFleet_BGT(bgt::PF);
-            break;
-
-        case tonnage::L2:
-
-            shipBGT = QFleet_BGT(bgt::PF);
-            break;
-
-        case tonnage::M:
-
-            shipBGT = QFleet_BGT(bgt::LN);
-            break;
-        case tonnage::H:
-
-            shipBGT = QFleet_BGT(bgt::VG);
-            break;
-        case tonnage::S:
-
-            shipBGT = QFleet_BGT(bgt::FL);
-            break;
-        case tonnage::S2:
-
-            shipBGT = QFleet_BGT(bgt::FL);
-            break;
-    }
-
-    // then use that value to get an index into an array for the appropriate counters
-    bgt typeEnum = shipBGT.getVal();
-
-    unsigned int index = 0;
-
-    switch (typeEnum)
-    {
-    case bgt::PF:
-
-        index = 0;
-        break;
-
-    case bgt::LN:
-
-        index = 1;
-        break;
-
-    case bgt::VG:
-
-        index = 2;
-        break;
-
-    case bgt::FL:
-
-        index = 3;
-        break;
-    }
+    // convert to index
+    unsigned int index = shipBGT.convertToIndex();
 
     std::array<unsigned int, 4> actual{countL, countM, countH, countSH};
     std::array<unsigned int, 4> limits{allowedL, allowedM, allowedH, allowedSH};
@@ -231,22 +156,7 @@ bool QFLW_Battlegroup::canAdd(const QFleet_Tonnage tonnageVal) const
 bool QFLW_Battlegroup::checkMandatory() const
 {
 
-    bgt typeEnum = type.getVal();
-
-    unsigned int index = 0;
-
-    if (typeEnum==bgt::LN)
-    {
-        index = 1;
-    }
-    else if (typeEnum == bgt::VG)
-    {
-        index = 2;
-    }
-    else if (typeEnum == bgt::FL)
-    {
-        index = 3;
-    }
+    unsigned int index = type.convertToIndex();
 
     std::array<unsigned int, 4> actual{countL, countM, countH, countSH};
 

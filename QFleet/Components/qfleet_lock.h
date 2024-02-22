@@ -2,18 +2,22 @@
 #define QFLEET_LOCK_H
 
 #include "qft_enum.h"
-#include <QMap>
+
 
 enum class lock
 {
-    lk2,
-    lk3,
-    lk4,
-    lk5,
-    lk6,
-    lkX
+    lk2=0,
+    lk3=1,
+    lk4=2,
+    lk5=3,
+    lk6=4,
+    lkX=5
 };
 
+inline uint qHash(lock key, uint seed)
+{
+    return qHash(static_cast<uint>(key),seed);
+}
 
 class QFleet_Lock : public qft_enum<QFleet_Lock, lock>
 {
@@ -74,8 +78,8 @@ private:
     const static QString val_6;
     const static QString val_x;
 
-    const static QMap<QString, lock> s2e;
-    const static QMap<lock, QString> e2s;
+    const static QHash<QString, lock> s2e;
+    const static QHash<lock, QString> e2s;
 };
 
 #endif // QFLEET_TONNAGE_H

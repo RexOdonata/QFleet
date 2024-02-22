@@ -7,12 +7,17 @@
 // not putting armor in here because its an enum, not an int
 enum class statID
 {
-    scan,
-    sig,
-    thrust,
-    hull,
-    PD
+    scan=0,
+    sig=1,
+    thrust=2,
+    hull=3,
+    PD=4
 };
+
+inline uint qHash(statID key, uint seed)
+{
+    return qHash(static_cast<uint>(key),seed);
+}
 
 class QFleet_StatID : public qft_enum<QFleet_StatID, statID>
 {
@@ -77,8 +82,8 @@ private:
     const static QString val_hull;
     const static QString val_PD;
 
-    const static QMap<QString, statID> s2e;
-    const static QMap<statID, QString> e2s;
+    const static QHash<QString, statID> s2e;
+    const static QHash<statID, QString> e2s;
 
 
 };
