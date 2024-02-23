@@ -64,7 +64,11 @@ void admiralSelectDialog::on_doneButton_clicked()
     auto checked = ui->radioButtonGroup->checkedId();
     if ( checked != -1)
     {
-        emit sendAdmiralValue(lvl, cost);
+        admiralVals newAdmiralVals;
+        newAdmiralVals.cost = cost;
+        newAdmiralVals.level=lvl;
+
+        emit signalAdmiralValue(newAdmiralVals);
 
         this->done(QDialog::Accepted);
     }

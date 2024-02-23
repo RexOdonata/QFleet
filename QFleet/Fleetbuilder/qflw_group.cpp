@@ -26,18 +26,12 @@ QFLW_Group::QFLW_Group(QWidget *parent, std::optional<QFleet_Ship_Fleet> setShip
 
     QFLW_List * listPtr = (QFLW_List*)((QFLW_Battlegroup*)cardWidgetPtr)->getListPtr();
 
-    // used to send a signal to the list that an admiral has been set
-    connect(this, &QFLW_Group::setAdmiral, listPtr, &QFLW_List::setAdmiral);
+    connect(this, &QFLW_Group::signalSetAdmiral, listPtr, &QFLW_List::slotAdmiralSet);
 
-    // the signal that the list uses to toggle admiral buttons and wipe out set admirals
-    connect(listPtr, &QFLW_List::admiralSignal, this, &QFLW_Group::admiralSlot);
+    connect(this, &QFLW_Group::signalAdmiralDeleted, listPtr, &QFLW_List::slotAdmiralDeleted);
 
-    connect(this, &QFLW_Group::queryAdmiralSet, listPtr, &QFLW_List::checkAdmiralState);
 
-    bool checkAdmiral;
-    emit queryAdmiralSet(&checkAdmiral);
-
-    if (checkAdmiral || ship.tonnage.getIntValue() < 5)
+    if (ship.tonnage.getIntValue() < 5)
     {
         ui->setAdmiralButton->setEnabled(false);
     }
@@ -62,10 +56,26 @@ QFleet_Cost QFLW_Group::getCost() const
     return cost;
 }
 
+void QFLW_Group::removeAdmiral()
+{
+    if (admiral)
+    {
+        admiral.reset();
+
+        cost = getShipGroupCost(num);
+
+        updateCost();
+
+        admiralIndicatorVisibility(false);
+    }
+}
+
 QFLW_Group::~QFLW_Group()
 {
-    if (admiral > 0)
-        emit setAdmiral(false);
+    if (admiral)
+    {
+        emit signalAdmiralDeleted();
+    }
 
 
      // delete the dynamically created label widgets for admirals
@@ -75,17 +85,6 @@ QFLW_Group::~QFLW_Group()
     delete ui;
 }
 
-// done when
-void QFLW_Group::getAdmiralSelect(unsigned int lvl, unsigned int pointsCost)
-{
-    admiral = lvl;
-
-    admiralCost =  pointsCost;
-
-    cost = getShipGroupCost(ui->numSpin->value());
-
-    updateCost();
-}
 
 void QFLW_Group::on_viewShipButton_clicked()
 {
@@ -96,60 +95,36 @@ void QFLW_Group::on_viewShipButton_clicked()
 
 }
 
+// this gets a signal from the admiral dialog that sets the admiral cost and value
+void QFLW_Group::slotAdmiralValues(admiralVals val)
+{
+    admiral = val;
+}
+
 
 void QFLW_Group::on_setAdmiralButton_clicked()
 {
     admiralSelectDialog dialog(this, &ship);
 
-    connect(&dialog, &admiralSelectDialog::sendAdmiralValue, this, &QFLW_Group::getAdmiralSelect);
+    admiralVals setadmiralVals;
+
+    connect(&dialog, &admiralSelectDialog::signalAdmiralValue, this, &QFLW_Group::slotAdmiralValues);
 
     int r = dialog.exec();
+    // after this resolves, the admiral should be set
 
     if (r == QDialog::Accepted)
     {
         // tell the list that an admiral has been set
-        emit setAdmiral(true);
+        emit signalSetAdmiral(this);
 
         // show icons
         admiralIndicatorVisibility(true);
+
+        cost = getShipGroupCost(num);
+
+        updateCost();
     }
-}
-
-void QFLW_Group::admiralSlot(const bool val)
-{
-    // first, light ships ignore this
-    if (ship.tonnage.getIntValue() < 5)
-        return;
-
-    // if the ship has an admiral present already, hide admiral indicators
-    if (!val && admiral > 0)
-    {
-        admiralIndicatorVisibility(false);
-    }
-
-    // this ship has recieved an admiral
-    if (val)
-    {
-        ui->setAdmiralButton->setEnabled(false);
-    }
-    // admiral reset signal recieved
-    else
-    {
-        // if this ship had the admiral, reset the value and recalculate
-        if (admiral > 0)
-        {
-            admiral = 0;
-            admiralCost = 0;
-            cost = getShipGroupCost(ui->numSpin->value());
-            // update cost, regardless of what happened
-            updateCost();
-        }
-
-        // for everyone else, re-enable buttons
-        ui->setAdmiralButton->setEnabled(true);
-    }
-
-
 }
 
 void QFLW_Group::admiralIndicatorVisibility(const bool val)
@@ -160,7 +135,7 @@ void QFLW_Group::admiralIndicatorVisibility(const bool val)
         admiralLevelLabel->setVisible(true);
         ui->admiralLayout->addWidget(admiralPresenceCheck);
         ui->admiralLayout->addWidget(admiralLevelLabel);
-        admiralLevelLabel->setText("Lvl " + QString::number(admiral));
+        admiralLevelLabel->setText("Lvl " + QString::number(admiral->level) + "/" + QString::number(admiral->cost) + " pts");
     }
     else
     {
@@ -195,7 +170,8 @@ QFleet_Cost QFLW_Group::getShipGroupCost(const unsigned int num) const
         scaledCost + scaling;
     }
 
-    scaledCost.points += admiralCost;
+    if (admiral)
+        scaledCost.points += admiral->cost;
 
     return scaledCost;
 }
@@ -205,6 +181,8 @@ QFleet_Cost QFLW_Group::getShipGroupCost(const unsigned int num) const
 void QFLW_Group::on_numSpin_valueChanged(int arg1)
 {
     QFleet_Cost newCost = getShipGroupCost(arg1);
+
+    num = arg1;
 
     cost = newCost;
 

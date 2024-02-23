@@ -6,6 +6,8 @@
 
 #include "../Components/qfleet_ship_fleet.h"
 
+#include "qflw_group.h"
+
 namespace Ui {
 class admiralSelectDialog;
 }
@@ -20,7 +22,7 @@ public:
 
 signals:
 
-    void sendAdmiralValue(unsigned int, unsigned int);
+    void signalAdmiralValue(admiralVals);
 
 
 private slots:

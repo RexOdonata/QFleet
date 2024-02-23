@@ -9,6 +9,12 @@
 #include <QCheckBox>
 #include <QLabel>
 
+struct admiralVals
+{
+    unsigned int level = 0;
+    unsigned int cost = 0;
+};
+
 namespace Ui {
 class QFLW_Group;
 }
@@ -23,21 +29,17 @@ public:
 
     QFleet_Cost getCost() const;
 
+    void removeAdmiral();
+
 signals:
 
-    // signals to the list if an admiral has been assigned or destroyed
-    void setAdmiral(const bool);
+    void signalSetAdmiral(QFLW_Group *);
 
-    // sets a bool flag based on if the list has an admiral set
-    void queryAdmiralSet(bool *);
+    void signalAdmiralDeleted();
 
 public slots:
 
-    // recieves a signal to create(true) or destroy(false) an admiral
-    void admiralSlot(const bool);
-
-    // gets a signal from the admiral select dialog to set values
-    void getAdmiralSelect(unsigned int, unsigned int);
+    void slotAdmiralValues(admiralVals);
 
 private slots:
     void on_viewShipButton_clicked();
@@ -64,9 +66,7 @@ private:
 
     unsigned int num = 0;
 
-    unsigned int admiral = 0;
-
-    unsigned int admiralCost = 0;
+    std::optional<admiralVals> admiral = {};
 
     // FX
 
