@@ -95,6 +95,7 @@ public:
             return QFleet_BGT(bgt::PF);
         }
 
+        return QFleet_BGT(bgt::PF);
     }
 
 protected:

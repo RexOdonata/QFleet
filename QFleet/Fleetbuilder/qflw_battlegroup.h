@@ -33,6 +33,8 @@ public:
 
     QFleet_BGT getType() const;
 
+    QWidget * getListPtr() const;
+
 public slots:
     // does the grunt work of adding a ship
     void recieveSelectedShip(const QFleet_Ship_Fleet&, QFLW_Battlegroup *);

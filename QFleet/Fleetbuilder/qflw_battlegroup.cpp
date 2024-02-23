@@ -14,6 +14,11 @@ const std::array<unsigned int, 16> QFLW_Battlegroup::groupLimitMatrix =
         1,0,0,2
 };
 
+QWidget * QFLW_Battlegroup::getListPtr() const
+{
+    return (QWidget *)listWidgetPtr;
+}
+
 QFLW_Battlegroup::QFLW_Battlegroup(QWidget *parent, std::optional<QFleet_BGT> setType) :
     QWidget(parent),
     ui(new Ui::QFLW_Battlegroup),

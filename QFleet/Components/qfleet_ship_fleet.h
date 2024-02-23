@@ -28,7 +28,7 @@ public:
 
     // translates the desired admiral level to actual cost based on discount
     // returns no value on L ships
-    std::optional<unsigned int> admiralCost(unsigned int);
+    std::optional<unsigned int> admiralCost(unsigned int) const;
 
 protected:
 

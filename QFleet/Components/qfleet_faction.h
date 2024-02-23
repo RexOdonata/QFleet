@@ -38,6 +38,7 @@ public:
 
     QFleet_Faction(QJsonObject in) : qft_enum<QFleet_Faction, faction>(in)
     {
+
     }
 
     QFleet_Faction()

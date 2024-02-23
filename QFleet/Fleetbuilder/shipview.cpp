@@ -64,6 +64,8 @@ void shipView::loadShip(const QFleet_Ship_Fleet& ship)
 
     ui->tonnageLabel->setText(ship.tonnage.toString());
 
+    ui->costLabel->setText(QString::number(ship.points));
+
     while (ui->weaponTableWidget->rowCount() > 0)
         ui->weaponTableWidget->removeRow(0);
     for (auto& element : ship.weapons)

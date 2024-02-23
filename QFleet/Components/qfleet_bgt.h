@@ -85,6 +85,8 @@ public:
             qFatal("Opened empty enum instance");
             return 0;
         }
+
+        return 0;
     }
 
 protected:

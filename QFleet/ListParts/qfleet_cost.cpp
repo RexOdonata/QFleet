@@ -56,7 +56,7 @@ void QFleet_Cost::zero()
 
 void QFleet_Cost::operator=(const QFleet_Cost& obj)
 {
-    this->SR += obj.SR;
-    this->LC += obj.LC;
-    this->points += obj.points;
+    this->SR = obj.SR;
+    this->LC = obj.LC;
+    this->points = obj.points;
 }

@@ -73,7 +73,7 @@ QString QFleet_Ship_Fleet::getSpecialString() const
     return str;
 }
 
-std::optional<unsigned int> QFleet_Ship_Fleet::admiralCost(unsigned int level)
+std::optional<unsigned int> QFleet_Ship_Fleet::admiralCost(unsigned int level) const
 {
     // return empty value if light - no admiral allowed
     // likewise an AV1 admiral isn't allowed
