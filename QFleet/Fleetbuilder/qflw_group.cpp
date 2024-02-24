@@ -115,11 +115,23 @@ void QFLW_Group::on_setAdmiralButton_clicked()
 
     if (r == QDialog::Accepted)
     {
-        // tell the list that an admiral has been set
-        emit signalSetAdmiral(this);
+        if (admiral->level > 0)
+        {
+            // tell the list that an admiral has been set
+            emit signalSetAdmiral(this);
 
-        // show icons
-        admiralIndicatorVisibility(true);
+            // show icons
+            admiralIndicatorVisibility(true);
+
+            cost = getShipGroupCost(num);
+        }
+        // if the ship has been set to no admiral
+        else
+        {
+            emit signalAdmiralDeleted();
+
+            admiralIndicatorVisibility(false);
+        }
 
         cost = getShipGroupCost(num);
 

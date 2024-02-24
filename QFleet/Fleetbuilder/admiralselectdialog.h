@@ -38,6 +38,8 @@ private slots:
 
     void on_doneButton_clicked();
 
+    void on_l0Radio_clicked();
+
 private:
     Ui::admiralSelectDialog *ui;
 

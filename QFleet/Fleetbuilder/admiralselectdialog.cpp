@@ -18,6 +18,7 @@ admiralSelectDialog::admiralSelectDialog(QWidget *parent, const QFleet_Ship_Flee
     ui->radioButtonGroup->setId(ui->l3Radio, 1);
     ui->radioButtonGroup->setId(ui->l4Radio, 2);
     ui->radioButtonGroup->setId(ui->l5Radio, 3);
+    ui->radioButtonGroup->setId(ui->l0Radio, 4);
 
     ui->l2CostLabel->setText(QString::number(costs[0]));
     ui->l3CostLabel->setText(QString::number(costs[1]));
@@ -74,5 +75,12 @@ void admiralSelectDialog::on_doneButton_clicked()
     }
     else
         this->done(QDialog::Rejected);
+}
+
+
+void admiralSelectDialog::on_l0Radio_clicked()
+{
+    lvl = 0;
+    cost = 0;
 }
 

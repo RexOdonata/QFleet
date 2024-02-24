@@ -47,8 +47,12 @@ void QFleet_launchProfile::setStrike(const bool set)
     strike = set;
 }
 
+
+// fuse multiple string-names into a single string seperated by &s
 void QFleet_launchProfile::setAssetNames(QVector<QString>& set)
 {
+    assetNames.clear();
+
     for (auto itr = set.begin(); itr != set.end(); itr++)
     {
         assetNames.append(*itr);

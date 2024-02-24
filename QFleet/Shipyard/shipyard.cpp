@@ -189,7 +189,6 @@ void Shipyard::on_launchAddButton_clicked()
 {
     QVector<QFleet_LaunchAsset> assets = launchSelectWidget->getMultiSelected();
 
-
     QFleet_launchProfile lp("newLP");
 
     lp.setCount(ui->launchQuantitySpin->value());
@@ -209,7 +208,6 @@ void Shipyard::on_launchAddButton_clicked()
     }
 
     lp.setStrike(isStrike);
-
 
     lp.setAssetNames(names);
 
@@ -476,4 +474,5 @@ void Shipyard::on_loadLaunchAssetsButton_clicked()
 
     launchSelectWidget->add(assets);
 }
+
 

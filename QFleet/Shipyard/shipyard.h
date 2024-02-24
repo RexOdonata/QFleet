@@ -54,6 +54,8 @@ private slots:
     void on_loadLaunchAssetsButton_clicked();
 
 
+    void on_pushButton_clicked();
+
 private:
     Ui::Shipyard *ui;
 
