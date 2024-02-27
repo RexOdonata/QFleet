@@ -17,7 +17,13 @@
    <item row="0" column="0">
     <widget class="QFrame" name="horizontalFrame">
      <property name="frameShape">
-      <enum>QFrame::Box</enum>
+      <enum>QFrame::Panel</enum>
+     </property>
+     <property name="frameShadow">
+      <enum>QFrame::Sunken</enum>
+     </property>
+     <property name="lineWidth">
+      <number>2</number>
      </property>
      <property name="midLineWidth">
       <number>2</number>

@@ -1,14 +1,14 @@
 #include "qfleet_faction.h"
 
 const QString QFleet_Faction::label = "faction";
-const QString QFleet_Faction::val_ucm = "ucm";
-const QString QFleet_Faction::val_scourge = "scourge";
-const QString QFleet_Faction::val_phr = "phr";
-const QString QFleet_Faction::val_shaltari = "shaltari";
-const QString QFleet_Faction::val_resistance = "resistance";
+const QString QFleet_Faction::val_ucm = "UCM";
+const QString QFleet_Faction::val_scourge = "Scourge";
+const QString QFleet_Faction::val_phr = "PHR";
+const QString QFleet_Faction::val_shaltari = "Shaltari";
+const QString QFleet_Faction::val_resistance = "Resistance";
 
 
-const QMap<QString, faction> QFleet_Faction::s2e =
+const QHash<QString, faction> QFleet_Faction::s2e =
 {
     {val_ucm,faction::UCM},
     {val_scourge,faction::SCOURGE},
@@ -17,7 +17,7 @@ const QMap<QString, faction> QFleet_Faction::s2e =
     {val_resistance, faction::RESISTANCE}
 };
 
-const QMap<faction, QString> QFleet_Faction::e2s =
+const QHash<faction, QString> QFleet_Faction::e2s =
 {
         {faction::UCM, val_ucm},
         {faction::SCOURGE, val_scourge},

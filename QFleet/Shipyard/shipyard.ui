@@ -397,7 +397,7 @@
          <layout class="QHBoxLayout" name="launchAssetLayout"/>
         </item>
         <item>
-         <layout class="QHBoxLayout" name="horizontalLayout_10">
+         <layout class="QVBoxLayout" name="verticalLayout_14">
           <item>
            <widget class="QPushButton" name="launchAddButton">
             <property name="text">

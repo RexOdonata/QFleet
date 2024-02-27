@@ -6,11 +6,16 @@
 
 enum class assetType
 {
-    fighter,
-    bomber,
-    torpedo,
-    drop
+    fighter=0,
+    bomber=1,
+    torpedo=2,
+    drop=3
 };
+
+inline uint qHash(assetType key, uint seed)
+{
+    return qHash(static_cast<uint>(key),seed);
+}
 
 class QFleet_AssetType : public qft_enum<QFleet_AssetType, assetType>
 {
@@ -70,8 +75,8 @@ private:
     const static QString val_torpedo;
     const static QString val_drop;
 
-    const static QMap<QString, assetType> s2e;
-    const static QMap<assetType, QString> e2s;
+    const static QHash<QString, assetType> s2e;
+    const static QHash<assetType, QString> e2s;
 
 };
 

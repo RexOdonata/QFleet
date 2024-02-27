@@ -4,17 +4,22 @@
 
 
 #include "qft_enum.h"
-#include <QMap>
+
 
 enum class armor
 {
-    Arm2,
-    Arm3,
-    Arm4,
-    Arm5,
-    Arm6,
-    none,
+    Arm2=0,
+    Arm3=1,
+    Arm4=2,
+    Arm5=3,
+    Arm6=4,
+    none=5
 };
+
+inline uint qHash(armor key, uint seed)
+{
+    return qHash(static_cast<uint>(key),seed);
+}
 
 
 class QFleet_Armor : public qft_enum<QFleet_Armor, armor>
@@ -77,8 +82,8 @@ private:
     const static QString val_6;
     const static QString val_n;
 
-    const static QMap<QString, armor> s2e;
-    const static QMap<armor, QString> e2s;
+    const static QHash<QString, armor> s2e;
+    const static QHash<armor, QString> e2s;
 
 };
 

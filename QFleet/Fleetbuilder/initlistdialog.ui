@@ -11,7 +11,7 @@
    </rect>
   </property>
   <property name="windowTitle">
-   <string>Dialog</string>
+   <string>New List</string>
   </property>
   <widget class="QWidget" name="verticalLayoutWidget">
    <property name="geometry">
@@ -35,7 +35,7 @@
       <item>
        <widget class="QSpinBox" name="pointsLimitSpin">
         <property name="maximum">
-         <number>10000</number>
+         <number>3000</number>
         </property>
        </widget>
       </item>

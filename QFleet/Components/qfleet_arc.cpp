@@ -11,7 +11,7 @@ const QString QFleet_Arc::val_FSR = "F/S/R";
 const QString QFleet_Arc::val_R = "S(r)";
 const QString QFleet_Arc::val_L = "S(l)";
 
-const QMap<arc, QString> QFleet_Arc::e2s =
+const QHash<arc, QString> QFleet_Arc::e2s =
     {
     {arc::FN, val_FN},
     {arc::F, val_F},
@@ -23,7 +23,7 @@ const QMap<arc, QString> QFleet_Arc::e2s =
     {arc::R, val_R}
 };
 
-const QMap<QString,arc> QFleet_Arc::s2e =
+const QHash<QString,arc> QFleet_Arc::s2e =
     {
         {val_FN, arc::FN},
         {val_F, arc::F},

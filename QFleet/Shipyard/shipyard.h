@@ -54,26 +54,23 @@ private slots:
     void on_loadLaunchAssetsButton_clicked();
 
 
+    void on_pushButton_clicked();
+
 private:
     Ui::Shipyard *ui;
 
-    dvs_Data<QFleet_Weapon, dvsx_Widget> * weaponRoster;
-    dvsx_Widget * weaponWidget;
 
-    dvs_Data<QFleet_Ship_Shipyard, dvsx_Widget> * shipRoster;
-    dvsx_Widget * shipWidget;
+    dvsx_Widget<QFleet_Weapon> * weaponWidget;
 
-    dvs_Data<QFleet_Option, dvsx_Widget> * optionRoster;
-    dvsx_Widget * optionWidget;
+    dvsx_Widget<QFleet_Ship_Shipyard> * shipWidget;
 
-    dvs_Data<QString, dvs_Widget> * specialRoster;
-    dvs_Widget * specialWidget;
+    dvsx_Widget<QFleet_Option> * optionWidget;
 
-    dvs_Data<QFleet_launchProfile, dvs_Widget> * launchRoster;
-    dvs_Widget * launchWidget;
+    dvs_Widget<QString> * specialWidget;
 
-    dvs_Data<QFleet_LaunchAsset, dvs_Widget> * launchSelect;
-    dvs_Widget * launchSelectWidget;
+    dvs_Widget<QFleet_launchProfile> * launchWidget;
+
+    dvs_Widget<QFleet_LaunchAsset> * launchSelectWidget;
 
 
 };

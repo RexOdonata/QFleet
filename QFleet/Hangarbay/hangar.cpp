@@ -5,9 +5,12 @@
 
 Hangar::Hangar(QWidget *parent)
     : QMainWindow(parent)
-    , ui(new Ui::Hangar), rosterWidget(std::make_shared<dvsx_Widget>(parent)), specialWidget(std::make_shared<dvs_Widget>(parent))
+    , ui(new Ui::Hangar),
+    rosterWidget(new dvsx_Widget<QFleet_LaunchAsset>(parent)),
+    specialWidget(new dvs_Widget<QString>(parent))
 {
     ui->setupUi(this);
+
 
     {
         qfu_specialRules specialRules;
@@ -24,12 +27,10 @@ Hangar::Hangar(QWidget *parent)
             ui->lock_combo->addItem(lock);
     }
 
-    ui->launchLayout->addWidget(rosterWidget.get());
-    launchRoster = std::make_shared<dvs_Data<QFleet_LaunchAsset, dvsx_Widget>>(rosterWidget.get());
+    ui->launchLayout->addWidget(rosterWidget);
     rosterWidget->setLabel("Launch");
 
-    ui->specialLayout->addWidget(specialWidget.get());
-    specialRules = std::make_shared<dvs_Data<QString, dvs_Widget>>(specialWidget.get());
+    ui->specialLayout->addWidget(specialWidget);
     specialWidget->setLabel("Special Rules");
 }
 
@@ -96,19 +97,19 @@ void Hangar::on_saveWeapon_button_clicked()
 {
     QFleet_LaunchAsset newLaunch = saveLaunch();
 
-    launchRoster->add(newLaunch);
+    rosterWidget->add(newLaunch);
 }
 
 void Hangar::on_loadWeapon_button_clicked()
 {
-    auto launch = launchRoster->getSelected();
+    auto launch = rosterWidget->getSelected();
 
     
 
     if (launch)
     {
 
-        specialRules->clear();
+        specialWidget->clear();
 
         ui->name_edit->clear();
         ui->name_edit->insert(launch->getName());
@@ -154,7 +155,7 @@ void Hangar::on_loadWeapon_button_clicked()
        ui->Scourge_check->setCheckState(factionMap[faction::SCOURGE]);
        ui->shaltari_check->setCheckState(factionMap[faction::SHALTARI]);
 
-       specialRules->add(launchValues.special);
+       specialWidget->add(launchValues.special);
 
        setValidFields();
     }
@@ -163,7 +164,7 @@ void Hangar::on_loadWeapon_button_clicked()
 
 void Hangar::on_deleteWeapon_button_clicked()
 {
-    launchRoster->remove();
+    rosterWidget->remove();
 }
 
 
@@ -171,13 +172,13 @@ void Hangar::on_specialAdd_button_clicked()
 {
     QString special = ui->special_combo->currentText();
 
-    specialRules->add(special);
+    specialWidget->add(special);
 }
 
 
 void Hangar::on_specialRemove_button_clicked()
 {
-    specialRules->remove();
+    specialWidget->remove();
 }
 
 void Hangar::setComboBoxSelection(QComboBox& box, QString item)
@@ -192,13 +193,13 @@ void Hangar::setComboBoxSelection(QComboBox& box, QString item)
 
 void Hangar::on_actionLoad_triggered()
 {
-    launchRoster->loadFromFile(this, fileType_launchData());
+    rosterWidget->loadFromFile(this, fileType_launchData());
 }
 
 
 void Hangar::on_actionSave_triggered()
 {
-    launchRoster->saveToFile(this, fileType_launchData());
+    rosterWidget->saveToFile(this, fileType_launchData());
 }
 
 

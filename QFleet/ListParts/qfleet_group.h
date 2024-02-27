@@ -6,6 +6,7 @@
 #include "qfleet_cost.h"
 #include "../Components/qfleet_ship_fleet.h"
 
+// this object is only used for loading/saving/printing, not manipulated on the fly
 class QFleet_Group : public qft_component<QFleet_Group>
 {
     friend class qft_component<QFleet_Group>;
@@ -13,42 +14,37 @@ class QFleet_Group : public qft_component<QFleet_Group>
 public:
     QFleet_Group(QJsonObject);
 
-    QFleet_Group(QFleet_Ship_Fleet, const QString);
+    QFleet_Group(const QFleet_Ship_Fleet&);
 
-    std::shared_ptr<QFleet_Ship_Fleet> ship = NULL;
+    // set information
 
-    // admiral poss
-    
-    bool admiralForced = false;
-    
-    bool admiralAllowed;
-    
-    unsigned int admiralDiscount = 0;
+    void setCostInfo(unsigned int num, unsigned int admiral);
 
-    // admiral actual
-    
-    unsigned int admiralLevel = 0;
+    // data
 
-    // FXs
-
-    void update();
-    void updateCost(const unsigned int);
     unsigned int getNumber() const;
     QFleet_Cost getCost() const;
+    unsigned int getAdmiral() const;
+    QFleet_Ship_Fleet getShip() const;
     
 protected:
 
     QFleet_Cost cost;
+
     unsigned int number;
+
+    unsigned int admiral;
+
+    QFleet_Ship_Fleet ship;
+
+    void admiralAdjust();
 
     const static QString label;
     const static QString field_cost;
     const static QString field_ship;
     const static QString field_number;
-    const static QString field_admiralForced;
-    const static QString field_admiralAllowed;
-    const static QString field_admiralDiscount;
-    const static QString field_admiralLevel;
+    const static QString field_admiral;
+
 
     void impl_toJson(QJsonObject&);
 };

@@ -5,11 +5,16 @@
 
 enum class optType
 {
-    WEAPONS,
-    LAUNCH,
-    STAT,
-    SPECIAL
+    WEAPONS=0,
+    LAUNCH=1,
+    STAT=2,
+    SPECIAL=3
 };
+
+inline uint qHash(optType key, uint seed)
+{
+    return qHash(static_cast<uint>(key),seed);
+}
 
 class QFleet_OptType : public qft_enum<QFleet_OptType, optType>
 {
@@ -71,8 +76,8 @@ private:
     const static QString val_stat;
     const static QString val_special;
 
-    const static QMap<QString, optType> s2e;
-    const static QMap<optType, QString> e2s;
+    const static QHash<QString, optType> s2e;
+    const static QHash<optType, QString> e2s;
 
 };
 

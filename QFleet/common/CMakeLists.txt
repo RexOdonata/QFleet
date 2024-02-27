@@ -3,7 +3,6 @@ add_library(
     dvs_widget.h
     dvs_widget.cpp
     dvs_widget.ui
-    dvsx_widget.ui
     windowUtils.h
     fileTypes.h
 )

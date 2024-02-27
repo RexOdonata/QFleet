@@ -50,7 +50,7 @@ void shipView::loadShip(const QFleet_Ship_Fleet& ship)
 
     ui->scanLabel->setText(QString::number(ship.scan));
 
-    ui->sigLabel->setText(ship.getArmorString());
+    ui->sigLabel->setText(ship.getSigString());
 
     ui->thrustLabel->setText(QString::number(ship.thrust));
 
@@ -63,6 +63,8 @@ void shipView::loadShip(const QFleet_Ship_Fleet& ship)
     ui->groupLabel->setText(ship.getGroupString());
 
     ui->tonnageLabel->setText(ship.tonnage.toString());
+
+    ui->costLabel->setText(QString::number(ship.points));
 
     while (ui->weaponTableWidget->rowCount() > 0)
         ui->weaponTableWidget->removeRow(0);
@@ -105,15 +107,18 @@ void shipView::loadShip(const QFleet_Ship_Fleet& ship)
         auto index = ui->launchTableWidget->rowCount();
         ui->launchTableWidget->insertRow(index);
 
-        QTableWidgetItem * item = new QTableWidgetItem(element.name);
+        QTableWidgetItem * item = new QTableWidgetItem(element.getAssetString());
         item->setTextAlignment(Qt::AlignHCenter);
         ui->launchTableWidget->setItem(index, NAME, item);
 
-        item = new QTableWidgetItem(element.getCount());
+        item = new QTableWidgetItem(QString::number(element.getCount()));
         item->setTextAlignment(Qt::AlignHCenter);
         ui->launchTableWidget->setItem(index, LAUNCH, item);
 
-        item = new QTableWidgetItem(element.getLimited());
+        if (element.getLimited())
+            item = new QTableWidgetItem(QString::number(element.getLimited()));
+        else
+            item = new QTableWidgetItem(QString("-"));
         item->setTextAlignment(Qt::AlignHCenter);
         ui->launchTableWidget->setItem(index, LIMITED, item);
     }

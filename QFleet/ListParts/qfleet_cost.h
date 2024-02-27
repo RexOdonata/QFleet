@@ -1,7 +1,11 @@
 #ifndef QFLEET_COST_H
 #define QFLEET_COST_H
 
+
 #include "../Components/qft_component.h"
+#include "../Components/qfleet_ship_fleet.h"
+
+
 
 class QFleet_Cost : public qft_component<QFleet_Cost>
 {
@@ -10,6 +14,8 @@ class QFleet_Cost : public qft_component<QFleet_Cost>
 
 public:
     QFleet_Cost(QJsonObject);
+
+    QFleet_Cost(const QFleet_Ship_Fleet&);
 
     QFleet_Cost(const QString);
 

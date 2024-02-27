@@ -3,11 +3,12 @@
 
 #include "optselect.h"
 
-shipSelect::shipSelect(QWidget *parent, const QMap<QString,QFleet_Ship_Shipyard> * setShipData, shipHook * setSelectedShip) :
+shipSelect::shipSelect(QWidget *parent, const QMap<QString,QFleet_Ship_Shipyard> * setShipData) :
     QDialog(parent),
     ui(new Ui::shipSelect),
     shipData(setShipData),
-    selectedShip(setSelectedShip)
+    ship(QFleet_Ship_Fleet("Placeholder"))
+
 {
     ui->setupUi(this);
 
@@ -90,9 +91,16 @@ void shipSelect::insertShip(std::array<QStandardItem *,5> models, const QString 
 }
 
 shipSelect::~shipSelect()
-{
-    selectedShip->valid = false;
+{    
     delete ui;
+}
+
+std::optional<QFleet_Ship_Fleet> shipSelect::getSelectedShip() const
+{
+    if (valid)
+            return ship;
+    else
+            return {};
 }
 
 // given the selected ship, load the ship view andset that ship to be selected
@@ -108,16 +116,16 @@ void shipSelect::on_treeView_activated(const QModelIndex &index)
 
         QFleet_Ship_Fleet fleetShip = createShip(indexShip,blank);
 
-        selectedShip->ship = fleetShip;
+        this->ship = fleetShip;
         // check if the selected ship has mandatory options which won't have been selected at this point
         if (checkMinOpts(indexShip))
         {
-            selectedShip->valid = true;
+            this->valid = true;
             ui->validCheck->setChecked(Qt::Checked);
         }
         else
         {
-            selectedShip->valid = false;
+            this->valid = false;
             ui->validCheck->setChecked(Qt::Unchecked);
         }
 
@@ -235,13 +243,15 @@ void shipSelect::on_selectOptionsButton_clicked()
             {
                 QFleet_Ship_Fleet fleetShip = createShip(indexShip, options);
 
-                selectedShip->ship = fleetShip;
-                selectedShip->valid = true;
+                shipViewWidget->loadShip(fleetShip);
+
+                this->ship = fleetShip;
+                this->valid = true;
                 ui->validCheck->setChecked(Qt::Checked);
             }
             else
             {
-                selectedShip->valid = false;
+                this->valid = false;
                 ui->validCheck->setChecked(Qt::Unchecked);
             }
     }

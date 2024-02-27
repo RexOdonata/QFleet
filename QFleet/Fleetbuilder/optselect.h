@@ -30,8 +30,11 @@ private slots:
 private:
     Ui::optSelect *ui;
 
-    dvs_Data<QFleet_Option, dvs_Widget> * selectOptionsRoster;
-    dvs_Widget * selectedOptionWidget;
+    QStringListModel listModel;
+
+    // I don't know if this is the best way to do this, it does mean iterating across a map quite a bit
+    // for now it works, maybe a more clever design can be implemented later
+    QMap<QString, unsigned int> selectedOptionsNum;
 
     QVector<QFleet_Option> * optionList = NULL;
 
@@ -41,6 +44,24 @@ private:
     bool checkAdd(const QFleet_Option&, QString&);
 
     void updateCounts();
+
+
+    // LIST VIEW FXS
+
+    // add option to list
+    void selectOption(const QFleet_Option&);
+
+    // expand
+    void expandSelectedOptions(QVector<QFleet_Option>&);
+
+    // regenerate the stringlist for the selection list view
+    void refreshSelectionView();
+
+    unsigned int getSelectionCount();
+
+    std::optional<QString> getSelection();
+
+    // VARS
 
     unsigned int broadsideLimit;
     unsigned int broadsideCount;

@@ -3,8 +3,8 @@
 
 #include <QJsonObject>
 #include <QVector>
+#include <QHash>
 #include <optional>
-
 
 template<typename T, typename B>
 class qft_enum

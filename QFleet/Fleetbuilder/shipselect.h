@@ -6,7 +6,7 @@
 #include <QTreeView>
 #include "shipview.h"
 #include <array>
-#include "shipHook.h"
+
 
 namespace Ui {
 class shipSelect;
@@ -17,8 +17,10 @@ class shipSelect : public QDialog
     Q_OBJECT
 
 public:
-    explicit shipSelect(QWidget *parent = nullptr, const QMap<QString, QFleet_Ship_Shipyard> * shipData = NULL, shipHook * selectedShip = NULL);
+    explicit shipSelect(QWidget *parent = nullptr, const QMap<QString, QFleet_Ship_Shipyard> * shipData = NULL);
     ~shipSelect();
+
+    std::optional<QFleet_Ship_Fleet> getSelectedShip() const;
 
 private slots:
     void on_treeView_clicked(const QModelIndex &index);
@@ -36,11 +38,13 @@ private:
 
     const QMap<QString, QFleet_Ship_Shipyard> * shipData;
 
-    shipHook * selectedShip;
-
     QStandardItemModel * shipTreeModel;
 
     // DATA
+
+    QFleet_Ship_Fleet ship;
+
+    bool valid = false;
 
     // UI ELEMENTS
 

@@ -7,7 +7,12 @@ const QString QFleet_BGT::val_LN="LN";
 const QString QFleet_BGT::val_VG="VG";
 const QString QFleet_BGT::val_FL="FL";
 
-const QMap<bgt, QString> QFleet_BGT::e2s =
+const QString QFleet_BGT::val_long_PF="Pathfinder";
+const QString QFleet_BGT::val_long_LN="Line";
+const QString QFleet_BGT::val_long_VG="Vanguard";
+const QString QFleet_BGT::val_long_FL="Flag";
+
+const QHash<bgt, QString> QFleet_BGT::e2s =
 {
     {bgt::PF,val_PF},
     {bgt::LN,val_LN},
@@ -15,7 +20,15 @@ const QMap<bgt, QString> QFleet_BGT::e2s =
     {bgt::FL,val_FL}
 };
 
-const QMap<QString, bgt> QFleet_BGT::s2e =
+const QHash<bgt, QString> QFleet_BGT::e2ls =
+{
+        {bgt::PF,val_long_PF},
+        {bgt::LN,val_long_LN},
+        {bgt::VG,val_long_VG},
+        {bgt::FL,val_long_FL}
+};
+
+const QHash<QString, bgt> QFleet_BGT::s2e =
     {
         {val_PF, bgt::PF},
         {val_LN, bgt::LN},

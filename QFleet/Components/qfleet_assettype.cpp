@@ -7,7 +7,7 @@ const QString QFleet_AssetType::val_bomber="bomber";
 const QString QFleet_AssetType::val_torpedo="torpedo";
 const QString QFleet_AssetType::val_drop="drop";
 
-const QMap<assetType, QString> QFleet_AssetType::e2s =
+const QHash<assetType, QString> QFleet_AssetType::e2s =
     {
     {assetType::fighter, val_fighter},
     {assetType::bomber, val_bomber},
@@ -15,7 +15,7 @@ const QMap<assetType, QString> QFleet_AssetType::e2s =
     {assetType::drop, val_drop}
 };
 
-const QMap<QString,assetType> QFleet_AssetType::s2e =
+const QHash<QString,assetType> QFleet_AssetType::s2e =
     {
         {val_fighter, assetType::fighter},
         {val_bomber, assetType::bomber},

@@ -4,18 +4,21 @@
 
 
 #include "qft_enum.h"
-#include <QMap>
-#include <optional>
+
 
 enum class faction
 {
-    UCM,
-    SCOURGE,
-    PHR,
-    SHALTARI,
-    RESISTANCE
+    UCM=0,
+    SCOURGE=1,
+    PHR=2,
+    SHALTARI=3,
+    RESISTANCE=4
 };
 
+inline uint qHash(faction key, uint seed)
+{
+    return qHash(static_cast<uint>(key),seed);
+}
 
 
 class QFleet_Faction : public qft_enum<QFleet_Faction, faction>
@@ -35,6 +38,7 @@ public:
 
     QFleet_Faction(QJsonObject in) : qft_enum<QFleet_Faction, faction>(in)
     {
+
     }
 
     QFleet_Faction()
@@ -80,8 +84,8 @@ private:
     const static QString val_shaltari;
     const static QString val_resistance;
 
-    const static QMap<QString, faction> s2e;
-    const static QMap<faction, QString> e2s;
+    const static QHash<QString, faction> s2e;
+    const static QHash<faction, QString> e2s;
 };
 
 inline bool operator==(const QFleet_Faction& A, const QFleet_Faction& B)
