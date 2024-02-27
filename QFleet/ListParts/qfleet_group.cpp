@@ -6,11 +6,29 @@ const QString QFleet_Group::field_ship="ship";
 const QString QFleet_Group::field_number="number";
 const QString QFleet_Group::field_admiral="admiral";
 
-
-QFleet_Group::QFleet_Group(const QFleet_Ship_Fleet& setShip, const unsigned int) :
+// creates a group with the given ship, but no admiral/cost/num info
+QFleet_Group::QFleet_Group(const QFleet_Ship_Fleet& setShip) :
     qft_component<QFleet_Group>(setShip.name), cost(QFleet_Cost("GroupCost")),
-    ship(setShip), number(setShip.groupL)
+    ship(setShip), number(0), admiral(0)
 {
+
+}
+
+// updates cost based on number of ships in group and presence of admiral
+void QFleet_Group::setCostInfo(unsigned int num, unsigned int setAdmiral)
+{
+    number = num;
+
+    admiral = setAdmiral;
+
+    QFleet_Cost shipCost(ship);
+
+    for (int i = 0; i < num; i++)
+        cost + shipCost;
+
+
+    if (setAdmiral > 0 && ship.admiralCost(setAdmiral))
+        cost.points += *ship.admiralCost(setAdmiral);
 
 }
 

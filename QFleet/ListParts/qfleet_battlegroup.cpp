@@ -19,7 +19,7 @@ QFleet_Battlegroup::QFleet_Battlegroup(QJsonObject in) :
 
 
 QFleet_Battlegroup::QFleet_Battlegroup(QString setName, QFleet_BGT type) : qft_component<QFleet_Battlegroup>(setName),
-    type(QFleet_BGT()),
+    type(type),
     cost(QFleet_Cost("battlegroupCost"))
 {
     // creating an empty group
@@ -30,6 +30,11 @@ void QFleet_Battlegroup::impl_toJson(QJsonObject& json)
     fieldToJson(json, field_groups, groups);
     fieldToJson(json, field_cost, cost);
     fieldToJson(json, field_type, type);
+}
+
+QVector<QFleet_Group> QFleet_Battlegroup::getGroups() const
+{
+    return groups;
 }
 
 void QFleet_Battlegroup::updateCost()

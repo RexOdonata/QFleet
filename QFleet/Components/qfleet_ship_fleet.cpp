@@ -6,7 +6,7 @@ const QString  QFleet_Ship_Fleet::field_selectedOptions="selectedOptions";
 
 QFleet_Ship_Fleet::QFleet_Ship_Fleet(QJsonObject in) : QFleet_Ship(in)
 {
-    fieldToJson(in, field_selectedOptions, selectedOptions);
+    fieldFromJson(in, field_selectedOptions, selectedOptions);
 }
 
 QFleet_Ship_Fleet::QFleet_Ship_Fleet (const QString setName) : QFleet_Ship(setName)
@@ -16,7 +16,7 @@ QFleet_Ship_Fleet::QFleet_Ship_Fleet (const QString setName) : QFleet_Ship(setNa
 
 void QFleet_Ship_Fleet::impl_toJson(QJsonObject& in)
 {
-    fieldFromJson(in, field_selectedOptions, selectedOptions);
+    fieldToJson(in, field_selectedOptions, selectedOptions);
 }
 
 QString QFleet_Ship_Fleet::getArmorString() const

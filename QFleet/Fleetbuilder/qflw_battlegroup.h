@@ -8,6 +8,8 @@
 #include "../ListParts/qfleet_cost.h"
 #include <QPointer>
 
+#include "../ListParts/qfleet_battlegroup.h"
+
 namespace Ui {
 class QFLW_Battlegroup;
 }
@@ -21,7 +23,7 @@ public:
     ~QFLW_Battlegroup();
 
     void removeGroup(QFLW_Group *);
-    void updateCost();
+    void updateCost(bool = true);
 
     QFleet_Cost getCost() const;
 
@@ -34,6 +36,10 @@ public:
     QFleet_BGT getType() const;
 
     QWidget * getListPtr() const;
+
+    QFleet_Battlegroup createListPart() const;
+
+    void addGroupListPart(const QFleet_Group&);
 
 public slots:
     // does the grunt work of adding a ship

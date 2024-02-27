@@ -9,6 +9,7 @@
 // represent a fleet list saved to file or loaded from file, or for printing
 class QFleet_List : public qft_component<QFleet_List>
 {
+    friend class qft_component<QFleet_List>;
 public:
     QFleet_List(QJsonObject);
 

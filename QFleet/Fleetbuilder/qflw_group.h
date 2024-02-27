@@ -6,6 +6,8 @@
 #include "../Components/qfleet_ship_fleet.h"
 #include "../ListParts/qfleet_cost.h"
 
+#include "../ListParts/qfleet_group.h"
+
 #include <QCheckBox>
 #include <QLabel>
 
@@ -25,11 +27,18 @@ class QFLW_Group : public QWidget
 
 public:
     explicit QFLW_Group(QWidget *parent = nullptr, std::optional<QFleet_Ship_Fleet> = {});
+
+    explicit QFLW_Group(QWidget *parent = nullptr, const QFleet_Group * = NULL);
+
     ~QFLW_Group();
 
     QFleet_Cost getCost() const;
 
     void removeAdmiral();
+
+    QFleet_Group createListPart() const;
+
+
 
 signals:
 
@@ -55,6 +64,10 @@ private:
 
     QLabel * admiralLevelLabel;
     QCheckBox * admiralPresenceCheck;
+
+    bool setup = false;
+
+    void setupWidget();
 
     // DATA
 

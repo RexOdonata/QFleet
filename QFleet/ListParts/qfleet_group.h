@@ -14,7 +14,11 @@ class QFleet_Group : public qft_component<QFleet_Group>
 public:
     QFleet_Group(QJsonObject);
 
-    QFleet_Group(const QFleet_Ship_Fleet&, const unsigned int);
+    QFleet_Group(const QFleet_Ship_Fleet&);
+
+    // set information
+
+    void setCostInfo(unsigned int num, unsigned int admiral);
 
     // data
 

@@ -70,7 +70,7 @@ void QFLW_Battlegroup::refreshCostLabels()
     ui->srLabel->setText(QString::number(cost.SR));
 }
 
-void QFLW_Battlegroup::updateCost()
+void QFLW_Battlegroup::updateCost(bool bubbleUp)
 {
     cost.zero();
 
@@ -79,11 +79,13 @@ void QFLW_Battlegroup::updateCost()
         cost + groupPtr->getCost();
     }
 
-    refreshCostLabels();
+    refreshCostLabels();    
 
-    QFLW_List * list = (QFLW_List *) this->parent();
-
-    list->updateCost();
+    if (bubbleUp)
+    {
+        QFLW_List * list = (QFLW_List *) this->parent();
+        list->updateCost();
+    }
 }
 
 QFleet_Cost QFLW_Battlegroup::getCost() const
@@ -115,6 +117,19 @@ void QFLW_Battlegroup::on_addGroupButton_clicked()
     emit querySelectedShip(this);
 }
 
+QFleet_Battlegroup QFLW_Battlegroup::createListPart() const
+{
+    QFleet_Battlegroup battleGroup(ui->nameEdit->text(), this->getType());
+
+    for (auto group : groups)
+        battleGroup.addGroup(group->createListPart());
+
+    battleGroup.updateCost();
+
+
+    return battleGroup;
+}
+
 void QFLW_Battlegroup::recieveSelectedShip(const QFleet_Ship_Fleet& ship, QFLW_Battlegroup * cardPtr)
 {
     // short circuit if this is not the right card
@@ -129,6 +144,7 @@ void QFLW_Battlegroup::recieveSelectedShip(const QFleet_Ship_Fleet& ship, QFLW_B
         msg.exec();
         return;
     }
+
 
     QPointer<QFLW_Group> newGroup = new QFLW_Group(this, ship);
 
@@ -175,6 +191,16 @@ bool QFLW_Battlegroup::checkMandatory() const
 QFleet_BGT QFLW_Battlegroup::getType() const
 {
     return type;
+}
+
+// creates a group list part from a widget
+void QFLW_Battlegroup::addGroupListPart(const QFleet_Group& group)
+{
+    QPointer<QFLW_Group> newGroup = new QFLW_Group(this, &group);
+
+    groups.push_back(newGroup);
+
+    ui->groupLayout->addWidget(newGroup.data());
 }
 
 void QFLW_Battlegroup::on_deleteCardButton_clicked()

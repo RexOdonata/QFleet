@@ -12,14 +12,28 @@
 QFLW_Group::QFLW_Group(QWidget *parent, std::optional<QFleet_Ship_Fleet> setShip) :
     QWidget(parent),
     ui(new Ui::QFLW_Group),
-    ship(*setShip), cost(QFleet_Cost(ship.name)), cardWidgetPtr(parent)
+    ship(*setShip), cost(QFleet_Cost(ship.name)), cardWidgetPtr(parent), num(setShip->groupL)
 {
     ui->setupUi(this);
 
+    setupWidget();
+
+
+    admiralIndicatorVisibility(false);
+
+    setup = true;
+
+}
+
+void QFLW_Group::setupWidget()
+{
     ui->shipnameLabel->setText(ship.name);
+
+    ui->numSpin->setValue(num);
 
     ui->numSpin->setMinimum(ship.groupL);
     ui->numSpin->setMaximum(ship.groupH);
+
 
     this->setAttribute(Qt::WA_DeleteOnClose);
 
@@ -39,15 +53,45 @@ QFLW_Group::QFLW_Group(QWidget *parent, std::optional<QFleet_Ship_Fleet> setShip
 
     // remember to delete any of this present in destructor
     this->admiralPresenceCheck = new QCheckBox(this);
+    admiralPresenceCheck->setText("Admiral");
 
+    this->admiralLevelLabel = new QLabel(this);
     admiralPresenceCheck->setText("Admiral");
     admiralPresenceCheck->setEnabled(false);
     admiralPresenceCheck->setChecked(true);
+}
 
-    this->admiralLevelLabel = new QLabel(this);
+// create a widget out of a group listpart
+QFLW_Group::QFLW_Group(QWidget *parent, const QFleet_Group * load) :
+    QWidget(parent),
+    ui(new Ui::QFLW_Group),
+    ship(load->getShip()), cost(load->getCost()), cardWidgetPtr(parent), num(load->getNumber())
+{
 
-    admiralIndicatorVisibility(false);
+    ui->setupUi(this);
 
+    // by this point the cost and ship should be correctly loaded, now to work on admiral
+
+    unsigned int admiralCost = 0;
+
+    if (load->getAdmiral() > 0 && ship.admiralCost(load->getAdmiral()))
+    {
+        admiralCost = cost.points - ship.points;
+        this->admiral = admiralVals{load->getAdmiral(),admiralCost};
+    }
+
+    // this will draw ship name, set Grp min/max connect slots, etc
+    setupWidget();
+
+    if (admiral)
+    {
+        emit signalSetAdmiral(this);
+        admiralIndicatorVisibility(true);
+    }
+    else
+        admiralIndicatorVisibility(false);
+
+    setup = true;
 
 }
 
@@ -198,7 +242,8 @@ void QFLW_Group::on_numSpin_valueChanged(int arg1)
 
     cost = newCost;
 
-    updateCost();
+    if (setup)
+        updateCost();
 }
 
 void QFLW_Group::updateCost()
@@ -213,6 +258,20 @@ void QFLW_Group::flagRemoval(QFLW_Group * thisPtr)
     QFLW_Battlegroup * BG = (QFLW_Battlegroup *) this->cardWidgetPtr;
 
     BG->removeGroup(thisPtr);
+}
+
+QFleet_Group QFLW_Group::createListPart() const
+{
+    QFleet_Group newGroup(this->ship);
+
+    unsigned int admiralLevel = 0;
+
+    if (admiral)
+        admiralLevel = admiral->level;
+
+    newGroup.setCostInfo(this->num, admiralLevel);
+
+    return newGroup;
 }
 
 
