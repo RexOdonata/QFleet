@@ -20,4 +20,5 @@ add_subdirectory(common)
 add_subdirectory(Hangarbay)
 add_subdirectory(Shipyard)
 add_subdirectory(Fleetbuilder)
-
+add_subdirectory(ShipView)
+add_subdirectory(ListPrinter)

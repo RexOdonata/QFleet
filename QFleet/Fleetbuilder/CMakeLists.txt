@@ -25,7 +25,6 @@ set(PROJECT_SOURCES
         qflw_list.h qflw_list.cpp qflw_list.ui
         qflw_battlegroup.h qflw_battlegroup.cpp qflw_battlegroup.ui
         qflw_group.h qflw_group.cpp qflw_group.ui
-        shipview.h shipview.cpp shipview.ui
         limitwidget.h limitwidget.cpp limitwidget.ui
         shipviewdialog.h shipviewdialog.cpp shipviewdialog.ui
         admiralselectdialog.h admiralselectdialog.cpp admiralselectdialog.ui
@@ -55,7 +54,7 @@ else()
     endif()
 endif()
 
-target_link_libraries(Fleetbuilder PRIVATE Qt${QT_VERSION_MAJOR}::Widgets QF_Components QF_Common QF_ListParts)
+target_link_libraries(Fleetbuilder PRIVATE Qt${QT_VERSION_MAJOR}::Widgets QF_Components QF_Common QF_ListParts ShipView)
 
 set_target_properties(Fleetbuilder PROPERTIES
     MACOSX_BUNDLE_GUI_IDENTIFIER my.example.com

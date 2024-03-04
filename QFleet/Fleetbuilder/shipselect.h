@@ -4,7 +4,7 @@
 #include <QDialog>
 #include "../Components/qfleet_ship_shipyard.h"
 #include <QTreeView>
-#include "shipview.h"
+#include "../ShipView/shipview.h"
 #include <array>
 
 

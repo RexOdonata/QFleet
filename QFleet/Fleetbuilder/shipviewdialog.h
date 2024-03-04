@@ -1,7 +1,7 @@
 #ifndef SHIPVIEWDIALOG_H
 #define SHIPVIEWDIALOG_H
 
-#include "shipview.h"
+#include "../ShipView/shipview.h"
 
 #include <QDialog>
 

@@ -43,7 +43,7 @@ else()
     endif()
 endif()
 
-target_link_libraries(ListPrinter PRIVATE Qt${QT_VERSION_MAJOR}::Widgets)
+target_link_libraries(ListPrinter PRIVATE Qt${QT_VERSION_MAJOR}::Widgets ShipView)
 
 set_target_properties(ListPrinter PROPERTIES
     MACOSX_BUNDLE_GUI_IDENTIFIER my.example.com
