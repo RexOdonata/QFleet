@@ -54,7 +54,7 @@ else()
     endif()
 endif()
 
-target_link_libraries(Fleetbuilder PRIVATE Qt${QT_VERSION_MAJOR}::Widgets QF_Components QF_Common QF_ListParts ShipView)
+target_link_libraries(Fleetbuilder PRIVATE Qt${QT_VERSION_MAJOR}::Widgets QF_Components QF_Common QF_ListParts ShipView ListPrinter)
 
 set_target_properties(Fleetbuilder PROPERTIES
     MACOSX_BUNDLE_GUI_IDENTIFIER my.example.com

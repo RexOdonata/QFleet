@@ -12,6 +12,8 @@
 #include <QFileDialog>
 #include <QJsonParseError>
 
+#include "../ListPrinter/qfp_strategycard.h"
+
 
 MainWindow::MainWindow(QWidget *parent)
     : QMainWindow(parent)
@@ -32,6 +34,13 @@ MainWindow::~MainWindow()
 
 void MainWindow::on_actionNew_triggered()
 {
+
+    // if a list is already loaded, delete it
+    if (listWidget)
+    {
+        listWidget.clear();
+    }
+
     listInit data;
     initListDialog * newListData = new initListDialog(this,&data);
 
@@ -106,6 +115,12 @@ void MainWindow::loadMapFromJsonFile(QWidget * parentWindow, QMap<QString, QFlee
 
 void MainWindow::on_actionLoad_triggered()
 {
+
+    // if a list is already loaded, delete it
+    if (listWidget)
+    {
+        listWidget.clear();
+    }
 
     QString filename = QFileDialog::getOpenFileName(this, "Select QFleet List", QDir::currentPath());
 
@@ -192,36 +207,97 @@ void MainWindow::slotShipPull(QFLW_Battlegroup * cardPtr)
 
 void MainWindow::on_actionSave_triggered()
 {
-    QFleet_List newList = listWidget->createListPart();
 
-    // save dialog goes here
-
-    QString filename = QFileDialog::getSaveFileName(this, "save list", QDir::currentPath());
-
-    QFile file(filename);
-
-    QJsonObject json = newList.toJson();
-
-    QJsonObject wrapperObj;
-
-    wrapperObj.insert(fileType_listData(), json);
-
-    if (file.open(QIODevice::WriteOnly | QIODevice::Text | QIODevice::Truncate))
+    if (!listWidget.isNull())
     {
-        QJsonDocument jsonDoc(wrapperObj);
+        QFleet_List newList = listWidget->createListPart();
 
-        QByteArray bytes = jsonDoc.toJson(QJsonDocument::Indented);
+        // save dialog goes here
 
-        QTextStream istream(&file);
+        QString filename = QFileDialog::getSaveFileName(this, "save list", QDir::currentPath());
 
-        istream << bytes;
+        QFile file(filename);
 
-        file.close();
+        QJsonObject json = newList.toJson();
+
+        QJsonObject wrapperObj;
+
+        wrapperObj.insert(fileType_listData(), json);
+
+        if (file.open(QIODevice::WriteOnly | QIODevice::Text | QIODevice::Truncate))
+        {
+            QJsonDocument jsonDoc(wrapperObj);
+
+            QByteArray bytes = jsonDoc.toJson(QJsonDocument::Indented);
+
+            QTextStream istream(&file);
+
+            istream << bytes;
+
+            file.close();
+        }
+        else
+        {
+            QMessageBox msg(this);
+            msg.setText("Couldn't open save target for writing");
+            msg.exec();
+        }
     }
     else
     {
         QMessageBox msg(this);
-        msg.setText("Couldn't open save target for writing");
+        msg.setText("No List Loaded to save");
+        msg.exec();
+    }
+
+
+}
+
+
+void MainWindow::on_actionStrategy_Cards_triggered()
+{
+    if (!listWidget.isNull())
+    {
+        QString dir = QFileDialog::getExistingDirectory(this, "Save strategy cards", QDir::currentPath());
+
+        dir.append("/");
+
+        auto cards = listWidget->createListPart().getCards();
+
+        auto index = 0;
+
+        QHash<QString, bool> stringGuard;
+
+        for (auto battlegroup : cards)
+        {
+            QString cardName = dir + battlegroup.name;
+
+            if (stringGuard.contains(battlegroup.name))
+            {
+                cardName = dir + "card-" + QString::number(index);
+            }
+
+            QFP_StrategyCard card(this, battlegroup);
+
+            card.show();
+
+            auto cardImage = card.getImage();
+
+            QFile file(cardName);
+
+            int r = file.open(QIODevice::WriteOnly);
+
+            r = cardImage.save(&file, "png");
+
+            file.close();
+
+            index++;
+        }
+    }
+    else
+    {
+        QMessageBox msg(this);
+        msg.setText("No List Loaded to print");
         msg.exec();
     }
 }

@@ -46,6 +46,8 @@ QFLW_List::QFLW_List(QWidget *parent, std::optional<QFleet_List> list) :
 
     updateListLimits();
 
+    this->setAttribute(Qt::WA_DeleteOnClose);
+
 
 }
 

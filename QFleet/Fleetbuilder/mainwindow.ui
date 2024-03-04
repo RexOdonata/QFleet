@@ -108,6 +108,8 @@
      <string>Print</string>
     </property>
     <addaction name="actionFleet_List"/>
+    <addaction name="actionStrategy_Cards"/>
+    <addaction name="actionSimple_List"/>
    </widget>
    <addaction name="menuFile"/>
    <addaction name="menuPrint"/>
@@ -145,6 +147,16 @@
   <action name="actionLoad_Launch">
    <property name="text">
     <string>Load Launch</string>
+   </property>
+  </action>
+  <action name="actionStrategy_Cards">
+   <property name="text">
+    <string>Strategy Cards</string>
+   </property>
+  </action>
+  <action name="actionSimple_List">
+   <property name="text">
+    <string>Simple List</string>
    </property>
   </action>
  </widget>

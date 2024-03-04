@@ -48,6 +48,8 @@ private slots:
 
     void on_actionSave_triggered();
 
+    void on_actionStrategy_Cards_triggered();
+
 private:
     Ui::MainWindow *ui;
 
@@ -55,7 +57,7 @@ private:
     QPointer<shipSelect> shipSelectDialog;
 
 
-    QFLW_List * listWidget;
+    QPointer<QFLW_List> listWidget;
 
 
     // VARS
