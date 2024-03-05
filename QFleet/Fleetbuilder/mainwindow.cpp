@@ -15,6 +15,8 @@
 
 #include "../ListPrinter/qfp_strategycard.h"
 
+#include "../ListPrinter/listprinter.h"
+
 
 
 MainWindow::MainWindow(QWidget *parent)
@@ -375,18 +377,54 @@ void MainWindow::on_actionSimple_List_triggered()
     }
 }
 
+bool MainWindow::writeHTML()
+{
+    QString filename = QFileDialog::getSaveFileName(this, "save list", QDir::currentPath());
+
+    QFile file(filename);
+
+    if (file.open(QIODevice::WriteOnly | QIODevice::Text | QIODevice::Truncate))
+    {
+        auto listObj = listWidget->createListPart();
+
+        QString stub;
+
+        std::string htmlString = listPrinter::getHTML(listObj);
+
+        QByteArray bytes = htmlString.c_str();
+
+        QTextStream istream(&file);
+
+        istream << bytes;
+
+        file.close();
+
+        return true;
+    }
+    else return false;
+}
+
 
 void MainWindow::on_actionFleet_List_triggered()
 {
     if (!listWidget.isNull())
     {
+        if (writeHTML())
+        {
 
+        }
+        else
+        {
+            QMessageBox msg(this);
+            msg.setText("Cannot write list file");
+            msg.exec();
+        }
 
     }
     else
     {
         QMessageBox msg(this);
-        msg.setText("No List Loaded to copy");
+        msg.setText("No List Loaded to export");
         msg.exec();
     }
 }

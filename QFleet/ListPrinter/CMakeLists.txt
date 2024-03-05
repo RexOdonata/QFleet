@@ -16,6 +16,9 @@ add_library(ListPrinter SHARED
   qfp_strategycard.cpp
   qfp_strategycard.h
   qfp_strategycard.ui
+  NLTemplate.h
+  NLTemplate.cpp
+  listprinter.h listprinter.cpp
 )
 
 target_link_libraries(ListPrinter PRIVATE Qt${QT_VERSION_MAJOR}::Widgets Qt${QT_VERSION_MAJOR}::PrintSupport QF_Components ShipView)

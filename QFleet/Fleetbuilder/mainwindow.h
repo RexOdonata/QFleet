@@ -89,6 +89,8 @@ private:
 
     bool drawStrategycards();
 
+    bool writeHTML();
+
 
 
 };
