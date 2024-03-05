@@ -27,6 +27,8 @@ public:
 
     void updateCost();
 
+    QString getListString();
+
 protected:
 
     QFleet_BGT type;

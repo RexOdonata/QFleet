@@ -79,3 +79,32 @@ void QFleet_Group::admiralAdjust()
     if (admiralPoints)
         cost.points +=  *admiralPoints;
 }
+
+QString QFleet_Group::getListString()
+{
+    QString numStr = "";
+    if (this->number > 1)
+    {
+        numStr.append(QString::number(this->number));
+        numStr.append("x");
+    }
+    else
+        numStr.append("1");
+
+    numStr.append(" ");
+
+    numStr.append(this->ship.name);
+
+    numStr.append("\r");
+
+    if (this->admiral)
+    {
+        numStr.append("\t\t\t");
+        numStr.append("Adm Lvl");
+        numStr.append(QString::number(this->admiral));
+        numStr.append("\r");
+    }
+
+    return numStr;
+
+}

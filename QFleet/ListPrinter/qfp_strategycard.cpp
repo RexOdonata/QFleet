@@ -66,6 +66,8 @@ void QFP_StrategyCard::setRow(QFleet_Group group, unsigned int row)
         numStr.append(QString::number(group.getNumber()));
         numStr.append("x");
     }
+    else
+        numStr = "1";
 
 
     widgetPtrs[NUM]->setText(numStr);
@@ -92,5 +94,7 @@ void QFP_StrategyCard::setEmptyRow(unsigned int row)
 
 QPixmap QFP_StrategyCard::getImage()
 {
-    return this->grab(this->rect() = QRect(QPoint(0, 0), QSize(-1, -1)));
+    auto pixmap = this->grab(this->rect() = QRect(QPoint(0, 0), QSize(-1, -1)));
+
+    return pixmap;
 }

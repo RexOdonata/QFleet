@@ -33,6 +33,7 @@ shipView::shipView(QWidget *parent) :
     ui->launchTableWidget->setHorizontalHeaderItem(NAME, new QTableWidgetItem("Name"));
     ui->launchTableWidget->setHorizontalHeaderItem(LAUNCH, new QTableWidgetItem("Launch"));
     ui->launchTableWidget->setHorizontalHeaderItem(LIMITED, new QTableWidgetItem("L"));
+
 }
 
 shipView::~shipView()
@@ -124,6 +125,12 @@ void shipView::loadShip(const QFleet_Ship_Fleet& ship)
     }
     // fit name column
     ui->launchTableWidget->resizeColumnToContents(0);
+
+    if (ship.launch.size() == 0)
+    {
+        ui->launchLabel->hide();
+        ui->launchTableWidget->hide();
+    }
 
 
 }

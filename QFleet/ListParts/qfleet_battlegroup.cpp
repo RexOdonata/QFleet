@@ -62,3 +62,25 @@ QFleet_BGT QFleet_Battlegroup::getType() const
 {
     return type;
 }
+
+QString QFleet_Battlegroup::getListString()
+{
+    QString nameStr = this->name;
+
+    nameStr.append(", ");
+
+    nameStr.append(QString::number(this->cost.SR));
+
+    nameStr.append(" SR");
+
+    for (auto& group : groups)
+    {
+        QString groupStr = "\r\t\t";
+
+        groupStr.append(group.getListString());
+
+        nameStr.append(groupStr);
+    }
+
+    return nameStr;
+}

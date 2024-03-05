@@ -26,6 +26,8 @@ public:
     QFleet_Cost getCost() const;
     unsigned int getAdmiral() const;
     QFleet_Ship_Fleet getShip() const;
+
+    QString getListString();
     
 protected:
 

@@ -32,6 +32,8 @@ public:
 
     void updateCost();
 
+    QString getListString();
+
 protected:
 
     void impl_toJson(QJsonObject&);

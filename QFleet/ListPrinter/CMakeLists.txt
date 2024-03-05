@@ -8,20 +8,16 @@ set(CMAKE_AUTORCC ON)
 set(CMAKE_CXX_STANDARD 17)
 set(CMAKE_CXX_STANDARD_REQUIRED ON)
 
-find_package(QT NAMES Qt6 Qt5 REQUIRED COMPONENTS Widgets)
-find_package(Qt${QT_VERSION_MAJOR} REQUIRED COMPONENTS Widgets)
+find_package(QT NAMES Qt6 Qt5 REQUIRED COMPONENTS Widgets PrintSupport)
+find_package(Qt${QT_VERSION_MAJOR} REQUIRED COMPONENTS Widgets PrintSupport)
 
 add_library(ListPrinter SHARED
   ListPrinter_global.h
-  qfp_listdetail.cpp
-  qfp_listdetail.h
-  qfp_listdetail.ui
   qfp_strategycard.cpp
   qfp_strategycard.h
   qfp_strategycard.ui
-
 )
 
-target_link_libraries(ListPrinter PRIVATE Qt${QT_VERSION_MAJOR}::Widgets QF_Components ShipView)
+target_link_libraries(ListPrinter PRIVATE Qt${QT_VERSION_MAJOR}::Widgets Qt${QT_VERSION_MAJOR}::PrintSupport QF_Components ShipView)
 
 target_compile_definitions(ListPrinter PRIVATE SHIPVIEW_LIBRARY)

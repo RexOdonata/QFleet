@@ -50,6 +50,10 @@ private slots:
 
     void on_actionStrategy_Cards_triggered();
 
+    void on_actionSimple_List_triggered();
+
+    void on_actionFleet_List_triggered();
+
 private:
     Ui::MainWindow *ui;
 
@@ -70,11 +74,21 @@ private:
 
     // FXs
 
+
+    void drawGUIFromListPart(const QFleet_List&);
+
+    // UTILITY FXs
+
     void loadShipData();
 
     void loadMapFromJsonFile(QWidget * parentWindow, QMap<QString, QFleet_Ship_Shipyard>& data);
 
-    void drawGUIFromListPart(const QFleet_List&);
+    bool loadListFromFile();
+
+    bool saveListToFile();
+
+    bool drawStrategycards();
+
 
 
 };

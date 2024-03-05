@@ -11,8 +11,10 @@
 
 #include <QFileDialog>
 #include <QJsonParseError>
+#include <QClipboard>
 
 #include "../ListPrinter/qfp_strategycard.h"
+
 
 
 MainWindow::MainWindow(QWidget *parent)
@@ -38,7 +40,7 @@ void MainWindow::on_actionNew_triggered()
     // if a list is already loaded, delete it
     if (listWidget)
     {
-        listWidget.clear();
+        delete listWidget;
     }
 
     listInit data;
@@ -73,6 +75,7 @@ void MainWindow::on_actionNew_triggered()
 }
 
 
+// loads ships from a file into the shipdata map and filters out ships from other factions
 void MainWindow::loadMapFromJsonFile(QWidget * parentWindow, QMap<QString, QFleet_Ship_Shipyard>& data)
 {
     allShipData.clear();
@@ -113,22 +116,21 @@ void MainWindow::loadMapFromJsonFile(QWidget * parentWindow, QMap<QString, QFlee
     }
 }
 
-void MainWindow::on_actionLoad_triggered()
+bool MainWindow::loadListFromFile()
 {
-
-    // if a list is already loaded, delete it
-    if (listWidget)
-    {
-        listWidget.clear();
-    }
-
     QString filename = QFileDialog::getOpenFileName(this, "Select QFleet List", QDir::currentPath());
 
     QFile file(filename);
 
-
     if (file.open(QIODevice::ReadOnly | QIODevice::Text))
     {
+
+        // if a list is already loaded, delete it
+        if (listWidget)
+        {
+            delete listWidget;
+        }
+
         QByteArray bytes = file.readAll();
 
         file.close();
@@ -137,7 +139,7 @@ void MainWindow::on_actionLoad_triggered()
 
         QJsonDocument jsonData = QJsonDocument::fromJson(bytes, &err);
 
-        QJsonObject wrapperObj = jsonData.object();        
+        QJsonObject wrapperObj = jsonData.object();
 
 
         if (wrapperObj.contains(fileType_listData()))
@@ -151,6 +153,18 @@ void MainWindow::on_actionLoad_triggered()
         {
             throw std::invalid_argument("Invalid File Type");
         }
+
+        return true;
+    }
+    else
+        return false;
+}
+
+void MainWindow::on_actionLoad_triggered()
+{
+    if (loadListFromFile())
+    {
+        // (-:
     }
     else
     {
@@ -205,36 +219,47 @@ void MainWindow::slotShipPull(QFLW_Battlegroup * cardPtr)
 }
 
 
+bool MainWindow::saveListToFile()
+{
+    QFleet_List newList = listWidget->createListPart();
+
+    // save dialog goes here
+
+    QString filename = QFileDialog::getSaveFileName(this, "save list", QDir::currentPath());
+
+    QFile file(filename);
+
+    QJsonObject json = newList.toJson();
+
+    QJsonObject wrapperObj;
+
+    wrapperObj.insert(fileType_listData(), json);
+
+    if (file.open(QIODevice::WriteOnly | QIODevice::Text | QIODevice::Truncate))
+    {
+        QJsonDocument jsonDoc(wrapperObj);
+
+        QByteArray bytes = jsonDoc.toJson(QJsonDocument::Indented);
+
+        QTextStream istream(&file);
+
+        istream << bytes;
+
+        file.close();
+
+        return true;
+    }
+    else return false;
+}
+
 void MainWindow::on_actionSave_triggered()
 {
 
     if (!listWidget.isNull())
     {
-        QFleet_List newList = listWidget->createListPart();
-
-        // save dialog goes here
-
-        QString filename = QFileDialog::getSaveFileName(this, "save list", QDir::currentPath());
-
-        QFile file(filename);
-
-        QJsonObject json = newList.toJson();
-
-        QJsonObject wrapperObj;
-
-        wrapperObj.insert(fileType_listData(), json);
-
-        if (file.open(QIODevice::WriteOnly | QIODevice::Text | QIODevice::Truncate))
+        if (saveListToFile())
         {
-            QJsonDocument jsonDoc(wrapperObj);
 
-            QByteArray bytes = jsonDoc.toJson(QJsonDocument::Indented);
-
-            QTextStream istream(&file);
-
-            istream << bytes;
-
-            file.close();
         }
         else
         {
@@ -250,6 +275,52 @@ void MainWindow::on_actionSave_triggered()
         msg.exec();
     }
 
+}
+
+bool MainWindow::drawStrategycards()
+{
+    QString dir = QFileDialog::getExistingDirectory(this, "Save strategy cards", QDir::currentPath());
+
+    dir.append(QDir::separator());
+
+    auto cards = listWidget->createListPart().getCards();
+
+    auto index = 0;
+
+    QHash<QString, bool> stringGuard;
+
+    bool rVal = true;
+
+    for (auto battlegroup : cards)
+    {
+        QString cardName = dir + battlegroup.name;
+
+        if (stringGuard.contains(battlegroup.name))
+        {
+            cardName = dir + "card-" + QString::number(index);
+        }
+
+        QFP_StrategyCard card(this, battlegroup);
+
+        card.show();
+
+        auto cardImage = card.getImage();
+
+        QFile file(cardName);
+
+        bool r1 = file.open(QIODevice::WriteOnly);
+
+        bool r2 = cardImage.save(&file, "PNG");
+
+        file.close();
+
+        index++;
+
+        if ((r1 && r2) == false)
+            rVal = false;
+    }
+
+    return rVal;
 
 }
 
@@ -258,46 +329,64 @@ void MainWindow::on_actionStrategy_Cards_triggered()
 {
     if (!listWidget.isNull())
     {
-        QString dir = QFileDialog::getExistingDirectory(this, "Save strategy cards", QDir::currentPath());
 
-        dir.append("/");
-
-        auto cards = listWidget->createListPart().getCards();
-
-        auto index = 0;
-
-        QHash<QString, bool> stringGuard;
-
-        for (auto battlegroup : cards)
+        if (drawStrategycards())
         {
-            QString cardName = dir + battlegroup.name;
 
-            if (stringGuard.contains(battlegroup.name))
-            {
-                cardName = dir + "card-" + QString::number(index);
-            }
-
-            QFP_StrategyCard card(this, battlegroup);
-
-            card.show();
-
-            auto cardImage = card.getImage();
-
-            QFile file(cardName);
-
-            int r = file.open(QIODevice::WriteOnly);
-
-            r = cardImage.save(&file, "png");
-
-            file.close();
-
-            index++;
+        }
+        else
+        {
+            QMessageBox msg(this);
+            msg.setText("One or more cards files could not be opened for writing");
+            msg.exec();
         }
     }
     else
     {
         QMessageBox msg(this);
         msg.setText("No List Loaded to print");
+        msg.exec();
+    }
+}
+
+
+void MainWindow::on_actionSimple_List_triggered()
+{    
+
+    if (!listWidget.isNull())
+    {
+        auto listPart = listWidget->createListPart();
+        QString listStr = listPart.getListString();
+
+        QClipboard * clipboard = QGuiApplication::clipboard();
+
+        clipboard->setText(listStr);
+
+        QMessageBox msg(this);
+        msg.setText("List copied to clipboard");
+        msg.exec();
+
+    }
+    else
+    {
+        QMessageBox msg(this);
+        msg.setText("No List Loaded to print");
+        msg.exec();
+    }
+}
+
+
+void MainWindow::on_actionFleet_List_triggered()
+{
+    if (!listWidget.isNull())
+    {
+
+
+    }
+    else
+    {
+        QMessageBox msg(this);
+        msg.setText("No List Loaded to copy");
         msg.exec();
     }
 }

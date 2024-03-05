@@ -67,6 +67,26 @@ unsigned int QFleet_List::getPointsLimit() const
     return pointsLimit;
 }
 
+unsigned int QFleet_List::getLaunchLimit() const
+{
+    if (pointsLimit < 1000)
+    {
+        return 10;
+    }
+    else if (pointsLimit < 2000)
+    {
+        return 15;
+    }
+    else if (pointsLimit < 3001)
+    {
+        return 20;
+    }
+    else
+    {
+        qFatal("List size too big!");
+    }
+}
+
 faction QFleet_List::getFaction() const
 {
     return listFaction.getVal();
@@ -75,4 +95,31 @@ faction QFleet_List::getFaction() const
 QFleet_Cost QFleet_List::getCost() const
 {
     return cost;
+}
+
+QString QFleet_List::getListString()
+{
+    QString nameStr = this->name;
+
+    nameStr.append(", ");
+
+    nameStr.append(QString::number(this->getCost().points));
+
+    nameStr.append(" pts, ");
+
+    nameStr.append(QFleet_Faction(this->getFaction()).toString());
+
+    for (auto& card : cards)
+    {
+
+        QString cardStr = "\r\t";
+
+        cardStr.append(card.getListString());
+
+        nameStr.append(cardStr);
+
+
+    }
+
+        return nameStr;
 }
