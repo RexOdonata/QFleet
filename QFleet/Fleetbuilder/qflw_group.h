@@ -38,6 +38,8 @@ public:
 
     QFleet_Group createListPart() const;
 
+    QFleet_Ship_Fleet getShip() const;
+
 
 
 signals:

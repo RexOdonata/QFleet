@@ -37,10 +37,6 @@ QFLW_Battlegroup::QFLW_Battlegroup(QWidget *parent, std::optional<QFleet_BGT> se
             mainWindowPtr , &MainWindow::slotShipPull);
 
 
-    QObject::connect(mainWindowPtr , &MainWindow::sendSelectedShip,
-            this, &QFLW_Battlegroup::recieveSelectedShip);
-
-
     ui->typeLabel->setText(type.toLongString());
 
     QString tempName = type.toLongString() + " " + QString::number((listPtr->getBGN(*setType)));
@@ -98,6 +94,10 @@ QFleet_Cost QFLW_Battlegroup::getCost() const
 void QFLW_Battlegroup::removeGroup(QFLW_Group * groupPtr)
 {
     auto index = 0;
+
+    // adjust counter
+    changeTypeCounters(groupPtr->getShip().tonnage, false);
+
     for (auto group : groups)
     {
         if (group.data() == groupPtr)
@@ -108,6 +108,8 @@ void QFLW_Battlegroup::removeGroup(QFLW_Group * groupPtr)
 
         index++;
     }
+
+
 
     updateCost();
 }
@@ -130,21 +132,19 @@ QFleet_Battlegroup QFLW_Battlegroup::createListPart() const
     return battleGroup;
 }
 
-void QFLW_Battlegroup::recieveSelectedShip(const QFleet_Ship_Fleet& ship, QFLW_Battlegroup * cardPtr)
+void QFLW_Battlegroup::recieveSelectedShip(const QFleet_Ship_Fleet& ship)
 {
-    // short circuit if this is not the right card
-    if (cardPtr != this)
-        return;
 
     // check if it is possible to add the card
     if (!canAdd(ship.tonnage))
     {
         QMessageBox msg(this);
-        msg.setText("Cannot add a group of this type to this Battlegroup");
+        msg.setText("Cannot Add another group of this type - No free slot");
         msg.exec();
         return;
     }
 
+    changeTypeCounters(ship.tonnage, true);
 
     QPointer<QFLW_Group> newGroup = new QFLW_Group(this, ship);
 
@@ -154,6 +154,39 @@ void QFLW_Battlegroup::recieveSelectedShip(const QFleet_Ship_Fleet& ship, QFLW_B
 
     updateCost();
 
+}
+
+void QFLW_Battlegroup::changeTypeCounters(const QFleet_Tonnage shipTonnage, const bool sign)
+{
+    QFleet_BGT shipType = shipTonnage.convertToBGT();
+
+    auto delta = 1;
+
+    if (sign == false)
+        delta = -1;
+
+    switch(shipType.getVal())
+    {
+    case bgt::PF:
+
+        countL += delta;
+        break;
+
+    case bgt::LN:
+
+        countM += delta;
+        break;
+
+    case bgt::VG:
+
+        countH += delta;
+        break;
+
+    case bgt::FL:
+
+        countSH += delta;
+        break;
+    }
 }
 
 bool QFLW_Battlegroup::canAdd(const QFleet_Tonnage tonnageVal) const

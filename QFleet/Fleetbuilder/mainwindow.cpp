@@ -210,7 +210,7 @@ void MainWindow::slotShipPull(QFLW_Battlegroup * cardPtr)
     if (!shipSelectDialog.isNull() && shipSelectDialog->getSelectedShip())
     {
        QFleet_Ship_Fleet selectedShip = *shipSelectDialog->getSelectedShip();
-       emit sendSelectedShip(selectedShip,cardPtr);
+        cardPtr->recieveSelectedShip(selectedShip);
     }
     else
     {

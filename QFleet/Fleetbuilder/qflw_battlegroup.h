@@ -35,37 +35,51 @@ public:
 
     QFleet_BGT getType() const;
 
+    // gets a pointer to the parent object, ie the list object - maybe should be private?
     QWidget * getListPtr() const;
 
+    // create a save/print representation of
     QFleet_Battlegroup createListPart() const;
 
+    // used during loading
     void addGroupListPart(const QFleet_Group&);
 
-public slots:
-    // does the grunt work of adding a ship
-    void recieveSelectedShip(const QFleet_Ship_Fleet&, QFLW_Battlegroup *);
+    // does the grunt work of adding a ship, emitted from main window I think?
+    void recieveSelectedShip(const QFleet_Ship_Fleet&);
+
 
 signals:
+    // get the currently selected ship from the select dialog
     void querySelectedShip(QFLW_Battlegroup *);
 
 private slots:
+    // starts the process to add the selected ship as a child group
     void on_addGroupButton_clicked();
 
+    // delete self and inform parent
     void on_deleteCardButton_clicked();
 
 private:
     Ui::QFLW_Battlegroup *ui;
     // UI
 
+    // stores child group widgets
     QVector<QPointer<QFLW_Group>> groups;
 
     // FXs
 
+    // check if it is legal to add a group of given type
     bool canAdd(QFleet_Tonnage) const;
 
+    // send a signal up to the list widget to delete this widget
     void flagRemoval(QFLW_Battlegroup *);
 
+    // update UI text labels
     void refreshCostLabels();
+
+    // true +, false -
+    // call when adding/removing a ship to update the typeCounts
+    void changeTypeCounters(const QFleet_Tonnage, const bool);
 
 
     // DATA

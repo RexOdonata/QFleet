@@ -25,6 +25,11 @@ QFLW_Group::QFLW_Group(QWidget *parent, std::optional<QFleet_Ship_Fleet> setShip
 
 }
 
+ QFleet_Ship_Fleet QFLW_Group::getShip() const
+{
+    return ship;
+ }
+
 void QFLW_Group::setupWidget()
 {
     ui->shipnameLabel->setText(ship.name);

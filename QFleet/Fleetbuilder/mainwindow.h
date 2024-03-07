@@ -29,10 +29,6 @@ public slots:
     void slotShipPull(QFLW_Battlegroup *);
 
 
-
-signals:
-    void sendSelectedShip(const QFleet_Ship_Fleet&, QFLW_Battlegroup *);    
-
 private slots:
     void on_actionNew_triggered();
 
