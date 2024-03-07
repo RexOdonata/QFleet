@@ -1,5 +1,5 @@
 <html>
-<h2>Dropfleet Commander: {{listName}}</h2>
+<h2>Dropfleet Commander: {{ listName }}</h2>
 <table style="height: 60px;" border="1" width="567">
 <tbody>
 <tr>

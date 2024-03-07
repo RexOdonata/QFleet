@@ -6,6 +6,7 @@
 #include "NLTemplate.h"
 
 
+using namespace std;
 using namespace NL::Template;
 using namespace NL::Template::Private;
 
@@ -32,38 +33,38 @@ static inline bool alphanum( const char c ) {
 }
 
 
-static inline long match_var( const char *text, std::string & result ) {
+static inline long match_var( const char *text, string & result ) {
     if (text[ 0 ] != '{' ||
         text[ 1 ] != '{' ||
         text[ 2 ] != ' ' )
     {
         return -1;
     }
-
+    
     const char *var = text + 3;
     const char *cursor = var;
-
+    
     while ( *cursor ) {
         if (cursor[ 0 ] == ' ' &&
             cursor[ 1 ] == '}' &&
             cursor[ 2 ] == '}' )
         {
-            result = std::string( var, cursor - var );
+            result = string( var, cursor - var );
             return cursor + 3 - text;
         }
-
+        
         if ( !alphanum( *cursor ) ) {
             return -1;
         }
-
+        
         cursor++;
     }
-
+    
     return -1;
 }
 
 
-static inline long match_tag_with_param( const char *tag, const char *text, std::string & result ) {
+static inline long match_tag_with_param( const char *tag, const char *text, string & result ) {
     if (text[ 0 ] != '{' ||
         text[ 1 ] != '%' ||
         text[ 2 ] != ' ')
@@ -77,11 +78,11 @@ static inline long match_tag_with_param( const char *tag, const char *text, std:
     }
 
     const char *param = text + 3 + taglen;
-
+    
     if ( *param != ' ' ) {
         return -1;
     }
-
+    
     param++;
 
     const char *cursor = param;
@@ -91,22 +92,22 @@ static inline long match_tag_with_param( const char *tag, const char *text, std:
             cursor[ 1 ] == '%' &&
             cursor[ 2 ] == '}' )
         {
-            result = std::string( param, cursor - param );
+            result = string( param, cursor - param );
             return cursor + 3 - text;
         }
 
         if ( !alphanum( *cursor ) ) {
             return -1;
         }
-
+        
         cursor++;
     }
-
+    
     return -1;
 }
 
 
-Tokenizer::Tokenizer( const std::string & text ) :
+Tokenizer::Tokenizer( const string & text ) :
 text_ptr( text.c_str() ),
 len( text.length() ),
 pos( 0 ),
@@ -120,21 +121,21 @@ Token Tokenizer::next() {
     static const char * s_block = "block";
     static const char * s_include = "include";
     static const long s_endblock_len = strlen( s_endblock );
-
+    
     if ( peeking ) {
         peeking = false;
         return peek;
     }
-
+    
     Token token;
     token.value.clear();
     peek.value.clear();
     token.type = TOKEN_END;
     peek.type = TOKEN_END;
-
+    
     long textpos = pos;
     long textlen = 0;
-
+    
 a:
     if ( pos < len ) {
         long m = match_tag_with_param( s_block, text_ptr + pos, peek.value );
@@ -160,7 +161,7 @@ a:
 
     if ( peeking ) {
         token.type = TOKEN_TEXT;
-        token.value = std::string( text_ptr + textpos, textlen );
+        token.value = string( text_ptr + textpos, textlen );
         return token;
     }
 
@@ -168,7 +169,7 @@ a:
 }
 
 
-const std::string Dictionary::find( const std::string & name ) const {
+const string Dictionary::find( const string & name ) const {
     for ( auto const & property : properties ) {
         if ( property.first == name ) {
             return property.second;
@@ -178,14 +179,14 @@ const std::string Dictionary::find( const std::string & name ) const {
 }
 
 
-void Dictionary::set( const std::string & name, const std::string & value ) {
+void Dictionary::set( const string & name, const string & value ) {
     for ( auto & property : properties ) {
         if ( property.first == name ) {
             property.second = value;
             return;
         }
     }
-    properties.push_back( std::pair<std::string, std::string>( name, value ) );
+    properties.push_back( pair<string, string>( name, value ) );
 }
 
 
@@ -193,17 +194,17 @@ Fragment::~Fragment() {
 }
 
 
-bool Fragment::isBlockNamed( const std::string & ) const {
+bool Fragment::isBlockNamed( const string & ) const {
     return false;
 }
 
 
 
-Text::Text( const std::string & text ) : text( text ) {
+Text::Text( const string & text ) : text( text ) {
 }
 
 
-void Text::render( std::ostream & output, const Dictionary & ) const {
+void Text::render( ostream & output, const Dictionary & ) const {
     output << text;
 }
 
@@ -213,11 +214,11 @@ Fragment *Text::copy() const {
 }
 
 
-Property::Property( const std::string & name ) : name( name ) {
+Property::Property( const string & name ) : name( name ) {
 }
 
 
-void Property::render( std::ostream & output, const Dictionary & dictionary ) const {
+void Property::render( ostream & output, const Dictionary & dictionary ) const {
     output << dictionary.find( name );
 }
 
@@ -244,15 +245,17 @@ Fragment *Node::copy() const {
 }
 
 
-void Node::render( std::ostream & output, const Dictionary & ) const {
-    for ( auto const & fragment : fragments ) {
+void Node::render( ostream & output, const Dictionary & ) const
+{
+    for ( auto const & fragment : fragments )
+    {
         fragment->render( output, *this );
     }
 }
 
 
 
-Block & Node::block( const std::string & name ) const {
+Block & Node::block( const string & name ) const {
     for ( auto & fragment : fragments ) {
         if ( fragment->isBlockNamed( name ) ) {
             return *dynamic_cast<Block*>( fragment );
@@ -262,7 +265,7 @@ Block & Node::block( const std::string & name ) const {
 }
 
 
-Block::Block( const std::string & name ) : name( name ), enabled( true ), resized( false ) {
+Block::Block( const string & name ) : name( name ), enabled( true ), resized( false ) {
 }
 
 
@@ -283,7 +286,7 @@ Block::~Block() {
 }
 
 
-bool Block::isBlockNamed( const std::string & name ) const {
+bool Block::isBlockNamed( const string & name ) const {
     return this->name == name;
 }
 
@@ -314,7 +317,7 @@ Node & Block::operator[]( size_t index ) {
 }
 
 
-void Block::render( std::ostream & output, const Dictionary & ) const {
+void Block::render( ostream & output, const Dictionary & ) const {
     if ( enabled ) {
         if ( resized ) {
             for ( auto node : nodes ) {
@@ -331,19 +334,18 @@ Loader::~Loader() {
 }
 
 
-Loader::Result LoaderFile::load( const std::string & name ) {
-    std::ifstream input;
+Loader::Result LoaderFile::load( const string & name ) {
+    ifstream input;
     input.open( name );
-
+    
     if ( ! input.is_open() ) {
         return { false, nullptr, "Could not open file " + name };
     }
-
+    
     std::string content( (std::istreambuf_iterator<char>( input ) ),
                          (std::istreambuf_iterator<char>() ) );
 
-    Loader::Result rVal{ true, content, "" };
-    return rVal;
+    return { true, content, "" };
 }
 
 
@@ -359,7 +361,7 @@ Loader::Result LoaderMemory::load( const std::string & name ) {
         }
     }
 
-    return { false, nullptr, name + " not found." };
+    return { false, "", name + " not found." };
 }
 
 
@@ -367,14 +369,14 @@ Template::Template( Loader & loader ) : Block( "main" ), loader( loader ) {
 }
 
 
-void Template::load_recursive( const std::string & name, std::vector<Tokenizer> & files, std::vector<Node*> & nodes ) {
+void Template::load_recursive( const string & name, vector<Tokenizer> & files, vector<Node*> & nodes ) {
     auto loaded = loader.load( name );
     if ( !loaded.valid ) {
         // TODO pass loaded.error somewhere..
         return;
     }
     files.emplace_back( loaded.data );
-
+    
     bool done = false;
     while( !done ) {
         Token token = files.back().next();
@@ -402,7 +404,7 @@ void Template::load_recursive( const std::string & name, std::vector<Tokenizer> 
                 break;
         }
     }
-
+    
     files.pop_back();
 }
 
@@ -420,19 +422,19 @@ void Template::clear() {
 }
 
 
-void Template::load( const std::string & name ) {
+void Template::load( const string & name ) {
     clear();
-
-    std::vector<Node*> stack;
+    
+    vector<Node*> stack;
     stack.push_back( this );
-
-    std::vector<Tokenizer> file_stack;
-
+    
+    vector<Tokenizer> file_stack;
+    
     load_recursive( name, file_stack, stack );
 }
 
 
-void Template::render( std::ostream & output ) const {
+void Template::render( ostream & output ) const {
     Node::render( output, *this );
 }
 

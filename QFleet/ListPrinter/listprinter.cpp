@@ -76,14 +76,14 @@ std::string listPrinter::getHTML(const QFleet_List& listObj)
 
         listTemplate.block("battleGroup")[cardIndex].set("cardName",card.name.toStdString());
 
-        listTemplate.block("battleGroup")[cardIndex].set("sr",QString::number(card.getCost().SR).toStdString());
+        listTemplate.block("battleGroup")[cardIndex].set("cardSR",QString::number(card.getCost().SR).toStdString());
 
         // get a reference to to the current group block
-        auto groupProfiles = listTemplate.block("battleGroup")[cardIndex];
+        NL::Template::Block& groupProfiles = listTemplate.block("battleGroup")[cardIndex].block("group");
 
         auto groups = card.getGroups();
 
-        // fill out the groups within the battlegroup
+        // fill out the group
         fillGroupBlocks(groupProfiles, groups);
 
     }
@@ -101,15 +101,15 @@ std::string listPrinter::getHTML(const QFleet_List& listObj)
     return oss.str();
 }
 
-void listPrinter::fillGroupBlocks(NL::Template::Block& blockRef, const QVector<QFleet_Group>& groups)
+void listPrinter::fillGroupBlocks(NL::Template::Block& groupBlockRef, const QVector<QFleet_Group>& groups)
 {
-    blockRef.block("group").repeat(groups.size());
+    groupBlockRef.repeat(groups.size());
 
     for (int groupIndex = 0; groupIndex < groups.size(); groupIndex++)
     {
         auto group = groups.at(groupIndex);
 
-        blockRef.block("group")[groupIndex].set("count", QString::number(group.getNumber()).toStdString());
+        groupBlockRef[groupIndex].set("count", QString::number(group.getNumber()).toStdString());
 
         std::string admiralStr = "";
 
@@ -120,85 +120,92 @@ void listPrinter::fillGroupBlocks(NL::Template::Block& blockRef, const QVector<Q
             admiralStr.append(" Admiral");
         }
 
-        blockRef.block("group")[groupIndex].set("admiral", admiralStr);
-
-
         auto ship = group.getShip();
 
-        blockRef.block("group")[groupIndex].set("shipName", ship.name.toStdString());
+        groupBlockRef[groupIndex].set("shipCost", QString::number(ship.points).toStdString());
 
-        blockRef.block("group")[groupIndex].set("scan", QString::number(ship.scan).toStdString());
+        groupBlockRef[groupIndex].set("cost", QString::number(group.getCost().points).toStdString());
 
-        blockRef.block("group")[groupIndex].set("signature", ship.getSigString().toStdString());
+        groupBlockRef[groupIndex].set("admiral", admiralStr);
 
-        blockRef.block("group")[groupIndex].set("thrust", QString::number(ship.thrust).toStdString());
+        groupBlockRef[groupIndex].set("shipName", ship.name.toStdString());
 
-        blockRef.block("group")[groupIndex].set("hull", QString::number(ship.hull).toStdString());
+        groupBlockRef[groupIndex].set("scan", QString::number(ship.scan).toStdString());
 
-        blockRef.block("group")[groupIndex].set("armor", ship.getArmorString().toStdString());
+        groupBlockRef[groupIndex].set("signature", ship.getSigString().toStdString());
 
-        blockRef.block("group")[groupIndex].set("pd", QString::number(ship.PD).toStdString());
+        groupBlockRef[groupIndex].set("thrust", QString::number(ship.thrust).toStdString());
 
-        blockRef.block("group")[groupIndex].set("armor", ship.getGroupString().toStdString());
+        groupBlockRef[groupIndex].set("hull", QString::number(ship.hull).toStdString());
 
-        blockRef.block("group")[groupIndex].set("tonnage", ship.tonnage.toString().toStdString());
+        groupBlockRef[groupIndex].set("armor", ship.getArmorString().toStdString());
 
-        blockRef.block("group")[groupIndex].set("armor", ship.getSpecialString().toStdString());
+        groupBlockRef[groupIndex].set("pd", QString::number(ship.PD).toStdString());
 
-        NL::Template::Node& groupRef = blockRef.block("group")[groupIndex];
+        groupBlockRef[groupIndex].set("group", ship.getGroupString().toStdString());
 
-        fillWeaponTable(groupRef, ship.weapons);
+        groupBlockRef[groupIndex].set("tonnage", ship.tonnage.toString().toStdString());
 
-        fillLaunchTable(groupRef, ship.launch);
+        groupBlockRef[groupIndex].set("special", ship.getSpecialString().toStdString());
+
+        NL::Template::Block& weaponRowBlock = groupBlockRef[groupIndex].block("weaponRow");
+
+        NL::Template::Block& launchTableBlock = groupBlockRef[groupIndex].block("launchTable");
+
+        fillWeaponTable(weaponRowBlock, ship.weapons);
+
+        fillLaunchTable(launchTableBlock, ship.launch);
     }
 }
 
-void listPrinter::fillWeaponTable(NL::Template::Block& blockRef, const QVector<QFleet_Weapon>& weapons)
+void listPrinter::fillWeaponTable(NL::Template::Block& weaponRowBlock, const QVector<QFleet_Weapon>& weapons)
 {
-    blockRef.block("weaponRow").repeat(weapons.size());
+    weaponRowBlock.repeat(weapons.size());
 
     for (int weaponIndex = 0; weaponIndex < weapons.size(); weaponIndex++)
     {
         auto weapon = weapons.at(weaponIndex);
 
-        blockRef.block("weaponRow").set("weaponName",weapon.name.toStdString());
+        weaponRowBlock[weaponIndex].set("weaponName",weapon.name.toStdString());
 
-        blockRef.block("weaponRow").set("weaponArc",weapon.facing.toString().toStdString());
+        weaponRowBlock[weaponIndex].set("weaponArc",weapon.facing.toString().toStdString());
 
-        blockRef.block("weaponRow").set("weaponDamage",weapon.damage.toStdString());
+        weaponRowBlock[weaponIndex].set("weaponDamage",weapon.damage.toStdString());
 
-        blockRef.block("weaponRow").set("weaponAttack",weapon.attacks.toStdString());
+        weaponRowBlock[weaponIndex].set("weaponAttack",weapon.attacks.toStdString());
 
-        blockRef.block("weaponRow").set("weaponLock",weapon.lock.toString().toStdString());
+        weaponRowBlock[weaponIndex].set("weaponLock",weapon.lock.toString().toStdString());
 
-        blockRef.block("weaponRow").set("weaponSpecial", weapon.getSpecialString().toStdString());
+        weaponRowBlock[weaponIndex].set("weaponSpecial", weapon.getSpecialString().toStdString());
     }
 }
 
-void listPrinter::fillLaunchTable(NL::Template::Block& blockRef, const QVector<QFleet_launchProfile>& launch)
+void listPrinter::fillLaunchTable(NL::Template::Block& launchTableBlock, const QVector<QFleet_launchProfile>& launch)
 {
     if (launch.size() == 0)
     {
-        blockRef.block("launchTable").disable();
+        launchTableBlock.disable();
+        launchTableBlock.block("launchRow").disable();
     }
     else
     {
-        NL::Template::Node& lTableBlock = blockRef.block("launchTable");
-        lTableBlock.block("launchRow").repeat(launch.size());
+
+       launchTableBlock.block("launchRow").repeat(launch.size());
 
         for (int launchIndex = 0; launchIndex < launch.size(); launchIndex++)
         {
             auto lp = launch.at(launchIndex);
 
-            lTableBlock.block("launchRow").set("launchName",lp.name.toStdString());
+            launchTableBlock.block("launchRow")[launchIndex].set("launchName",lp.name.toStdString());
 
-            lTableBlock.block("launchRow").set("launchCount",QString::number(lp.getCount()).toStdString());
+            launchTableBlock.block("launchRow")[launchIndex].set("launchCount",QString::number(lp.getCount()).toStdString());
 
             std::string limStr = "-";
 
             if (lp.getLimited())
                 limStr = QString::number(lp.getLimited()).toStdString();
-            lTableBlock.block("launchRow").set("launchName",limStr);
+
+            launchTableBlock.block("launchRow")[launchIndex].set("launchLimited",limStr);
         }
     }
 

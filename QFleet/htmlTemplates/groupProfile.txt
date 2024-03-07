@@ -1,17 +1,17 @@
-{{% block group %}}
-<h3><strong>{{count}}x {{shipName}}</strong></h3>
+{% block group %}
+<h3><strong>{{ count }}x {{ shipName }}</strong></h3>
 <table style="height: 44px;" border="0" width="512" cellspacing="0">
 <tbody>
 <tr>
-<td style="width: 102.467px; text-align: right;">{{cost}}</td>
+<td style="width: 102.467px; text-align: right;">{{ cost }}</td>
 <td style="width: 95.8667px;">&nbsp;points</td>
-<td style="width: 165.8px; text-align: right;">{{shipCost}}</td>
+<td style="width: 165.8px; text-align: right;">{{ shipCost }}</td>
 <td style="width: 95.8667px;">each</td>
-<td style="width: 147px; text-align: center;">{{admiral}}</td>
+<td style="width: 147px; text-align: center;">{{ admiral }}</td>
 </tr>
 </tbody>
 </table>
-<table style="height: 75px; float: left;" border="1" width="512">
+<table style="height: 75px; " border="1" width="512">
 <tbody>
 <tr>
 <td style="width: 81.7667px; text-align: center;"><strong>Name</strong></td>
@@ -26,16 +26,16 @@
 <td style="width: 62.3167px; text-align: center;"><strong>Special</strong></td>
 </tr>
 <tr>
-<td style="width: 81.7667px; text-align: left;">{{shipName}}</td>
-<td style="width: 48.3px;">{{scan}}</td>
-<td style="width: 76.3167px;">{{signature}}</td>
-<td style="width: 53.7333px;">{{thrust}}</td>
-<td style="width: 40.5333px;">{{hull}}</td>
-<td style="width: 55.3px;">{{armor}}</td>
-<td style="width: 34.3px;">{{pd}}</td>
-<td style="width: 54.5333px;">{{group}}</td>
-<td style="width: 69.3167px;">{{tonnage}}</td>
-<td style="width: 62.3167px;">{{special}}</td>
+<td style="width: 81.7667px; text-align: left;">{{ shipName }}</td>
+<td style="width: 48.3px;text-align: center">{{ scan }}</td>
+<td style="width: 76.3167px;text-align: center">{{ signature }}</td>
+<td style="width: 53.7333px;text-align: center">{{ thrust }}</td>
+<td style="width: 40.5333px;text-align: center">{{ hull }}</td>
+<td style="width: 55.3px;text-align: center">{{ armor }}</td>
+<td style="width: 34.3px;text-align: center">{{ pd }}</td>
+<td style="width: 54.5333px;text-align: center">{{ group }}</td>
+<td style="width: 69.3167px;text-align: center">{{ tonnage }}</td>
+<td style="width: 62.3167px;text-align: center">{{ special }}</td>
 </tr>
 </tbody>
 </table>
@@ -54,12 +54,12 @@
 </tr>
 {% block weaponRow %}
 <tr>
-<td style="width: 90.6667px; text-align: center;">{{weaponName}}</td>
-<td style="width: 90.6667px; text-align: center;">{{weaponLock}}</td>
-<td style="width: 90.6667px; text-align: center;">{{weaponAttack}}</td>
-<td style="width: 90.6667px; text-align: center;">{{weaponDamage}}</td>
-<td style="width: 90.6667px; text-align: center;">{{weaponArc}}</td>
-<td style="width: 90.6667px; text-align: center;">{{weaponSpecial}}</td>
+<td style="width: 90.6667px; text-align: center;">{{ weaponName }}</td>
+<td style="width: 90.6667px; text-align: center;">{{ weaponLock }}</td>
+<td style="width: 90.6667px; text-align: center;">{{ weaponAttack }}</td>
+<td style="width: 90.6667px; text-align: center;">{{ weaponDamage }}</td>
+<td style="width: 90.6667px; text-align: center;">{{ weaponArc }}</td>
+<td style="width: 90.6667px; text-align: center;">{{ weaponSpecial }}</td>
 </tr>
 {% endblock %}
 </tbody>
@@ -75,9 +75,9 @@
 </tr>
 {% block launchRow %}
 <tr>
-<td style="width: 210px;">{{launchName}}</td>
-<td style="width: 64.4334px;">{{launchCount}}</td>
-<td style="width: 45.5667px;">{{launchLimited}}</td>
+<td style="width: 210px;">{{ launchName }}</td>
+<td style="width: 64.4334px;">{{ launchCount }}</td>
+<td style="width: 45.5667px;">{{ launchLimited }}</td>
 </tr>
 {% endblock %}
 </tbody>

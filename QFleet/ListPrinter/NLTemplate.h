@@ -14,7 +14,7 @@ namespace NL {
 namespace Template {
 
 namespace Private {
-
+    
 
 struct Token {
     int type;
@@ -26,7 +26,7 @@ class Tokenizer {
 public:
     Tokenizer( const std::string & text );
     Token next();
-
+    
 private:
     const char *text_ptr;
     long len;
@@ -60,7 +60,7 @@ public:
     Text( const std::string & text );
     void render( std::ostream & output, const Dictionary & dictionary ) const;
     Fragment *copy() const;
-
+    
 private:
     const std::string text;
 };
@@ -71,31 +71,31 @@ public:
     Property( const std::string & name );
     void render( std::ostream & output, const Dictionary & dictionary ) const;
     Fragment *copy() const;
-
+    
 private:
     const std::string name;
 };
 
+    
+} // namespace Private
 
-}; // namespace Private
-
-
-
+    
+    
 class Block;
 
 //using namespace Private;
 
-
+    
 class Node : public Private::Fragment, public Private::Dictionary {
 public:
     ~Node();
     Fragment *copy() const;
     void render( std::ostream & output, const Private::Dictionary & dictionary ) const;
     Block & block( const std::string & name ) const;
-
+    
 protected:
     std::vector<Fragment*> fragments;
-
+    
     friend class Template;
 };
 
@@ -111,7 +111,7 @@ public:
     void repeat( size_t n );
     Node & operator[]( size_t index );
     void render( std::ostream & output, const Dictionary & dictionary ) const;
-
+    
 protected:
     const std::string name;
     bool enabled;
@@ -127,7 +127,7 @@ public:
         std::string data;
         std::string error;
     };
-
+    
     virtual ~Loader();
     virtual Result load( const std::string & name ) = 0;
 };
@@ -167,7 +167,7 @@ private:
 
 
 } // namespace Template
-
+    
 } // namespace NL
 
 #endif
