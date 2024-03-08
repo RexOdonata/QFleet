@@ -6,6 +6,7 @@
 #include "../Components/qfleet_weapon.h"
 #include "../Components/qfleet_ship_shipyard.h"
 #include "../Components/qfleet_launchasset.h"
+#include "dvsz_widget.h"
 
 
 QT_BEGIN_NAMESPACE
@@ -53,16 +54,13 @@ private slots:
 
     void on_loadLaunchAssetsButton_clicked();
 
-
-    void on_pushButton_clicked();
-
 private:
     Ui::Shipyard *ui;
 
 
     dvsx_Widget<QFleet_Weapon> * weaponWidget;
 
-    dvsx_Widget<QFleet_Ship_Shipyard> * shipWidget;
+    dvsz_Widget * shipWidget;
 
     dvsx_Widget<QFleet_Option> * optionWidget;
 

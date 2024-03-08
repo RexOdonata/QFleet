@@ -35,7 +35,10 @@
       <layout class="QHBoxLayout" name="searchBoxLayout"/>
      </item>
      <item>
-      <widget class="QListView" name="listView"/>
+      <layout class="QHBoxLayout" name="factionFilterLayout"/>
+     </item>
+     <item>
+      <widget class="QTreeView" name="treeView"/>
      </item>
     </layout>
    </item>

@@ -15,7 +15,7 @@ Shipyard::Shipyard(QWidget *parent)
     : QMainWindow(parent)
     , ui(new Ui::Shipyard)
     , weaponWidget(new dvsx_Widget<QFleet_Weapon>(parent))
-    , shipWidget(new dvsx_Widget<QFleet_Ship_Shipyard>(parent))
+    , shipWidget(new dvsz_Widget(parent))
     , optionWidget(new dvsx_Widget<QFleet_Option>(parent))
     , specialWidget(new dvs_Widget<QString>(parent))
     , launchWidget(new dvs_Widget<QFleet_launchProfile>(parent))
@@ -176,6 +176,8 @@ void Shipyard::on_deleteWeaponButton_clicked()
 void Shipyard::on_actionLoad_triggered()
 {
     shipWidget->loadFromFile(this, fileType_shipData());
+
+    shipWidget->manualRefresh();
 }
 
 

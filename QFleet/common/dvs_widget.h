@@ -11,7 +11,9 @@
 #include <QJsonDocument>
 #include <QJsonArray>
 #include <QJsonObject>
+#include <QComboBox>
 #include <optional>
+#include <QStandardItemModel>
 
 #include "fileTypes.h"
 
@@ -37,9 +39,11 @@ public:
 
 protected:
 
-    QStringListModel  * listModel;
+    QStandardItemModel  * listModel;
 
     void createSearchBar();
+
+    void createFactionCombo();
 
     QString getSelectedStr() const;
 
@@ -53,6 +57,9 @@ private:
     QCompleter * completer = NULL;
 
     QLineEdit * searchLinePtr = NULL;
+
+protected:
+    QComboBox * factionFilter = NULL;
 
 };
 
@@ -73,18 +80,21 @@ inline QString getStr<QString>(const QString in)
 template <typename T>
 class dvs_Widget : public dvs_WidgetBase
 {
-    private:
+    protected:
 
     void refresh()
     {
-        QStringList strings;
+
+        listModel->clear();
 
         for (auto& item : data)
         {
-            strings.push_back(getStr(item));
+            QString str = getStr(item);
+            auto newItem = new QStandardItem(str);
+            listModel->appendRow(newItem);
         }
 
-        this->listModel->setStringList(strings);
+        listModel->setHeaderData(0,Qt::Horizontal, "Data");
     }
 
     public:
@@ -262,10 +272,8 @@ class dvsx_Widget : public dvs_Widget<T>
         {
             this->createSearchBar();
         }
-    private:
 
 };
-
 
 
 #endif // DVS_WIDGET_H
