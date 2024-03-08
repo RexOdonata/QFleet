@@ -1,10 +1,15 @@
 #include "qflw_battlegroup.h"
+#include "qjsondocument.h"
 #include "qmessagebox.h"
 #include "ui_qflw_battlegroup.h"
 
 #include "mainwindow.h"
 
 #include "qflw_list.h"
+
+#include <QDragEnterEvent>
+#include <QDropEvent>
+#include <QMimeData>
 
 const std::array<unsigned int, 16> QFLW_Battlegroup::groupLimitMatrix =
     {
@@ -55,9 +60,56 @@ QFLW_Battlegroup::QFLW_Battlegroup(QWidget *parent, std::optional<QFleet_BGT> se
     this->setAttribute(Qt::WA_DeleteOnClose);
 }
 
+void QFLW_Battlegroup::dragEnterEvent(QDragEnterEvent * event)
+{
+    QFLW_Group * srcPtr = (QFLW_Group *) event->source();
+    // do I need to put anything here?
+    if (event->mimeData()->hasFormat(QFLW_Group::dropGroupText) &&
+        srcPtr->getcardWidgetPtr() != this)
+    {
+        event->acceptProposedAction();
+    }
+    else
+    {
+        event->ignore();
+    }
+}
+
+void QFLW_Battlegroup::dropEvent(QDropEvent * event)
+{
+    if (event->mimeData()->hasFormat(QFLW_Group::dropGroupText))
+    {
+        QByteArray bytes = event->mimeData()->data(QFLW_Group::dropGroupText);
+
+        QJsonDocument jsonDoc = QJsonDocument::fromJson(bytes);
+
+        QJsonObject jsonObj = jsonDoc.object();
+
+        QFleet_Group droppedGroup(jsonObj);
+
+        this->addGroupListPart(droppedGroup);
+
+        updateCost();
+
+        event->setDropAction(Qt::MoveAction);
+    }
+    else
+    {
+        event->setDropAction(Qt::IgnoreAction);
+    }
+
+
+    event->acceptProposedAction();
+}
+
 QFLW_Battlegroup::~QFLW_Battlegroup()
 {
     delete ui;
+
+    for (auto& group : groups)
+    {
+        delete group;
+    }
 }
 
 void QFLW_Battlegroup::refreshCostLabels()

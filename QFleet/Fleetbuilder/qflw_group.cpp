@@ -1,6 +1,7 @@
 #include "qflw_group.h"
 #include "qcheckbox.h"
 #include "qflw_list.h"
+#include "qjsondocument.h"
 #include "ui_qflw_group.h"
 
 #include "shipviewdialog.h"
@@ -8,6 +9,12 @@
 #include "qflw_battlegroup.h"
 
 #include "admiralselectdialog.h"
+
+#include <QDrag>
+#include <QMouseEvent>
+#include <QMimeData>
+
+const QString QFLW_Group::dropGroupText = "dropGroup";
 
 QFLW_Group::QFLW_Group(QWidget *parent, std::optional<QFleet_Ship_Fleet> setShip) :
     QWidget(parent),
@@ -98,6 +105,11 @@ QFLW_Group::QFLW_Group(QWidget *parent, const QFleet_Group * load) :
 
     setup = true;
 
+}
+
+const QWidget * QFLW_Group::getcardWidgetPtr() const
+{
+    return cardWidgetPtr;
 }
 
 QFleet_Cost QFLW_Group::getCost() const
@@ -277,6 +289,35 @@ QFleet_Group QFLW_Group::createListPart() const
     newGroup.setCostInfo(this->num, admiralLevel);
 
     return newGroup;
+}
+
+// for drag and drop group movements
+void QFLW_Group::mousePressEvent(QMouseEvent * event)
+{
+    // check if mouse is on the ship name to drag
+    if (event->button() == Qt::LeftButton && ui->shipnameLabel->geometry().contains(event->pos()))
+    {
+        QDrag * drag = new QDrag(this);
+
+        QJsonObject json = this->createListPart().toJson();
+
+        QByteArray bytes = QJsonDocument(json).toJson();
+
+        QMimeData * mimeData = new QMimeData;
+
+        mimeData->setData(dropGroupText,bytes);
+
+        drag->setMimeData(mimeData);
+
+        Qt::DropAction dropAction = drag->exec(Qt::MoveAction | Qt::IgnoreAction);
+
+        if (Qt::MoveAction == dropAction)
+        {
+            this->flagRemoval(this);
+            this->close();
+        }
+    }
+
 }
 
 

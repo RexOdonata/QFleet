@@ -8,6 +8,8 @@
 
 #include "../ListParts/qfleet_group.h"
 
+
+
 #include <QCheckBox>
 #include <QLabel>
 
@@ -40,7 +42,13 @@ public:
 
     QFleet_Ship_Fleet getShip() const;
 
+    // DRAG-DROP groups
 
+    void mousePressEvent(QMouseEvent *);
+
+    const static QString dropGroupText;
+
+    const QWidget * getcardWidgetPtr() const;
 
 signals:
 
@@ -94,6 +102,9 @@ private:
     void flagRemoval(QFLW_Group *);
 
     QFleet_Cost getShipGroupCost(const unsigned int) const;
+
+
+
 
 };
 

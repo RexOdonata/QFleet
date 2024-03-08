@@ -47,6 +47,11 @@ public:
     // does the grunt work of adding a ship, emitted from main window I think?
     void recieveSelectedShip(const QFleet_Ship_Fleet&);
 
+    // GROUP DRAG-DROP
+    void dragEnterEvent(QDragEnterEvent *);
+
+    void dropEvent(QDropEvent *);
+
 
 signals:
     // get the currently selected ship from the select dialog
