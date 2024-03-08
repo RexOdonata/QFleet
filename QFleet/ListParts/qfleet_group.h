@@ -28,6 +28,8 @@ public:
     QFleet_Ship_Fleet getShip() const;
 
     QString getListString();
+
+    void purgeAdmiral();
     
 protected:
 

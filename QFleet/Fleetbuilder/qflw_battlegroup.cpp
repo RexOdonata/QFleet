@@ -1,6 +1,5 @@
 #include "qflw_battlegroup.h"
 #include "qjsondocument.h"
-#include "qmessagebox.h"
 #include "ui_qflw_battlegroup.h"
 
 #include "mainwindow.h"
@@ -10,6 +9,7 @@
 #include <QDragEnterEvent>
 #include <QDropEvent>
 #include <QMimeData>
+
 
 const std::array<unsigned int, 16> QFLW_Battlegroup::groupLimitMatrix =
     {
@@ -41,6 +41,8 @@ QFLW_Battlegroup::QFLW_Battlegroup(QWidget *parent, std::optional<QFleet_BGT> se
     QObject::connect(this, &QFLW_Battlegroup::querySelectedShip,
             mainWindowPtr , &MainWindow::slotShipPull);
 
+    QObject::connect(this, &QFLW_Battlegroup::signalDuplicate, listPtr, &QFLW_List::slotCardDuplicated);
+
 
     ui->typeLabel->setText(type.toLongString());
 
@@ -52,12 +54,158 @@ QFLW_Battlegroup::QFLW_Battlegroup(QWidget *parent, std::optional<QFleet_BGT> se
 
     unsigned int index = setType.value().convertToIndex();
 
+    {
     allowedL = groupLimitMatrix[4*index];
     allowedM = groupLimitMatrix[4*index + 1];
     allowedH = groupLimitMatrix[4*index + 2];
     allowedSH = groupLimitMatrix[4*index + 3];
+    }
+
+    updateGroupCounts();
+    updateWarningLabels();
+
 
     this->setAttribute(Qt::WA_DeleteOnClose);
+}
+
+QString QFLW_Battlegroup::getName() const
+{
+    return ui->nameEdit->text();
+}
+
+unsigned int QFLW_Battlegroup::getcostNoAdmiral() const
+{
+    unsigned int output = this->cost.points;
+
+    for (auto& group : groups)
+    {
+    output -= group->getAdmiralCost();
+    }
+
+    return output;
+}
+
+// update internal group counts
+void QFLW_Battlegroup::updateGroupCounts()
+{
+    countSH = countH= countM = countL = 0;
+
+    for (auto& group : groups)
+    incrementTypeCounters(group->getShip().tonnage);
+
+}
+
+// sets warning labels as appropriate to current counts
+void QFLW_Battlegroup::updateWarningLabels()
+{
+    {
+        // too many groups
+        unsigned int maxgroups = 3;
+        if (this->type.getVal() == bgt::FL)
+            maxgroups = 2;
+
+        if (groups.size() > maxgroups)
+        {
+            QString labelStr = QString("!: Too many groups, max is %1").arg(QString::number(maxgroups));
+            ui->grpfullWarnLabel->setText(labelStr);
+            ui->grpfullWarnLabel->setVisible(true);
+        }
+        else
+            ui->grpfullWarnLabel->setVisible(false);
+    }
+
+    {
+        // minimum group warning
+        if (!checkMandatory())
+        {
+            QString labelStr = QString("!: No mandatory %1 group").arg(type.toLongStringBase());
+            ui->mingrpWarnLabel->setText(labelStr);
+            ui->mingrpWarnLabel->setVisible(true);
+        }
+        else
+        {
+            ui->mingrpWarnLabel->setVisible(false);
+        }
+    }
+
+    {
+        // check against group lims
+        if (!checkGroupLimits())
+        {
+            QString labelStr = getGroupLimwarnings();
+            ui->grplimsWarnLabel->setText(QString("!: Too many %1 groups").arg(labelStr));
+            ui->grplimsWarnLabel->setVisible(true);
+        }
+        else
+        {
+            ui->grplimsWarnLabel->setVisible(false);
+        }
+    }
+
+}
+
+// returns true if the battlegroup is valid
+bool QFLW_Battlegroup::validityCheck() const
+{
+    if (ui->grplimsWarnLabel->isVisible() ||
+        ui->mingrpWarnLabel->isVisible() ||
+        ui->grpfullWarnLabel->isVisible())
+        return false;
+    else
+        return true;
+}
+
+QString QFLW_Battlegroup::getGroupLimwarnings() const
+{
+    unsigned int index = type.convertToIndex();
+
+    std::array<unsigned int, 4> lims = {groupLimitMatrix[4*index],
+                                        groupLimitMatrix[4*index+1],
+                                        groupLimitMatrix[4*index+2],
+                                        groupLimitMatrix[4*index+3]};
+
+    QVector<QString> strVec;
+
+    if (lims[0]<countL)
+        strVec.push_back(QFleet_BGT(bgt::PF).toLongStringBase());
+    if (lims[1]<countM)
+        strVec.push_back(QFleet_BGT(bgt::LN).toLongStringBase());
+    if (lims[2]<countH)
+        strVec.push_back(QFleet_BGT(bgt::VG).toLongStringBase());
+    if (lims[3]<countSH)
+        strVec.push_back(QFleet_BGT(bgt::FL).toLongStringBase());
+
+    QString output="";
+
+    for (auto& str : strVec)
+    {
+        output.append(str);
+        if (str != strVec.back())
+            output.append(",");
+    }
+
+    return output;
+}
+
+bool QFLW_Battlegroup::checkGroupLimits() const
+{
+    unsigned int index = type.convertToIndex();
+
+    std::array<unsigned int, 4> lims = {groupLimitMatrix[4*index],
+                                        groupLimitMatrix[4*index+1],
+                                        groupLimitMatrix[4*index+2],
+                                        groupLimitMatrix[4*index+3]};
+
+    if (lims[0]<countL)
+        return false;
+    if (lims[1]<countM)
+        return false;
+    if (lims[2]<countH)
+        return false;
+    if (lims[3]<countSH)
+        return false;
+
+    return true;
 }
 
 void QFLW_Battlegroup::dragEnterEvent(QDragEnterEvent * event)
@@ -127,6 +275,10 @@ void QFLW_Battlegroup::updateCost(bool bubbleUp)
         cost + groupPtr->getCost();
     }
 
+    updateGroupCounts();
+
+    updateWarningLabels();
+
     refreshCostLabels();    
 
     if (bubbleUp)
@@ -147,9 +299,6 @@ void QFLW_Battlegroup::removeGroup(QFLW_Group * groupPtr)
 {
     auto index = 0;
 
-    // adjust counter
-    changeTypeCounters(groupPtr->getShip().tonnage, false);
-
     for (auto group : groups)
     {
         if (group.data() == groupPtr)
@@ -160,8 +309,6 @@ void QFLW_Battlegroup::removeGroup(QFLW_Group * groupPtr)
 
         index++;
     }
-
-
 
     updateCost();
 }
@@ -187,20 +334,9 @@ QFleet_Battlegroup QFLW_Battlegroup::createListPart() const
 void QFLW_Battlegroup::recieveSelectedShip(const QFleet_Ship_Fleet& ship)
 {
 
-    // check if it is possible to add the card
-    if (!canAdd(ship.tonnage))
-    {
-        QMessageBox msg(this);
-        msg.setText("Cannot Add another group of this type - No free slot");
-        msg.exec();
-        return;
-    }
-
-    changeTypeCounters(ship.tonnage, true);
-
     QPointer<QFLW_Group> newGroup = new QFLW_Group(this, ship);
 
-    groups.push_back(newGroup);
+    groups.push_back(newGroup); 
 
     ui->groupLayout->addWidget(newGroup.data());
 
@@ -208,55 +344,32 @@ void QFLW_Battlegroup::recieveSelectedShip(const QFleet_Ship_Fleet& ship)
 
 }
 
-void QFLW_Battlegroup::changeTypeCounters(const QFleet_Tonnage shipTonnage, const bool sign)
+void QFLW_Battlegroup::incrementTypeCounters(const QFleet_Tonnage shipTonnage)
 {
     QFleet_BGT shipType = shipTonnage.convertToBGT();
 
-    auto delta = 1;
-
-    if (sign == false)
-        delta = -1;
-
-    switch(shipType.getVal())
+ switch(shipType.getVal())
     {
     case bgt::PF:
 
-        countL += delta;
+        countL++;
         break;
 
     case bgt::LN:
 
-        countM += delta;
+        countM++;
         break;
 
     case bgt::VG:
 
-        countH += delta;
+        countH++;
         break;
 
     case bgt::FL:
 
-        countSH += delta;
+        countSH++;
         break;
     }
-}
-
-bool QFLW_Battlegroup::canAdd(const QFleet_Tonnage tonnageVal) const
-{
-
-    // first, get the type of ship L/M/H/S from its tonnage
-    QFleet_BGT shipBGT = tonnageVal.convertToBGT();
-
-    // convert to index
-    unsigned int index = shipBGT.convertToIndex();
-
-    std::array<unsigned int, 4> actual{countL, countM, countH, countSH};
-    std::array<unsigned int, 4> limits{allowedL, allowedM, allowedH, allowedSH};
-
-    if (actual[index]+1>limits[index])
-        return false;
-    else
-        return true;
 }
 
 bool QFLW_Battlegroup::checkMandatory() const
@@ -302,4 +415,18 @@ void QFLW_Battlegroup::flagRemoval(QFLW_Battlegroup * thisPtr)
     list->removeCard(thisPtr);
 
 }
+
+
+void QFLW_Battlegroup::on_duplicateButton_clicked()
+{
+    auto listpart = this->createListPart();
+
+    listpart.purgeAdmiral();
+
+    emit signalDuplicate(listpart);
+
+
+}
+
+
 

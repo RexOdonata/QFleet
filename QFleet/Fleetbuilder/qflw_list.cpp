@@ -40,15 +40,34 @@ QFLW_List::QFLW_List(QWidget *parent, std::optional<QFleet_List> list) :
             cards.back()->updateCost(false);
         }
 
-        updateCost();
     }
 
+    setListLimits();
 
-    updateListLimits();
+    updateCost();
 
     this->setAttribute(Qt::WA_DeleteOnClose);
 
 
+}
+
+void QFLW_List::slotCardDuplicated(QFleet_Battlegroup battlegroup)
+{
+    addBGT(battlegroup.getType());
+
+    auto groups = battlegroup.getGroups();
+
+    // get the group widget we just added
+    auto bgc = cards.back();
+
+    for (auto& group : groups)
+    {
+        bgc->addGroupListPart(group);
+    }
+
+    bgc->updateCost();
+
+    this->updateCost();
 }
 
 void QFLW_List::setupWidgets()
@@ -73,12 +92,159 @@ void QFLW_List::setupWidgets()
 
 }
 
-void QFLW_List::updateListLimits()
+// set the limits on status widgets
+void QFLW_List::setListLimits()
 {
+
     pointsStatusWidget->setLimit(pointsLimit);
     launchStatusWidget->setLimit(launchLimit);
-    pointsStatusWidget->setValue(this->cost.points);
-    launchStatusWidget->setValue(this->cost.LC);
+
+}
+
+// count the number of battlegroup types
+void QFLW_List::updateCardLimits()
+{
+    countSH = countH = countM = countL = 0;
+
+    for (auto& card : cards)
+    {
+        switch (card->getType().getVal())
+        {
+            case bgt::PF:
+                countL++;
+                break;
+            case bgt::LN:
+                countM++;
+                break;
+            case bgt::VG:
+                countH++;
+                break;
+            case bgt::FL:
+                countSH++;
+                break;
+        }
+    }
+}
+
+bool QFLW_List::checkMinimumcards() const
+{
+    unsigned int minL = 1;
+    if (pointsLimit < 1000)
+        minL = 0;
+
+    if (countL < minL || countM < 1)
+        return false;
+    else
+        return true;
+
+}
+
+QString QFLW_List::getCardRequirementLabels() const
+{
+    QVector<QString> strs;
+
+    unsigned int minL = 1;
+    if (pointsLimit < 1000)
+        minL = 0;
+
+    if (countM < 1)
+        strs.push_back("1 Medium");
+    if (countL < minL)
+        strs.push_back("1 Light");
+
+    if (strs.size() > 1)
+    {
+        return QString("%1, %2").arg(strs.at(0),strs.at(1));
+    }
+    else
+    {
+        return strs.front();
+    }
+}
+
+
+void QFLW_List::updateValidityLabels()
+{
+    {
+        if (!checkMinimumcards())
+        {
+            QString cardWarning = getCardRequirementLabels();
+            QString str = QString("!: Minimum Battlegroups not met, need %1").arg(cardWarning);
+            ui->minCardsWarnLabel->setText(str);
+            ui->minCardsWarnLabel->setVisible(true);
+        }
+        else
+            ui->minCardsWarnLabel->setVisible(false);
+    }
+
+    {
+
+        float lfrac = 0.33;
+        if (pointsLimit < 1000)
+            lfrac = 0.5;
+
+        unsigned int lim = lfrac * pointsLimit;
+
+        QVector<QString> overweightCards;
+        for (auto& card : cards)
+        {
+            if (card->getcostNoAdmiral() > lim)
+                overweightCards.push_back(card->getName());
+        }
+
+        if (overweightCards.size() > 0)
+        {
+            QString warningLabel = "";
+
+            for (auto& str : overweightCards)
+            {
+                warningLabel.append(str);
+                if (str != overweightCards.back())
+                    warningLabel.append(", ");
+            }
+
+            ui->cardOverweightWarnLabel->setText(QString("!: Battlegroup(s) %1 is over points limit of %2").arg(warningLabel,QString::number(lim)));
+            ui->cardOverweightWarnLabel->setVisible(true);
+        }
+        else
+            ui->cardOverweightWarnLabel->setVisible(false);
+
+    }
+}
+
+bool QFLW_List::checkValid() const
+{
+    if (!pointsStatusWidget->isValid())
+        return false;
+
+    if (!launchStatusWidget->isValid())
+        return false;
+
+    if (!pfStatusWidget->isValid())
+        return false;
+
+    if (!lnStatusWidget->isValid())
+        return false;
+
+    if (!vgStatusWidget->isValid())
+        return false;
+
+    if (!flStatusWidget->isValid())
+        return false;
+
+    if (ui->cardOverweightWarnLabel->isVisible())
+        return false;
+
+    if (ui->minCardsWarnLabel->isVisible())
+        return false;
+
+    for (auto card : cards)
+    {
+        if (!card->validityCheck())
+            return false;
+    }
+
+    return true;
 }
 
 
@@ -180,6 +346,7 @@ void QFLW_List::setPointsLimit(unsigned int set)
 
 }
 
+// updates the display of bg cards based on current values
 void QFLW_List::updateHeader()
 {
     pfStatusWidget->setValue(countL);
@@ -208,21 +375,14 @@ void QFLW_List::updateCost()
         cost + cardPtr->getCost();
     }
 
+    updateCardLimits();   
+
+    updateValidityLabels();
+
     updateHeader();
+
 }
 
-bool QFLW_List::canAdd(QFleet_BGT bgType) const
-{
-    unsigned int index = bgType.convertToIndex();
-
-    std::array<unsigned int, 4> actual{countL, countM, countH, countSH};
-    std::array<unsigned int, 4> limits{allowedL, allowedM, allowedH, allowedSH};
-
-    if (actual[index]+1>limits[index])
-        return false;
-    else
-        return true;
-}
 
 unsigned int QFLW_List::getBGN(QFleet_BGT bgType) const
 {
@@ -254,43 +414,29 @@ unsigned int QFLW_List::getBGN(QFleet_BGT bgType) const
 
 void QFLW_List::addBGT(QFleet_BGT type)
 {
-    if (canAdd(type))
+    switch (type.getVal())
     {
-        switch (type.getVal())
-        {
-            case bgt::PF:
-                countL++;
-            break;
-
-            case bgt::LN:
-                countM++;
-            break;
-
-            case bgt::VG:
-                countH++;
-            break;
-
-            case bgt::FL:
-                countSH++;
-            break;
-        }
-
-            QPointer<QFLW_Battlegroup> newBG = new QFLW_Battlegroup(this, type);
-
-            cards.push_back(newBG.data());
-
-            ui->cardLayout->addWidget(newBG.data());
-
-            updateHeader();
+        case bgt::PF:
+            countL++;
+        break;
+        case bgt::LN:
+            countM++;
+        break;
+        case bgt::VG:
+            countH++;
+        break;
+        case bgt::FL:
+            countSH++;
+        break;
     }
-    else
-    {
-        QMessageBox msg(this);
-        msg.setText("Cannot add a Battlegroup of this type");
-        msg.exec();
-    }
+
+    QPointer<QFLW_Battlegroup> newBG = new QFLW_Battlegroup(this, type);
+    cards.push_back(newBG.data());
+    ui->cardLayout->addWidget(newBG.data());
+
+    updateCost();
+
 }
-
 void QFLW_List::removeBGT(QFleet_BGT type)
 {
     switch (type.getVal())
@@ -311,6 +457,8 @@ void QFLW_List::removeBGT(QFleet_BGT type)
         countSH--;
         break;
     }
+
+    updateCost();
 }
 
 void QFLW_List::on_addPF_Button_clicked()

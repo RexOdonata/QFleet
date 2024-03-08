@@ -28,10 +28,7 @@ public:
     QFleet_Cost getCost() const;
 
     // sets constraints based on battlegroup type
-    void setType(QFleet_BGT);
-
-    // checks if the BG contains a group of type mandory for it
-    bool checkMandatory() const;
+    void setType(QFleet_BGT);    
 
     QFleet_BGT getType() const;
 
@@ -47,6 +44,13 @@ public:
     // does the grunt work of adding a ship, emitted from main window I think?
     void recieveSelectedShip(const QFleet_Ship_Fleet&);
 
+    // check if the group has any warnings present
+    bool validityCheck() const;
+
+    unsigned int getcostNoAdmiral() const;
+
+    QString getName() const;
+
     // GROUP DRAG-DROP
     void dragEnterEvent(QDragEnterEvent *);
 
@@ -57,12 +61,16 @@ signals:
     // get the currently selected ship from the select dialog
     void querySelectedShip(QFLW_Battlegroup *);
 
+    void signalDuplicate(QFleet_Battlegroup);
+
 private slots:
     // starts the process to add the selected ship as a child group
     void on_addGroupButton_clicked();
 
     // delete self and inform parent
     void on_deleteCardButton_clicked();
+
+    void on_duplicateButton_clicked();
 
 private:
     Ui::QFLW_Battlegroup *ui;
@@ -73,8 +81,11 @@ private:
 
     // FXs
 
-    // check if it is legal to add a group of given type
-    bool canAdd(QFleet_Tonnage) const;
+    // update internal group counts
+    void updateGroupCounts();
+
+    // sets warning labels as appropriate to current counts
+    void updateWarningLabels();
 
     // send a signal up to the list widget to delete this widget
     void flagRemoval(QFLW_Battlegroup *);
@@ -84,7 +95,14 @@ private:
 
     // true +, false -
     // call when adding/removing a ship to update the typeCounts
-    void changeTypeCounters(const QFleet_Tonnage, const bool);
+    void incrementTypeCounters(const QFleet_Tonnage);
+
+    // checks if the BG contains a group of type mandory for it
+    bool checkMandatory() const;
+
+    bool checkGroupLimits() const;
+
+    QString getGroupLimwarnings() const;
 
 
     // DATA

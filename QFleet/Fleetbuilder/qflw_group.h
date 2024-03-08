@@ -42,13 +42,18 @@ public:
 
     QFleet_Ship_Fleet getShip() const;
 
+
+    const QWidget * getcardWidgetPtr() const;
+
+    unsigned int getAdmiralCost() const;
+
     // DRAG-DROP groups
 
     void mousePressEvent(QMouseEvent *);
 
     const static QString dropGroupText;
 
-    const QWidget * getcardWidgetPtr() const;
+
 
 signals:
 
@@ -101,6 +106,7 @@ private:
     // send a signal up to parent card to remove from container
     void flagRemoval(QFLW_Group *);
 
+    // optional argument shows whether to to count the admiral or not
     QFleet_Cost getShipGroupCost(const unsigned int) const;
 
 

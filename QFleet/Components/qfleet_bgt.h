@@ -52,6 +52,17 @@ public:
         }
     }
 
+    QString toLongStringBase() const
+    {
+        if (val)
+            return e2lbs.value(*val);
+        else
+        {
+            qFatal("Opened empty enum instance");
+            return "REEEEE!";
+        }
+    }
+
     // get a numerical index 0,1,2,3:PF,LN,VG,FL
     unsigned int convertToIndex() const
     {
@@ -134,9 +145,15 @@ private:
     const static QString val_long_VG;
     const static QString val_long_FL;
 
+    const static QString val_lb_L;
+    const static QString val_lb_M;
+    const static QString val_lb_H;
+    const static QString val_lb_SH;
+
     const static QHash<QString, bgt> s2e;
     const static QHash<bgt, QString> e2s;
     const static QHash<bgt, QString> e2ls;
+    const static QHash<bgt, QString> e2lbs;
 };
 
 

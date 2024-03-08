@@ -23,11 +23,21 @@ void limitWidget::setValue(unsigned int set)
 {
     value = set;
     ui->numLabel->setText(QString::number(set));
+
+    if (!isValid())
+    {
+        QString style = "background-color:rgb(204, 0, 0)";
+        this->setStyleSheet(style);
+    }
+    else
+    {
+        this->setStyleSheet("");
+    }
 }
 
 bool limitWidget::isValid() const
 {
-    if (value < limit)
+    if (value <= limit)
         return true;
     else
         return false;

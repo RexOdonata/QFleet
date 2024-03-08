@@ -28,6 +28,7 @@ set(PROJECT_SOURCES
         limitwidget.h limitwidget.cpp limitwidget.ui
         shipviewdialog.h shipviewdialog.cpp shipviewdialog.ui
         admiralselectdialog.h admiralselectdialog.cpp admiralselectdialog.ui
+        confirmdialog.h confirmdialog.cpp confirmdialog.ui
 
 )
 

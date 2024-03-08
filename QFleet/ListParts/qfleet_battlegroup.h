@@ -29,6 +29,8 @@ public:
 
     QString getListString();
 
+    void purgeAdmiral();
+
 protected:
 
     QFleet_BGT type;

@@ -36,6 +36,9 @@
             <bold>true</bold>
            </font>
           </property>
+          <property name="toolTip">
+           <string extracomment="Drag to move battlegroups"/>
+          </property>
           <property name="text">
            <string>Ship</string>
           </property>

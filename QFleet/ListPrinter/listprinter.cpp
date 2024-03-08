@@ -196,7 +196,7 @@ void listPrinter::fillLaunchTable(NL::Template::Block& launchTableBlock, const Q
         {
             auto lp = launch.at(launchIndex);
 
-            launchTableBlock.block("launchRow")[launchIndex].set("launchName",lp.name.toStdString());
+            launchTableBlock.block("launchRow")[launchIndex].set("launchName",lp.getAssetString().toStdString());
 
             launchTableBlock.block("launchRow")[launchIndex].set("launchCount",QString::number(lp.getCount()).toStdString());
 

@@ -84,3 +84,12 @@ QString QFleet_Battlegroup::getListString()
 
     return nameStr;
 }
+
+void QFleet_Battlegroup::purgeAdmiral()
+{
+    for (auto& group : groups)
+    {
+        if (group.getAdmiral())
+            group.purgeAdmiral();
+    }
+}

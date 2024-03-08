@@ -230,6 +230,7 @@ void QFLW_Group::on_deleteGroupButton_clicked()
     flagRemoval(this);
 }
 
+// gets the cost of the group, optional bool determines whether admiral is counted or not
 QFleet_Cost QFLW_Group::getShipGroupCost(const unsigned int num) const
 {
     QFleet_Cost scaling(ship);
@@ -248,6 +249,15 @@ QFleet_Cost QFLW_Group::getShipGroupCost(const unsigned int num) const
 
     return scaledCost;
 }
+
+unsigned int QFLW_Group::getAdmiralCost() const
+{
+    if (admiral)
+        return admiral->cost;
+    else
+        return 0;
+}
+
 
 
 

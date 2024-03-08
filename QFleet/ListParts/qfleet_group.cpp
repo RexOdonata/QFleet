@@ -106,5 +106,9 @@ QString QFleet_Group::getListString()
     }
 
     return numStr;
+}
 
+void QFleet_Group::purgeAdmiral()
+{
+    admiral = 0;
 }

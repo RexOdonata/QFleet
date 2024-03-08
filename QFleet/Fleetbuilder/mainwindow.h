@@ -30,13 +30,7 @@ public slots:
 
 
 private slots:
-    void on_actionNew_triggered();
-
-    void on_actionLoad_Launch_triggered();
-
-    void on_actionLoad_Ships_triggered();
-
-    void on_selectShipsButton_clicked();
+    void on_actionNew_triggered();   
 
     void on_actionLoad_triggered();
 
@@ -77,7 +71,7 @@ private:
 
     void loadShipData();
 
-    void loadMapFromJsonFile(QWidget * parentWindow, QMap<QString, QFleet_Ship_Shipyard>& data);
+    bool loadMapFromJsonFile(QWidget * parentWindow, QMap<QString, QFleet_Ship_Shipyard>& data);
 
     bool loadListFromFile();
 
@@ -86,6 +80,8 @@ private:
     bool drawStrategycards();
 
     bool writeHTML();
+
+    bool checkListValidity();
 
 
 

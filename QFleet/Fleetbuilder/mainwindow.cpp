@@ -17,6 +17,8 @@
 
 #include "../ListPrinter/listprinter.h"
 
+#include "confirmdialog.h"
+
 
 
 MainWindow::MainWindow(QWidget *parent)
@@ -54,23 +56,28 @@ void MainWindow::on_actionNew_triggered()
 
     if (r==QDialog::Accepted)
     {
-        listWidget = new QFLW_List(this);
-
-        listWidget->setFaction(data.listFaction);
-        listWidget->setPointsLimit(data.listPoints);
-
-        pointsLimit = data.listPoints;
         faction = data.listFaction;
 
-
         // load ship Data for the faction of the new list
-        loadMapFromJsonFile(this, allShipData);
+        if (loadMapFromJsonFile(this, allShipData))
+        {
+            listWidget = new QFLW_List(this);
 
-        ui->fleetBox->addWidget(listWidget);
+            listWidget->setFaction(data.listFaction);
+            listWidget->setPointsLimit(data.listPoints);
 
-        listWidget->updateHeader();
+            pointsLimit = data.listPoints;
 
-        // put something here about refreshing the UI view or delete what is already there if neccessary
+            ui->fleetBox->addWidget(listWidget);
+        }
+        else
+        {
+            QMessageBox msg(this);
+            msg.setText("Couldn't ship data");
+            msg.setWindowTitle("Error");
+            msg.exec();
+        }
+
 
     }
 
@@ -78,7 +85,7 @@ void MainWindow::on_actionNew_triggered()
 
 
 // loads ships from a file into the shipdata map and filters out ships from other factions
-void MainWindow::loadMapFromJsonFile(QWidget * parentWindow, QMap<QString, QFleet_Ship_Shipyard>& data)
+bool MainWindow::loadMapFromJsonFile(QWidget * parentWindow, QMap<QString, QFleet_Ship_Shipyard>& data)
 {
     allShipData.clear();
 
@@ -98,24 +105,39 @@ void MainWindow::loadMapFromJsonFile(QWidget * parentWindow, QMap<QString, QFlee
 
         QJsonObject wrapperObj = jsonData.object();
 
-        if (wrapperObj.contains(fileType_shipData()))
+        try
         {
-            QJsonArray objects = wrapperObj[fileType_shipData()].toArray();
-
-            for (auto object : objects)
+            if (wrapperObj.contains(fileType_shipData()))
             {
-                QFleet_Ship_Shipyard newShip(object.toObject());
+                QJsonArray objects = wrapperObj[fileType_shipData()].toArray();
 
-                if (newShip.factions.contains(*faction))
-                    data.insert(newShip.getName(), newShip);
+                for (auto object : objects)
+                {
+                    QFleet_Ship_Shipyard newShip(object.toObject());
+
+                    if (newShip.factions.contains(*faction))
+                        data.insert(newShip.getName(), newShip);
+                }
+            }
+            else
+            {
+                throw std::invalid_argument("Invalid File Type");
             }
         }
-        else
+        catch (std::invalid_argument)
         {
-            throw std::invalid_argument("Invalid File Type");
+            QMessageBox msg(this);
+            msg.setText("File read Error! file was wrong type or malformed");
+            msg.setWindowTitle("Load Error");
+            msg.exec();
+            return false;
         }
 
+
+        return true;
     }
+
+    return false;
 }
 
 bool MainWindow::loadListFromFile()
@@ -144,17 +166,28 @@ bool MainWindow::loadListFromFile()
         QJsonObject wrapperObj = jsonData.object();
 
 
-        if (wrapperObj.contains(fileType_listData()))
+        try
         {
-            QFleet_List list(wrapperObj[fileType_listData()].toObject());
+            if (wrapperObj.contains(fileType_listData()))
+            {
+                QFleet_List list(wrapperObj[fileType_listData()].toObject());
 
 
-            drawGUIFromListPart(list);
+                drawGUIFromListPart(list);
+            }
+            else
+            {
+                throw std::invalid_argument("Invalid File Type");
+            }
         }
-        else
+        catch (std::invalid_argument)
         {
-            throw std::invalid_argument("Invalid File Type");
+            QMessageBox msg(this);
+            msg.setText("File read Error! file was wrong type or malformed");
+            msg.setWindowTitle("Load Error");
+            msg.exec();
         }
+
 
         return true;
     }
@@ -181,13 +214,22 @@ void MainWindow::drawGUIFromListPart(const QFleet_List& list)
     this->faction = list.getFaction();
 
     // Load ships for the faction matching the loaded list
-    loadMapFromJsonFile(this, allShipData);
+    if (loadMapFromJsonFile(this, allShipData))
+    {
+        this->pointsLimit = list.getPointsLimit();
 
-    this->pointsLimit = list.getPointsLimit();
+        this->listWidget = new QFLW_List(this, list);
 
-    this->listWidget = new QFLW_List(this, list);
+        ui->fleetBox->addWidget(listWidget);
+    }
+    else
+    {
+        QMessageBox msg(this);
+        msg.setText("Couldn't ship data");
+        msg.setWindowTitle("Error");
+        msg.exec();
+    }
 
-    ui->fleetBox->addWidget(listWidget);
 }
 
 
@@ -259,6 +301,10 @@ void MainWindow::on_actionSave_triggered()
 
     if (!listWidget.isNull())
     {
+        if (!checkListValidity())
+            return;
+
+
         if (saveListToFile())
         {
 
@@ -331,15 +377,21 @@ void MainWindow::on_actionStrategy_Cards_triggered()
 {
     if (!listWidget.isNull())
     {
+        if (!checkListValidity())
+            return;
 
         if (drawStrategycards())
         {
-
+            QMessageBox msg(this);
+            msg.setText("Strategy Card images written to directory");
+            msg.setWindowTitle("Success");
+            msg.exec();
         }
         else
         {
             QMessageBox msg(this);
             msg.setText("One or more cards files could not be opened for writing");
+            msg.setWindowTitle("Error");
             msg.exec();
         }
     }
@@ -347,6 +399,7 @@ void MainWindow::on_actionStrategy_Cards_triggered()
     {
         QMessageBox msg(this);
         msg.setText("No List Loaded to print");
+        msg.setWindowTitle("Error");
         msg.exec();
     }
 }
@@ -357,6 +410,9 @@ void MainWindow::on_actionSimple_List_triggered()
 
     if (!listWidget.isNull())
     {
+        if (!checkListValidity())
+            return;
+
         auto listPart = listWidget->createListPart();
         QString listStr = listPart.getListString();
 
@@ -366,6 +422,7 @@ void MainWindow::on_actionSimple_List_triggered()
 
         QMessageBox msg(this);
         msg.setText("List copied to clipboard");
+        msg.setWindowTitle("Success");
         msg.exec();
 
     }
@@ -373,6 +430,7 @@ void MainWindow::on_actionSimple_List_triggered()
     {
         QMessageBox msg(this);
         msg.setText("No List Loaded to print");
+        msg.setWindowTitle("Error");
         msg.exec();
     }
 }
@@ -409,14 +467,21 @@ void MainWindow::on_actionFleet_List_triggered()
 {
     if (!listWidget.isNull())
     {
+        if (!checkListValidity())
+            return;
+
         if (writeHTML())
         {
-
+            QMessageBox msg(this);
+            msg.setText("Fleet written to HTML file");
+            msg.setWindowTitle("Success");
+            msg.exec();
         }
         else
         {
             QMessageBox msg(this);
             msg.setText("Cannot write list file");
+            msg.setWindowTitle("Error");
             msg.exec();
         }
 
@@ -425,7 +490,26 @@ void MainWindow::on_actionFleet_List_triggered()
     {
         QMessageBox msg(this);
         msg.setText("No List Loaded to export");
+        msg.setWindowTitle("Error");
         msg.exec();
+    }
+}
+
+// checks is the user is okay with doing an action if their list is invalid
+bool MainWindow::checkListValidity()
+{
+    if (listWidget->checkValid())
+        return true;
+    {
+        confirmDialog msg(this);
+        msg.setMsg("One or more list validty checks has failed, print/save anyways?");
+        int r = msg.exec();
+
+        if (r == QDialog::Accepted)
+            return true;
+        else
+            return false;
+
     }
 }
 

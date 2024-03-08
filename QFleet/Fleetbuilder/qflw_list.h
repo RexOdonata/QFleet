@@ -43,6 +43,8 @@ public:
 
     QFleet_List createListPart() const;
 
+    bool checkValid() const;
+
 signals:
 
 
@@ -52,6 +54,8 @@ public slots:
     void slotAdmiralSet(QFLW_Group *);
 
     void slotAdmiralDeleted();
+
+    void slotCardDuplicated(QFleet_Battlegroup);
 
 
 private slots:
@@ -63,16 +67,14 @@ private slots:
 
     void on_addFL_Button_clicked();
 
-    void on_pushButton_clicked();
 
-    void on_resetAdmiralButton_clicked();
+
 
 private:
     Ui::QFLW_List *ui;
 
     // FXs
 
-    bool canAdd(QFleet_BGT) const;
 
     void addBGT(QFleet_BGT);
 
@@ -80,7 +82,19 @@ private:
 
     void setupWidgets();
 
-    void updateListLimits();
+    // update launch/point displays based on current value
+    void setListLimits();
+
+    // count types of battlegroup cards
+    void updateCardLimits();
+
+
+    void updateValidityLabels();
+
+
+    bool checkMinimumcards() const;
+
+    QString getCardRequirementLabels() const;
 
 
     // UI ELEMENTS

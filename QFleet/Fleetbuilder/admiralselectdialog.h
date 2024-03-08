@@ -34,8 +34,6 @@ private slots:
 
     void on_l5Radio_clicked();
 
-    void on_pushButton_clicked();
-
     void on_doneButton_clicked();
 
     void on_l0Radio_clicked();
