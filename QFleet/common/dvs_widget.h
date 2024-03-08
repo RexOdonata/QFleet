@@ -13,6 +13,8 @@
 #include <QJsonObject>
 #include <optional>
 
+#include "fileTypes.h"
+
 #include <type_traits>
 
 namespace Ui {
@@ -178,7 +180,7 @@ class dvs_Widget : public dvs_WidgetBase
     {
         data.clear();
 
-        QString filename = QFileDialog::getOpenFileName(parent, "open content", QDir::currentPath());
+        QString filename = QFileDialog::getOpenFileName(parent, "open content", QDir::currentPath(), getExtensionFilter(fileType));
 
         QFile file(filename);
 
@@ -216,7 +218,9 @@ class dvs_Widget : public dvs_WidgetBase
 
     void saveToFile(QWidget * parent, const QString fileType)
     {
-        QString filename = QFileDialog::getSaveFileName(parent, "save content", QDir::currentPath());
+
+
+        QString filename = QFileDialog::getSaveFileName(parent, "save content", QDir::currentPath(), getExtensionFilter(fileType));
 
         QFile file(filename);
 

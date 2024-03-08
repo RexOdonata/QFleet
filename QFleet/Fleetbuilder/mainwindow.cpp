@@ -93,7 +93,7 @@ bool MainWindow::loadMapFromJsonFile(QWidget * parentWindow, QMap<QString, QFlee
 {
     allShipData.clear();
 
-    QString filename = QFileDialog::getOpenFileName(parentWindow, "Select Ship Data", QDir::currentPath());
+    QString filename = QFileDialog::getOpenFileName(parentWindow, "Select Ship Data", QDir::currentPath(),"QFleet Ship Data(*.qfs)");
 
     QFile file(filename);
 
@@ -146,7 +146,7 @@ bool MainWindow::loadMapFromJsonFile(QWidget * parentWindow, QMap<QString, QFlee
 
 bool MainWindow::loadListFromFile()
 {
-    QString filename = QFileDialog::getOpenFileName(this, "Select QFleet List", QDir::currentPath());
+    QString filename = QFileDialog::getOpenFileName(this, "Select QFleet List", QDir::currentPath(),"QFleet Lists(*.dfc);");
 
     QFile file(filename);
 
