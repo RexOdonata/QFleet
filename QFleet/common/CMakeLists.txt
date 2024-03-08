@@ -8,6 +8,7 @@ add_library(
 )
 
 
+
 include_directories(${Qt6Core_INCLUDE_DIRS})
 include_directories(${Qt6Widgets_INCLUDE_DIRS})
 

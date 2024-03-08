@@ -31,7 +31,11 @@ MainWindow::MainWindow(QWidget *parent)
 
 MainWindow::~MainWindow()
 {
-    delete listWidget;
+    if (!listWidget.isNull())
+        delete listWidget;
+
+    if (!shipSelectDialog.isNull())
+        delete shipSelectDialog;
 
     delete ui;
 }

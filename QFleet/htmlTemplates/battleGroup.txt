@@ -1,4 +1,6 @@
 {% block battleGroup %}
+<div id="battlegroup" style="border:medium solid">
 <h3>{{ cardName }}<strong>,</strong> Strategy Rating {{ cardSR }}</h3>
 {% include htmlTemplates/groupProfile.txt %}
+</div>
 {% endblock %}

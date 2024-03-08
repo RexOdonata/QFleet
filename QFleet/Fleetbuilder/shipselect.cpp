@@ -48,6 +48,8 @@ shipSelect::shipSelect(QWidget *parent, const QMap<QString,QFleet_Ship_Shipyard>
     ui->treeView->setModel(shipTreeModel);
 
     ui->validCheck->setEnabled(false);
+
+    this->setAttribute(Qt::WA_DeleteOnClose);
 }
 
 void shipSelect::insertShip(std::array<QStandardItem *,5> models, const QString shipName)
@@ -91,7 +93,9 @@ void shipSelect::insertShip(std::array<QStandardItem *,5> models, const QString 
 }
 
 shipSelect::~shipSelect()
-{    
+{
+    delete shipViewWidget;
+    delete shipTreeModel;
     delete ui;
 }
 

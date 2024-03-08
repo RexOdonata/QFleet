@@ -169,7 +169,7 @@ void QFLW_List::updateValidityLabels()
         if (!checkMinimumcards())
         {
             QString cardWarning = getCardRequirementLabels();
-            QString str = QString("!: Minimum Battlegroups not met, need %1").arg(cardWarning);
+            QString str = QString("! : Minimum Battlegroups not met, need %1").arg(cardWarning);
             ui->minCardsWarnLabel->setText(str);
             ui->minCardsWarnLabel->setVisible(true);
         }
@@ -203,7 +203,7 @@ void QFLW_List::updateValidityLabels()
                     warningLabel.append(", ");
             }
 
-            ui->cardOverweightWarnLabel->setText(QString("!: Battlegroup(s) %1 is over points limit of %2").arg(warningLabel,QString::number(lim)));
+            ui->cardOverweightWarnLabel->setText(QString("! : Battlegroup(s) %1 is over points limit of %2").arg(warningLabel,QString::number(lim)));
             ui->cardOverweightWarnLabel->setVisible(true);
         }
         else

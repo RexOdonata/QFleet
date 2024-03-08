@@ -29,6 +29,7 @@ set(PROJECT_SOURCES
         shipviewdialog.h shipviewdialog.cpp shipviewdialog.ui
         admiralselectdialog.h admiralselectdialog.cpp admiralselectdialog.ui
         confirmdialog.h confirmdialog.cpp confirmdialog.ui
+        rsc/icons.qrc
 
 )
 
@@ -54,6 +55,8 @@ else()
         )
     endif()
 endif()
+
+qt_add_resources(Fleetbuilder "resources" PREFIX "/rsc" FILES dfc.jpeg)
 
 target_link_libraries(Fleetbuilder PRIVATE Qt${QT_VERSION_MAJOR}::Widgets QF_Components QF_Common QF_ListParts ShipView ListPrinter)
 

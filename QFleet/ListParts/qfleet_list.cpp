@@ -24,7 +24,8 @@ QFleet_List::QFleet_List(const QString setName, QFleet_Faction setFaction, unsig
     listFaction(setFaction), pointsLimit(setLimit)
 
 {
-
+    if (this->name.isEmpty())
+        name = QString("Unnamed %1 fleet").arg(listFaction.toString());
 }
 
 void QFleet_List::impl_toJson(QJsonObject& json)

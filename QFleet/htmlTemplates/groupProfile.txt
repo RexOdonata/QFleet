@@ -1,6 +1,7 @@
 {% block group %}
+<div id="group" style="border:thin solid">
 <h3><strong>{{ count }}x {{ shipName }}</strong></h3>
-<table style="height: 44px;" border="0" width="512" cellspacing="0">
+<table style="height: 44px;" border="0" width="512px" cellspacing="0">
 <tbody>
 <tr>
 <td style="width: 102.467px; text-align: right;">{{ cost }}</td>
@@ -11,7 +12,7 @@
 </tr>
 </tbody>
 </table>
-<table style="height: 75px; " border="1" width="512">
+<table style="height: 75px; " border="1" width="100%">
 <tbody>
 <tr>
 <td style="width: 81.7667px; text-align: center;"><strong>Name</strong></td>
@@ -42,7 +43,7 @@
 <p>&nbsp;</p>
 
 
-<table style="height: 10px;" border="1" width="584">
+<table style="height: 10px;" border="1" width="100%">
 <tbody>
 <tr>
 <td style="width: 90.6667px; text-align: center;"><strong>Weapon</strong></td>
@@ -76,12 +77,13 @@
 {% block launchRow %}
 <tr>
 <td style="width: 210px;">{{ launchName }}</td>
-<td style="width: 64.4334px;">{{ launchCount }}</td>
-<td style="width: 45.5667px;">{{ launchLimited }}</td>
+<td style="width: 64.4334px;text-align: center;">{{ launchCount }}</td>
+<td style="width: 45.5667px;text-align: center;">{{ launchLimited }}</td>
 </tr>
 {% endblock %}
 </tbody>
 </table>
 {% endblock %}
 <p>&nbsp;</p>
+ </div>
 {% endblock %}

@@ -106,7 +106,7 @@ void QFLW_Battlegroup::updateWarningLabels()
 
         if (groups.size() > maxgroups)
         {
-            QString labelStr = QString("!: Too many groups, max is %1").arg(QString::number(maxgroups));
+            QString labelStr = QString("! : Too many groups, max is %1").arg(QString::number(maxgroups));
             ui->grpfullWarnLabel->setText(labelStr);
             ui->grpfullWarnLabel->setVisible(true);
         }
@@ -118,7 +118,7 @@ void QFLW_Battlegroup::updateWarningLabels()
         // minimum group warning
         if (!checkMandatory())
         {
-            QString labelStr = QString("!: No mandatory %1 group").arg(type.toLongStringBase());
+            QString labelStr = QString("! : No mandatory %1 group").arg(type.toLongStringBase());
             ui->mingrpWarnLabel->setText(labelStr);
             ui->mingrpWarnLabel->setVisible(true);
         }
@@ -133,7 +133,7 @@ void QFLW_Battlegroup::updateWarningLabels()
         if (!checkGroupLimits())
         {
             QString labelStr = getGroupLimwarnings();
-            ui->grplimsWarnLabel->setText(QString("!: Too many %1 groups").arg(labelStr));
+            ui->grplimsWarnLabel->setText(QString("! : Too many %1 groups").arg(labelStr));
             ui->grplimsWarnLabel->setVisible(true);
         }
         else
