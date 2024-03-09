@@ -20,6 +20,10 @@ public:
     explicit optSelect(QWidget *parent = nullptr, const QFleet_Ship_Shipyard * refShip = NULL , QVector<QFleet_Option> * setOptionList = NULL);
     ~optSelect();
 
+signals:
+
+    void signalCustomName(QString);
+
 private slots:
     void on_addOptionButton_clicked();
 

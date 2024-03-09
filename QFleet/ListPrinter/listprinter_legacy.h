@@ -1,15 +1,15 @@
-#ifndef LISTPRINTER_H
-#define LISTPRINTER_H
+#ifndef LISTPRINTER_LEGACY_H
+#define LISTPRINTER_LEGACY_H
 
 #include "NLTemplate.h"
 
 
 #include "../ListParts/qfleet_list.h"
 
-class listPrinter
+class listPrinter_Legacy
 {
 public:
-    listPrinter() = delete;
+    listPrinter_Legacy() = delete;
 
     static std::string getHTML(const QFleet_List&);
 
@@ -25,4 +25,4 @@ private:
 
 };
 
-#endif // LISTPRINTER_H
+#endif // LISTPRINTER_LEGACY_H

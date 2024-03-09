@@ -88,7 +88,7 @@ QFLW_Group::QFLW_Group(QWidget *parent, const QFleet_Group * load) :
 
     if (load->getAdmiral() > 0 && ship.admiralCost(load->getAdmiral()))
     {
-        admiralCost = cost.points - ship.points;
+        admiralCost = *ship.admiralCost(load->getAdmiral());
         this->admiral = admiralVals{load->getAdmiral(),admiralCost};
     }
 

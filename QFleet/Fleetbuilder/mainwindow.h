@@ -44,6 +44,8 @@ private slots:
 
     void on_actionFleet_List_triggered();
 
+    void on_actionCompact_Fleet_List_triggered();
+
 private:
     Ui::MainWindow *ui;
 
@@ -79,7 +81,9 @@ private:
 
     bool drawStrategycards();
 
-    bool writeHTML();
+    bool writeHTML_Legacy();
+
+    bool writeHTML_Short();
 
     bool checkListValidity();
 

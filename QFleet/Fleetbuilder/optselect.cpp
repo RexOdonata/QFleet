@@ -201,17 +201,39 @@ void optSelect::on_removeOptionButton_clicked()
 void optSelect::on_saveOptionsButton_clicked()
 {
 
-    if (getSelectionCount() >= minOptions)
-    {
-        expandSelectedOptions(*optionList);
+    QString nt = ui->customNameEdit->text();
 
-        this->done(QDialog::Accepted);
-    }
-    else
+    if (getSelectionCount() < minOptions)
     {
         QMessageBox msgBox;
         msgBox.setText("Minimum hardpoints not filled");
         msgBox.exec();
+    }
+    else if (getSelectionCount() > maxOptions)
+    {
+        QMessageBox msgBox;
+        msgBox.setText("Too many hardpoints");
+        msgBox.exec();
+    }
+    else if (broadsideCount > broadsideLimit)
+    {
+        QMessageBox msgBox;
+        msgBox.setText("Too many broadsides");
+        msgBox.exec();
+    }
+    else if (ui->customNameEdit->text().isEmpty())
+    {
+        QMessageBox msgBox;
+        msgBox.setText("Enter custom Name");
+        msgBox.exec();
+    }
+    else
+    {
+        expandSelectedOptions(*optionList);
+
+        emit signalCustomName(ui->customNameEdit->text());
+
+        this->done(QDialog::Accepted);
     }
 }
 

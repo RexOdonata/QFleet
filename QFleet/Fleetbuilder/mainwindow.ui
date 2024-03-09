@@ -106,6 +106,7 @@
      <string>Print</string>
     </property>
     <addaction name="actionFleet_List"/>
+    <addaction name="actionCompact_Fleet_List"/>
     <addaction name="actionStrategy_Cards"/>
     <addaction name="actionSimple_List"/>
    </widget>
@@ -114,7 +115,7 @@
   </widget>
   <action name="actionFleet_List">
    <property name="text">
-    <string>Fleet List</string>
+    <string>Tradtional Fleet List</string>
    </property>
   </action>
   <action name="actionSave">
@@ -155,6 +156,11 @@
   <action name="actionSimple_List">
    <property name="text">
     <string>Simple List</string>
+   </property>
+  </action>
+  <action name="actionCompact_Fleet_List">
+   <property name="text">
+    <string>Compact Fleet List</string>
    </property>
   </action>
  </widget>

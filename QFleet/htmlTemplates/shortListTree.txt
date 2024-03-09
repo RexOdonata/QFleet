@@ -1,0 +1,16 @@
+<div id="listTree">
+<ul>
+{% block battlegroup %}
+<li>
+    <h3>{{ cardName }} - {{ SR }} SR</h3>
+<ul>
+{% block group %}
+    <li>
+        <h4> {{ count }}x {{ shipName }}{{ admiral }} </h4>
+    </li>
+{% endblock %}
+</ul>
+</li>
+{% endblock %}
+</ul>
+</div>

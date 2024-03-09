@@ -118,7 +118,7 @@ void shipSelect::on_treeView_activated(const QModelIndex &index)
 
         QVector<QFleet_Option> blank;
 
-        QFleet_Ship_Fleet fleetShip = createShip(indexShip,blank);
+        QFleet_Ship_Fleet fleetShip = createShip(indexShip,blank,"");
 
         this->ship = fleetShip;
         // check if the selected ship has mandatory options which won't have been selected at this point
@@ -138,9 +138,14 @@ void shipSelect::on_treeView_activated(const QModelIndex &index)
     }
 }
 
-QFleet_Ship_Fleet shipSelect::createShip(const QFleet_Ship_Shipyard& shipSrc, QVector<QFleet_Option>& opts)
+QFleet_Ship_Fleet shipSelect::createShip(const QFleet_Ship_Shipyard& shipSrc, QVector<QFleet_Option>& opts, const QString customName)
 {
-    QFleet_Ship_Fleet newShip(shipSrc.name);
+    QString newName = shipSrc.name;
+
+    if (!customName.isEmpty())
+        newName.append(QString(" (%1)").arg(customName));
+
+    QFleet_Ship_Fleet newShip(newName);
 
     newShip.points = shipSrc.points;
     newShip.scan = shipSrc.scan;
@@ -223,6 +228,11 @@ bool shipSelect::checkMinOpts(const QFleet_Ship_Shipyard& ship)
             return true;
 }
 
+void shipSelect::slotGetCustomName(QString set)
+{
+    customNameRx = set;
+}
+
 void shipSelect::on_selectOptionsButton_clicked()
 {
     auto selectionIndex = ui->treeView->selectionModel()->selectedIndexes();
@@ -239,13 +249,15 @@ void shipSelect::on_selectOptionsButton_clicked()
 
             optSelect * dialog = new optSelect(this, &indexShip, &options);
 
+            connect(dialog, &optSelect::signalCustomName, this, &shipSelect::slotGetCustomName);
+
             dialog->setAttribute(Qt::WA_DeleteOnClose);
 
             int r = dialog->exec();
 
             if (r == QDialog::Accepted)
             {
-                QFleet_Ship_Fleet fleetShip = createShip(indexShip, options);
+                QFleet_Ship_Fleet fleetShip = createShip(indexShip, options,customNameRx);
 
                 shipViewWidget->loadShip(fleetShip);
 

@@ -15,7 +15,8 @@
 
 #include "../ListPrinter/qfp_strategycard.h"
 
-#include "../ListPrinter/listprinter.h"
+#include "../ListPrinter/listprinter_legacy.h"
+#include "../ListPrinter/listprinter_short.h"
 
 #include "confirmdialog.h"
 
@@ -253,15 +254,27 @@ void MainWindow::slotShipPull(QFLW_Battlegroup * cardPtr)
 {
 
 
-    if (!shipSelectDialog.isNull() && shipSelectDialog->getSelectedShip())
+    if ( shipSelectDialog.isNull() )
     {
-       QFleet_Ship_Fleet selectedShip = *shipSelectDialog->getSelectedShip();
+        QMessageBox msg(this);
+        msg.setText("Select a ship to add in the Ship Menu");
+        msg.exec();
+    }
+    else if (!shipSelectDialog.isNull() && !shipSelectDialog->getSelectedShip().has_value())
+    {
+        QMessageBox msg(this);
+        msg.setText("Select options for current ship");
+        msg.exec();
+    }
+    else if (!shipSelectDialog.isNull() && shipSelectDialog->getSelectedShip().has_value())
+    {        
+        QFleet_Ship_Fleet selectedShip = *shipSelectDialog->getSelectedShip();
         cardPtr->recieveSelectedShip(selectedShip);
     }
     else
     {
         QMessageBox msg(this);
-        msg.setText("Select a ship to add in the Ship Menu");
+        msg.setText("Error: Unknown ship select state");
         msg.exec();
     }
 }
@@ -439,9 +452,9 @@ void MainWindow::on_actionSimple_List_triggered()
     }
 }
 
-bool MainWindow::writeHTML()
+bool MainWindow::writeHTML_Legacy()
 {
-    QString filename = QFileDialog::getSaveFileName(this, "save list", QDir::currentPath());
+    QString filename = QFileDialog::getSaveFileName(this, "save list", QDir::currentPath(),"HTML (*.html)");
 
     QFile file(filename);
 
@@ -451,7 +464,34 @@ bool MainWindow::writeHTML()
 
         QString stub;
 
-        std::string htmlString = listPrinter::getHTML(listObj);
+        std::string htmlString = listPrinter_Legacy::getHTML(listObj);
+
+        QByteArray bytes = htmlString.c_str();
+
+        QTextStream istream(&file);
+
+        istream << bytes;
+
+        file.close();
+
+        return true;
+    }
+    else return false;
+}
+
+bool MainWindow::writeHTML_Short()
+{
+    QString filename = QFileDialog::getSaveFileName(this, "save list", QDir::currentPath(),"HTML (*.html)");
+
+    QFile file(filename);
+
+    if (file.open(QIODevice::WriteOnly | QIODevice::Text | QIODevice::Truncate))
+    {
+        auto listObj = listWidget->createListPart();
+
+        QString stub;
+
+        std::string htmlString = listPrinter_Short::getHTML(listObj);
 
         QByteArray bytes = htmlString.c_str();
 
@@ -474,7 +514,7 @@ void MainWindow::on_actionFleet_List_triggered()
         if (!checkListValidity())
             return;
 
-        if (writeHTML())
+        if (writeHTML_Legacy())
         {
             QMessageBox msg(this);
             msg.setText("Fleet written to HTML file");
@@ -515,5 +555,39 @@ bool MainWindow::checkListValidity()
             return false;
 
     }
+}
+
+
+void MainWindow::on_actionCompact_Fleet_List_triggered()
+{
+    if (!listWidget.isNull())
+    {
+        if (!checkListValidity())
+            return;
+
+        if (writeHTML_Short())
+        {
+            QMessageBox msg(this);
+            msg.setText("Fleet written to HTML file");
+            msg.setWindowTitle("Success");
+            msg.exec();
+        }
+        else
+        {
+            QMessageBox msg(this);
+            msg.setText("Cannot write list file");
+            msg.setWindowTitle("Error");
+            msg.exec();
+        }
+
+    }
+    else
+    {
+        QMessageBox msg(this);
+        msg.setText("No List Loaded to export");
+        msg.setWindowTitle("Error");
+        msg.exec();
+    }
+
 }
 

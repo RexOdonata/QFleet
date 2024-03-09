@@ -1,4 +1,4 @@
-#include "listprinter.h"
+#include "listprinter_legacy.h"
 
 #include "NLTemplate.h"
 
@@ -6,7 +6,7 @@
 #include <ctime>
 
 
-std::string listPrinter::getTimeStamp()
+std::string listPrinter_Legacy::getTimeStamp()
 {
     auto t = std::time(nullptr);
     auto tm = *std::localtime(&t);
@@ -18,7 +18,7 @@ std::string listPrinter::getTimeStamp()
     return oss.str();
 }
 
-std::string listPrinter::getHTML(const QFleet_List& listObj)
+std::string listPrinter_Legacy::getHTML(const QFleet_List& listObj)
 {
 
     NL::Template::LoaderFile templateLoader;
@@ -51,7 +51,7 @@ std::string listPrinter::getHTML(const QFleet_List& listObj)
 
     // set creation time
 
-    std::string timestampStr = listPrinter::getTimeStamp();
+    std::string timestampStr = listPrinter_Legacy::getTimeStamp();
 
     listTemplate.set("listCreated",timestampStr);
 
@@ -71,6 +71,10 @@ std::string listPrinter::getHTML(const QFleet_List& listObj)
     for (int cardIndex = 0; cardIndex < cards.size(); cardIndex++)
     {
         auto card = cards.at(cardIndex);
+
+        // check if the card has group profiles that can be compressed
+        if (card.hasMultigroup())
+            card.reduceGroups();
 
         // set header info for the battlegroup
 
@@ -101,7 +105,7 @@ std::string listPrinter::getHTML(const QFleet_List& listObj)
     return oss.str();
 }
 
-void listPrinter::fillGroupBlocks(NL::Template::Block& groupBlockRef, const QVector<QFleet_Group>& groups)
+void listPrinter_Legacy::fillGroupBlocks(NL::Template::Block& groupBlockRef, const QVector<QFleet_Group>& groups)
 {
     groupBlockRef.repeat(groups.size());
 
@@ -158,7 +162,7 @@ void listPrinter::fillGroupBlocks(NL::Template::Block& groupBlockRef, const QVec
     }
 }
 
-void listPrinter::fillWeaponTable(NL::Template::Block& weaponRowBlock, const QVector<QFleet_Weapon>& weapons)
+void listPrinter_Legacy::fillWeaponTable(NL::Template::Block& weaponRowBlock, const QVector<QFleet_Weapon>& weapons)
 {
     weaponRowBlock.repeat(weapons.size());
 
@@ -180,7 +184,7 @@ void listPrinter::fillWeaponTable(NL::Template::Block& weaponRowBlock, const QVe
     }
 }
 
-void listPrinter::fillLaunchTable(NL::Template::Block& launchTableBlock, const QVector<QFleet_launchProfile>& launch)
+void listPrinter_Legacy::fillLaunchTable(NL::Template::Block& launchTableBlock, const QVector<QFleet_launchProfile>& launch)
 {
     if (launch.size() == 0)
     {
@@ -208,6 +212,5 @@ void listPrinter::fillLaunchTable(NL::Template::Block& launchTableBlock, const Q
             launchTableBlock.block("launchRow")[launchIndex].set("launchLimited",limStr);
         }
     }
-
 
 }

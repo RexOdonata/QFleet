@@ -31,6 +31,11 @@ public:
 
     void purgeAdmiral();
 
+    void reduceGroups();
+
+    // check whether group reduction is needed
+    bool hasMultigroup();
+
 protected:
 
     QFleet_BGT type;
@@ -41,14 +46,14 @@ protected:
     void impl_toJson(QJsonObject&);
 
 
-
-
     const static QString label;
 
 
     const static QString field_groups;
     const static QString field_cost;
     const static QString field_type;
+
+
 
 };
 
