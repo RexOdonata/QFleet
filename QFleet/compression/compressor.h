@@ -1,10 +1,11 @@
 #ifndef COMPRESSOR_H
 #define COMPRESSOR_H
 
-#include "LZ4/lz4file.h"
+
 
 #include <QByteArray>
 #include <QString>
+#include <vector>
 
 class compressor
 {
@@ -12,14 +13,12 @@ public:
 
     compressor() = delete;
 
-    static bool writeCompressedFile(QByteArray&, QString);
+    static bool writeCompressedFile(QByteArray&, const QString);
 
 
 private:
 
-    char * compressedData = NULL;
-
-    static void deleteTempfile();
+    static size_t readSrcBytes(std::vector<char>&,QByteArray::Iterator&, QByteArray&);
 
 };
 

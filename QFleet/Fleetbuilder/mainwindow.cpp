@@ -639,43 +639,60 @@ void MainWindow::on_actionLoad_compressed_triggered()
 
 bool MainWindow::loadCompressedListFromFile()
 {
-    QString filename = QFileDialog::getOpenFileName(this, "Select QFleet List", QDir::currentPath(),"QFleet Lists(*.dfc);");
+    QString filename = QFileDialog::getOpenFileName(this, "Select QFleet List", QDir::currentPath()," Compressed QFleet Lists(*.dfcz);");
 
     QFile file(filename);
 
-    QByteArray bytes;
-
-    bool r = decompressor::readCompressedFile(filename, bytes);
-
-    QJsonParseError err;
-
-    QJsonDocument jsonData = QJsonDocument::fromJson(bytes, &err);
-
-    QJsonObject wrapperObj = jsonData.object();
-
-    try
+    if (file.open(QIODevice::ReadOnly))
     {
-        if (wrapperObj.contains(fileType_listData()))
+        QByteArray bytes = file.readAll();
+
+        // if a list is already loaded, delete it
+        if (listWidget)
         {
-            QFleet_List list(wrapperObj[fileType_listData()].toObject());
-
-
-            drawGUIFromListPart(list);
+            delete listWidget;
         }
-        else
+
+        file.close();
+
+        QJsonParseError err;
+
+        auto r = decompressor::readCompressedFile(bytes, filename);
+
+        QJsonDocument jsonData = QJsonDocument::fromJson(bytes, &err);
+
+        QJsonObject wrapperObj = jsonData.object();
+
+        QClipboard * clip = QGuiApplication::clipboard();
+        QString str(bytes.constData());
+        clip->setText(str);
+
+        try
         {
-            throw std::invalid_argument("Invalid File Type");
+            if (wrapperObj.contains(fileType_listData()))
+            {
+                QFleet_List list(wrapperObj[fileType_listData()].toObject());
+
+
+                drawGUIFromListPart(list);
+            }
+            else
+            {
+                throw std::invalid_argument("Invalid File Type");
+            }
+        }
+        catch (std::invalid_argument err)
+        {
+            QMessageBox msg(this);
+            msg.setText(QString("File read Error! %1").arg(err.what()));
+            msg.setWindowTitle("Load Error");
+            msg.exec();
+            return false;
         }
     }
-    catch (std::invalid_argument)
-    {
-        QMessageBox msg(this);
-        msg.setText("File read Error! file was wrong type or malformed");
-        msg.setWindowTitle("Load Error");
-        msg.exec();
-    }
+    else return false;
 
-    return r;
+    return true;
 }
 
 bool MainWindow::saveCompressedListToFile()
@@ -684,7 +701,7 @@ bool MainWindow::saveCompressedListToFile()
 
     // save dialog goes here
 
-    QString filename = QFileDialog::getSaveFileName(this, "save list", QDir::currentPath());
+    QString filename = QFileDialog::getSaveFileName(this, "Save List", QDir::currentPath(),"Compressed QFleet Lists(*.dfcz);");
 
     QJsonObject json = newList.toJson();
 
@@ -696,7 +713,9 @@ bool MainWindow::saveCompressedListToFile()
 
     QByteArray bytes = jsonDoc.toJson(QJsonDocument::Indented);
 
-
     return compressor::writeCompressedFile(bytes, filename);
+
+
+
 }
 

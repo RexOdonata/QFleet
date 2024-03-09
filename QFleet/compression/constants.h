@@ -1,8 +1,10 @@
 #ifndef CONSTANTS_H
 #define CONSTANTS_H
 
-constexpr int CHUNKSIZE=16*1024;
+constexpr char field_baseSize[] = "baseSize";
+constexpr char field_compressedSize[] = "compressedSize";
+constexpr char field_data[] = "data";
 
-constexpr char tempname[] ="tempdfc";
+constexpr size_t CHUNKSIZE = 16*1024;
 
 #endif // CONSTANTS_H
