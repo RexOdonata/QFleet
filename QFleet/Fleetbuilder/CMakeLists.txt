@@ -58,7 +58,8 @@ endif()
 
 qt_add_resources(Fleetbuilder "resources" PREFIX "/rsc" FILES dfc.jpeg)
 
-target_link_libraries(Fleetbuilder PRIVATE Qt${QT_VERSION_MAJOR}::Widgets QF_Components QF_Common QF_ListParts ShipView ListPrinter)
+target_link_libraries(Fleetbuilder PRIVATE Qt${QT_VERSION_MAJOR}::Widgets
+    QF_Components QF_Common QF_ListParts ShipView ListPrinter QF_Compression)
 
 set_target_properties(Fleetbuilder PROPERTIES
     MACOSX_BUNDLE_GUI_IDENTIFIER my.example.com
