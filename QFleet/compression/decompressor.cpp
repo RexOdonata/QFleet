@@ -55,14 +55,22 @@ bool decompressor::readCompressedFile(QByteArray& dest, const QString fn)
             break;
 
         outData.insert(outData.end(), buffer.begin(), buffer.end());
-        memset(buffer.data(), 0, CHUNKSIZE);
-    }
+
+        // fill the buffer with 0s so that chunk N doesn't have spillover from chunk N-1
+        // otherwise space that is supposed to be empty will get repeated data
+        memset(buffer.data(), 0, CHUNKSIZE);    }
+
+
 
     // get an iterator to the first 0 element at the end of the file in case of overchunking
-    auto lItr = getMismatch(outData);
+    auto lItr = std::find_if(outData.rbegin(), outData.rend(),
+                             [](const char val)
+                             {
+                                 return val != 0;
+                             });
 
     // shrink to trim
-    outData.resize(lItr-outData.begin());
+    outData.resize(lItr.base()-outData.begin());
 
 
     r = LZ4F_readClose(lz4Read);
@@ -81,18 +89,3 @@ bool decompressor::readCompressedFile(QByteArray& dest, const QString fn)
     return true;
 }
 
-std::vector<char>::iterator decompressor::getMismatch(std::vector<char>& data)
-{
-    std::vector<char> emptyVec(data.size(),0);
-
-    // first output is from first range, 2nd from 2nd
-    auto last = std::mismatch(data.rbegin(), data.rend(), emptyVec.rbegin(), emptyVec.rend());
-
-    auto lrItr = last.first;
-
-    auto lItr = lrItr.base();
-
-    qInfo()<<QString("trimming last chunk at %1").arg(lItr-data.begin());
-
-    return lItr;
-}

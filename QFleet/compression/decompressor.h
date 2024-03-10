@@ -13,9 +13,6 @@ public:
     decompressor() = delete;
 
     static bool readCompressedFile(QByteArray&, const QString);
-private:
-
-    static std::vector<char>::iterator getMismatch(std::vector<char>&);
 };
 
 #endif // DECOMPRESSOR_H
