@@ -55,6 +55,7 @@ bool decompressor::readCompressedFile(QByteArray& dest, const QString fn)
             break;
 
         outData.insert(outData.end(), buffer.begin(), buffer.end());
+        memset(buffer.data(), 0, CHUNKSIZE);
     }
 
     // get an iterator to the first 0 element at the end of the file in case of overchunking
@@ -76,6 +77,7 @@ bool decompressor::readCompressedFile(QByteArray& dest, const QString fn)
     // copy results back to the ref passed in, I sure hope this is a deep copy
     dest = QByteArray(outData.data(), outData.size());
 
+
     return true;
 }
 
@@ -89,6 +91,8 @@ std::vector<char>::iterator decompressor::getMismatch(std::vector<char>& data)
     auto lrItr = last.first;
 
     auto lItr = lrItr.base();
+
+    qInfo()<<QString("trimming last chunk at %1").arg(lItr-data.begin());
 
     return lItr;
 }

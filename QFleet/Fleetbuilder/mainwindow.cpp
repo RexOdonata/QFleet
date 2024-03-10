@@ -289,7 +289,7 @@ bool MainWindow::saveListToFile()
 
     // save dialog goes here
 
-    QString filename = QFileDialog::getSaveFileName(this, "save list", QDir::currentPath());
+    QString filename = QFileDialog::getSaveFileName(this, "save list", QDir::currentPath(), "QFleet_List (*.dfc)");
 
     QFile file(filename);
 
@@ -639,7 +639,7 @@ void MainWindow::on_actionLoad_compressed_triggered()
 
 bool MainWindow::loadCompressedListFromFile()
 {
-    QString filename = QFileDialog::getOpenFileName(this, "Select QFleet List", QDir::currentPath()," Compressed QFleet Lists(*.dfcz);");
+    QString filename = QFileDialog::getOpenFileName(this, "Select QFleet List", QDir::currentPath()," Compressed QFleet List(*.dfcz);");
 
     QFile file(filename);
 
@@ -701,7 +701,7 @@ bool MainWindow::saveCompressedListToFile()
 
     // save dialog goes here
 
-    QString filename = QFileDialog::getSaveFileName(this, "Save List", QDir::currentPath(),"Compressed QFleet Lists(*.dfcz);");
+    QString filename = QFileDialog::getSaveFileName(this, "Save List", QDir::currentPath(),"Compressed QFleet List(*.dfcz);");
 
     QJsonObject json = newList.toJson();
 
