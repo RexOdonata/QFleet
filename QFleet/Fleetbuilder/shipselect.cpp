@@ -53,6 +53,8 @@ shipSelect::shipSelect(QWidget *parent, const QMap<QString,QFleet_Ship_Shipyard>
 
     completer = new QCompleter(strModel, this);
 
+    completer->setCaseSensitivity(Qt::CaseInsensitive);
+
     ui->shipSearchEdit->setCompleter(completer);
 
     ui->treeView->setModel(shipTreeModel);

@@ -50,6 +50,8 @@ private slots:
 
     void on_actionLoad_compressed_triggered();
 
+    void on_actionProfile_Cards_triggered();
+
 private:
     Ui::MainWindow *ui;
 
@@ -87,7 +89,9 @@ private:
 
     bool saveCompressedListToFile();
 
-    bool drawStrategycards();
+    bool drawStrategyCards();
+
+    bool drawProfileCards();
 
     bool writeHTML_Legacy();
 

@@ -67,7 +67,7 @@ QString QFleet_Ship_Fleet::getSpecialString() const
         str.append(special);
 
         if (special != specialRules.back())
-            str.append(",");
+            str.append(", ");
     }
 
     return str;

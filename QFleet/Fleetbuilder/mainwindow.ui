@@ -111,6 +111,7 @@
     <addaction name="actionCompact_Fleet_List"/>
     <addaction name="actionStrategy_Cards"/>
     <addaction name="actionSimple_List"/>
+    <addaction name="actionProfile_Cards"/>
    </widget>
    <addaction name="menuFile"/>
    <addaction name="menuPrint"/>
@@ -173,6 +174,11 @@
   <action name="actionLoad_compressed">
    <property name="text">
     <string>Load (compressed)</string>
+   </property>
+  </action>
+  <action name="actionProfile_Cards">
+   <property name="text">
+    <string>Profile Cards</string>
    </property>
   </action>
  </widget>

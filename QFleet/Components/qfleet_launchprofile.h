@@ -46,6 +46,14 @@ public:
         return assetNames;
     }
 
+    inline QString getLimString() const
+    {
+        if (limited)
+            return QString("%1").arg(QString::number(limited));
+        else
+            return "-";
+    }
+
 protected:
 
     // VARS

@@ -23,6 +23,9 @@
 #include "../compression/compressor.h"
 #include "../compression/decompressor.h"
 
+#include "../ListPrinter/qfp_weaponcards.h"
+#include "../ListPrinter/qfp_profilecard.h"
+
 
 
 MainWindow::MainWindow(QWidget *parent)
@@ -345,7 +348,81 @@ void MainWindow::on_actionSave_triggered()
 
 }
 
-bool MainWindow::drawStrategycards()
+bool MainWindow::drawProfileCards()
+{
+    QString dir = QFileDialog::getExistingDirectory(this, "Save strategy cards", QDir::currentPath());
+
+    dir.append(QDir::separator());
+
+    auto cards = listWidget->createListPart().getCards();
+
+    // build a list of all present ships
+    QMap<QString, QFleet_Ship_Fleet> shipMap;
+
+    for (auto& card : cards)
+    {
+        for (auto& group: card.getGroups())
+        {
+            if (!shipMap.contains(group.getShip().name))
+            {
+                shipMap.insert(group.getShip().name, group.getShip());
+            }
+        }
+    }
+
+    bool rVal = true;
+
+    for (auto& ship : shipMap)
+    {
+        {
+            QString cardName = QString("%1%2_Weapons.png").arg(dir,ship.name);
+
+            QFP_WeaponCards weaponCard(this, ship);
+
+            weaponCard.show();
+
+            auto px = weaponCard.getImage();
+
+            QFile file(cardName);
+
+            bool r1 = file.open(QIODevice::WriteOnly);
+
+            bool r2 = px.save(&file, "PNG");
+
+            file.close();
+
+            if ((r1 && r2) == false)
+                rVal = false;
+        }
+
+        {
+            QString cardName = QString("%1%2_Profile.png").arg(dir,ship.name);
+
+            QFP_ProfileCard profileCard(this, ship);
+
+            profileCard.show();
+
+            auto px = profileCard.getImage();
+
+            QFile file(cardName);
+
+            bool r1 = file.open(QIODevice::WriteOnly);
+
+            bool r2 = px.save(&file, "PNG");
+
+            file.close();
+
+            if ((r1 && r2) == false)
+                rVal = false;
+        }
+
+
+    }
+
+    return rVal;
+}
+
+bool MainWindow::drawStrategyCards()
 {
     QString dir = QFileDialog::getExistingDirectory(this, "Save strategy cards", QDir::currentPath());
 
@@ -359,9 +436,9 @@ bool MainWindow::drawStrategycards()
 
     bool rVal = true;
 
-    for (auto battlegroup : cards)
+    for (auto& battlegroup : cards)
     {
-        QString cardName = dir + battlegroup.name;
+        QString cardName = QString("%1%2.png").arg(dir,battlegroup.name);
 
         if (stringGuard.contains(battlegroup.name))
         {
@@ -400,7 +477,7 @@ void MainWindow::on_actionStrategy_Cards_triggered()
         if (!checkListValidity())
             return;
 
-        if (drawStrategycards())
+        if (drawStrategyCards())
         {
             QMessageBox msg(this);
             msg.setText("Strategy Card images written to directory");
@@ -717,5 +794,37 @@ bool MainWindow::saveCompressedListToFile()
 
 
 
+}
+
+
+void MainWindow::on_actionProfile_Cards_triggered()
+{
+    if (!listWidget.isNull())
+    {
+        if (!checkListValidity())
+            return;
+
+        if (drawProfileCards())
+        {
+            QMessageBox msg(this);
+            msg.setText("Profile card images written to directory");
+            msg.setWindowTitle("Success");
+            msg.exec();
+        }
+        else
+        {
+            QMessageBox msg(this);
+            msg.setText("One or more cards files could not be opened for writing");
+            msg.setWindowTitle("Error");
+            msg.exec();
+        }
+    }
+    else
+    {
+        QMessageBox msg(this);
+        msg.setText("No List Loaded to print");
+        msg.setWindowTitle("Error");
+        msg.exec();
+    }
 }
 

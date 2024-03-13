@@ -1,6 +1,8 @@
 #include "qfp_strategycard.h"
 #include "./ui_qfp_strategycard.h"
 
+#include <QPalette>
+
 #define NUM 0
 #define NAME 1
 #define ADMIRAL 2
@@ -41,6 +43,13 @@ QFP_StrategyCard::QFP_StrategyCard(QWidget *parent,std::optional<QFleet_Battlegr
     ui->srLabel->setText(QString::number(battlegroup->getCost().SR));
 
     ui->nameLabel->setText(battlegroup->getName());
+
+    QPalette p;
+    p.setColor(QPalette::Window, Qt::white);
+    p.setColor(QPalette::WindowText, Qt::black);
+
+    this->setAutoFillBackground(true);
+    this->setPalette(p);
 }
 
 QFP_StrategyCard::~QFP_StrategyCard()

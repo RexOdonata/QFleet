@@ -46,7 +46,7 @@ QString QFleet_Weapon::getSpecialString() const
         str.append(special);
 
         if (special != specials.back())
-            str.append(",");
+            str.append(", ");
     }
 
     return str;
