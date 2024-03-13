@@ -45,7 +45,7 @@ protected:
 
     QVector<QString> getMultiSelectStr() const;
 
-    std::optional<QString> hasSearchResult() const;
+    virtual std::optional<QString> hasSearchResult() const;
 
     void addSearchWidget(QWidget *);
 
@@ -84,17 +84,17 @@ class dvs_Widget : public dvs_WidgetBase
 {
     protected:
 
-    void populateStringList(QString)
+    virtual void populateStringList(QString)
     {
         // this is just here to get inherited
     }
 
-    void resetStringList()
+    virtual void resetStringList()
     {
         // this is just here to get inherited
     }
 
-    void setStringList()
+    virtual void setStringList()
     {
         // this is just here to get inherited
     }
@@ -104,9 +104,7 @@ class dvs_Widget : public dvs_WidgetBase
         listModel->clear();
     }
 
-
-
-    void refresh()
+    virtual void refresh()
     {
 
         listModel->clear();
@@ -323,6 +321,10 @@ class dvsx_Widget : public dvs_Widget<T>
             strList.append(str);
         }
 
+        void setStringList()
+        {
+            strListModel->setStringList(strList);
+        }
     private:
 
         // VAR
