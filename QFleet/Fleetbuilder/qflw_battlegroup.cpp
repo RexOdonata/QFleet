@@ -135,10 +135,12 @@ void QFLW_Battlegroup::updateWarningLabels()
             QString labelStr = getGroupLimwarnings();
             ui->grplimsWarnLabel->setText(QString("! : Too many %1 groups").arg(labelStr));
             ui->grplimsWarnLabel->setVisible(true);
+            ui->trimGroupsButton->setVisible(true);
         }
         else
         {
             ui->grplimsWarnLabel->setVisible(false);
+            ui->trimGroupsButton->setVisible(false);
         }
     }
 
@@ -429,4 +431,27 @@ void QFLW_Battlegroup::on_duplicateButton_clicked()
 }
 
 
+
+
+void QFLW_Battlegroup::on_trimGroupsButton_clicked()
+{
+    QVector<QFLW_Group *> tbd;
+
+    if (groups.size() > 3)
+    {
+        for (auto itr = groups.begin() + 3; itr != groups.end(); itr++)
+        {
+            tbd.push_back(itr->data());
+        }
+    }
+
+    for (auto ptr : tbd)
+    {
+        delete ptr;
+    }
+
+    groups.resize(3);
+
+    updateCost();
+}
 

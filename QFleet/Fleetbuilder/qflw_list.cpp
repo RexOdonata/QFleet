@@ -432,7 +432,7 @@ void QFLW_List::addBGT(QFleet_BGT type)
 
     QPointer<QFLW_Battlegroup> newBG = new QFLW_Battlegroup(this, type);
     cards.push_back(newBG.data());
-    ui->cardLayout->addWidget(newBG.data());
+    ui->battlegroupLayout->addWidget(newBG.data());
 
     updateCost();
 

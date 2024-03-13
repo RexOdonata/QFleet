@@ -72,6 +72,8 @@ private slots:
 
     void on_duplicateButton_clicked();
 
+    void on_trimGroupsButton_clicked();
+
 private:
     Ui::QFLW_Battlegroup *ui;
     // UI
