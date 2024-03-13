@@ -41,13 +41,15 @@ protected:
 
     QStandardItemModel  * listModel;
 
-    void createSearchBar();
-
-    void createFactionCombo();
-
     QString getSelectedStr() const;
 
     QVector<QString> getMultiSelectStr() const;
+
+    std::optional<QString> hasSearchResult() const;
+
+    void addSearchWidget(QWidget *);
+
+    void addFilterWidget(QWidget *);
 
 private:
 
@@ -82,17 +84,45 @@ class dvs_Widget : public dvs_WidgetBase
 {
     protected:
 
+    void populateStringList(QString)
+    {
+        // this is just here to get inherited
+    }
+
+    void resetStringList()
+    {
+        // this is just here to get inherited
+    }
+
+    void setStringList()
+    {
+        // this is just here to get inherited
+    }
+
+    void clearModel()
+    {
+        listModel->clear();
+    }
+
+
+
     void refresh()
     {
 
         listModel->clear();
 
+        resetStringList();
+
         for (auto& item : data)
         {
             QString str = getStr(item);
             auto newItem = new QStandardItem(str);
+            populateStringList(str);
             listModel->appendRow(newItem);
         }
+
+        // this iterates over the string list of tiems
+        setStringList();
 
         listModel->setHeaderData(0,Qt::Horizontal, "Data");
     }
@@ -272,6 +302,72 @@ class dvsx_Widget : public dvs_Widget<T>
         {
             this->createSearchBar();
         }
+
+        ~dvsx_Widget()
+        {
+            delete searchLinePtr;
+
+            delete completer;
+
+            delete strListModel;
+        }
+    protected:
+
+        void resetStringList()
+        {
+            strList.clear();
+        }
+
+        void populateStringList(QString str)
+        {
+            strList.append(str);
+        }
+
+    private:
+
+        // VAR
+
+        QLineEdit * searchLinePtr = NULL;
+        QCompleter * completer = NULL;
+
+        QStringListModel * strListModel = NULL;
+
+        QStringList strList;
+
+        // FX
+
+        std::optional<QString> hasSearchResult() const
+        {
+            if (completer != NULL && searchLinePtr != NULL &&
+                completer->completionCount() == 1 && searchLinePtr->text().length() > 0)
+
+            return searchLinePtr->text();
+
+            else
+                return {};
+        }
+
+        void createSearchBar()
+        {
+            strListModel = new QStringListModel(this);
+
+            completer = new QCompleter(strListModel, this);
+
+            searchLinePtr = new QLineEdit(this);
+
+            this->addSearchWidget(searchLinePtr);
+
+            // set the lineEdit to provide data to the completer
+            searchLinePtr->setCompleter(completer);
+
+            strListModel->setStringList(strList);
+        }
+
+
+
+
+
+
 
 };
 

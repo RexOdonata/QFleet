@@ -38,11 +38,18 @@ void dvs_WidgetBase::setLabel(const QString in)
     ui->label->setText(in);
 }
 
+std::optional<QString> dvs_WidgetBase::hasSearchResult() const
+{
+    return {};
+}
+
+
 QString dvs_WidgetBase::getSelectedStr() const
 {
-    if (completer && completer->completionCount() == 1 && searchLinePtr->text().length() > 0)
+    auto sr = this->hasSearchResult();
+    if (sr)
     {
-        return searchLinePtr->text();
+        return *sr;
     }
     else if (ui->treeView->selectionModel()->selectedIndexes().size() > 0)
     {
@@ -69,22 +76,13 @@ QVector<QString> dvs_WidgetBase::getMultiSelectStr() const
         return QVector<QString>();
 }
 
-
-void dvs_WidgetBase::createSearchBar()
+void dvs_WidgetBase::addSearchWidget(QWidget * widget)
 {
-    completer = new QCompleter(listModel, this);
-
-
-    searchLinePtr = new QLineEdit(this);
-
-    ui->searchBoxLayout->addWidget(searchLinePtr);
-
-    // set the lineEdit to provide data to the completer
-    searchLinePtr->setCompleter(completer);
-
+    ui->searchBoxLayout->addWidget(widget);
 }
 
-void dvs_WidgetBase::createFactionCombo()
+void dvs_WidgetBase::addFilterWidget(QWidget * widget)
 {
-    ui->factionFilterLayout->addWidget(factionFilter);
+    ui->factionFilterLayout->addWidget(widget);
 }
+
