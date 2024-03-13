@@ -6,6 +6,8 @@
 #include <QTreeView>
 #include "../ShipView/shipview.h"
 #include <array>
+#include <QStringListModel>
+#include <QCompleter>
 
 
 namespace Ui {
@@ -33,6 +35,8 @@ private slots:
 
     void on_selectOptionsButton_clicked();
 
+    void on_getSearchButton_clicked();
+
 private:
     Ui::shipSelect *ui;
 
@@ -40,11 +44,17 @@ private:
 
     const QMap<QString, QFleet_Ship_Shipyard> * shipData;
 
-    QStandardItemModel * shipTreeModel;
+    QStandardItemModel * shipTreeModel = NULL;
+
+    QStringListModel * strModel = NULL;
+
+    QCompleter * completer = NULL;
 
     // DATA
 
     QFleet_Ship_Fleet ship;
+
+    QString selectedName = "";
 
     bool valid = false;
 
@@ -55,6 +65,8 @@ private:
     shipView * shipViewWidget;
 
     // FXs
+
+    void selectShip(QString);
 
     void insertShip(std::array<QStandardItem *,5> model, const QString);
 

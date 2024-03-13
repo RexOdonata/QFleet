@@ -99,7 +99,8 @@ void shipView::loadShip(const QFleet_Ship_Fleet& ship)
         ui->weaponTableWidget->setItem(index, SPECIAL, item);
     }
     // fit name column
-    ui->weaponTableWidget->resizeColumnToContents(0);
+    ui->weaponTableWidget->resizeColumnToContents(NAME);
+    ui->weaponTableWidget->resizeColumnToContents(SPECIAL);
 
     while (ui->launchTableWidget->rowCount() > 0)
         ui->launchTableWidget->removeRow(0);
@@ -124,7 +125,7 @@ void shipView::loadShip(const QFleet_Ship_Fleet& ship)
         ui->launchTableWidget->setItem(index, LIMITED, item);
     }
     // fit name column
-    ui->launchTableWidget->resizeColumnToContents(0);
+    ui->launchTableWidget->resizeColumnToContents(NAME);
 
     if (ship.launch.size() == 0)
     {

@@ -25,6 +25,37 @@
      <item>
       <layout class="QVBoxLayout" name="verticalLayout_2">
        <item>
+        <layout class="QHBoxLayout" name="horizontalLayout_3" stretch="0,4">
+         <item>
+          <widget class="QPushButton" name="getSearchButton">
+           <property name="text">
+            <string>Select Search</string>
+           </property>
+          </widget>
+         </item>
+         <item>
+          <widget class="QLineEdit" name="shipSearchEdit"/>
+         </item>
+        </layout>
+       </item>
+       <item>
+        <widget class="Line" name="line">
+         <property name="orientation">
+          <enum>Qt::Horizontal</enum>
+         </property>
+        </widget>
+       </item>
+       <item>
+        <widget class="QLabel" name="label_2">
+         <property name="text">
+          <string>Click on ship in tree to select</string>
+         </property>
+         <property name="alignment">
+          <set>Qt::AlignCenter</set>
+         </property>
+        </widget>
+       </item>
+       <item>
         <widget class="QTreeView" name="treeView">
          <property name="sizePolicy">
           <sizepolicy hsizetype="Minimum" vsizetype="Expanding">
