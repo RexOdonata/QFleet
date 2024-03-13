@@ -46,6 +46,10 @@ private slots:
 
     void on_actionCompact_Fleet_List_triggered();
 
+    void on_actionSave_Compressed_triggered();
+
+    void on_actionLoad_compressed_triggered();
+
 private:
     Ui::MainWindow *ui;
 
@@ -78,6 +82,10 @@ private:
     bool loadListFromFile();
 
     bool saveListToFile();
+
+    bool loadCompressedListFromFile();
+
+    bool saveCompressedListToFile();
 
     bool drawStrategycards();
 

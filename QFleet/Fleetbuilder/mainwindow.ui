@@ -100,6 +100,8 @@
     <addaction name="actionSave"/>
     <addaction name="actionLoad"/>
     <addaction name="actionNew"/>
+    <addaction name="actionSave_Compressed"/>
+    <addaction name="actionLoad_compressed"/>
    </widget>
    <widget class="QMenu" name="menuPrint">
     <property name="title">
@@ -161,6 +163,16 @@
   <action name="actionCompact_Fleet_List">
    <property name="text">
     <string>Compact Fleet List</string>
+   </property>
+  </action>
+  <action name="actionSave_Compressed">
+   <property name="text">
+    <string>Save (compressed)</string>
+   </property>
+  </action>
+  <action name="actionLoad_compressed">
+   <property name="text">
+    <string>Load (compressed)</string>
    </property>
   </action>
  </widget>

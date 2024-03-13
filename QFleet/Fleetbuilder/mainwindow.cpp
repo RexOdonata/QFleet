@@ -20,6 +20,9 @@
 
 #include "confirmdialog.h"
 
+#include "../compression/compressor.h"
+#include "../compression/decompressor.h"
+
 
 
 MainWindow::MainWindow(QWidget *parent)
@@ -286,7 +289,7 @@ bool MainWindow::saveListToFile()
 
     // save dialog goes here
 
-    QString filename = QFileDialog::getSaveFileName(this, "save list", QDir::currentPath());
+    QString filename = QFileDialog::getSaveFileName(this, "save list", QDir::currentPath(), "QFleet_List (*.dfc)");
 
     QFile file(filename);
 
@@ -588,6 +591,131 @@ void MainWindow::on_actionCompact_Fleet_List_triggered()
         msg.setWindowTitle("Error");
         msg.exec();
     }
+
+}
+
+
+void MainWindow::on_actionSave_Compressed_triggered()
+{
+    if (!listWidget.isNull())
+    {
+        if (!checkListValidity())
+            return;
+
+
+        if (saveCompressedListToFile())
+        {
+
+        }
+        else
+        {
+            QMessageBox msg(this);
+            msg.setText("Couldn't open save target for writing");
+            msg.exec();
+        }
+    }
+    else
+    {
+        QMessageBox msg(this);
+        msg.setText("No List Loaded to save");
+        msg.exec();
+    }
+}
+
+
+void MainWindow::on_actionLoad_compressed_triggered()
+{
+    if (loadCompressedListFromFile())
+    {
+        // (-:
+    }
+    else
+    {
+        QMessageBox msg(this);
+        msg.setText("Couldn't open load target for reading");
+        msg.exec();
+    }
+}
+
+bool MainWindow::loadCompressedListFromFile()
+{
+    QString filename = QFileDialog::getOpenFileName(this, "Select QFleet List", QDir::currentPath()," Compressed QFleet List(*.dfcz);");
+
+    QFile file(filename);
+
+    if (file.open(QIODevice::ReadOnly))
+    {
+        QByteArray bytes = file.readAll();
+
+        // if a list is already loaded, delete it
+        if (listWidget)
+        {
+            delete listWidget;
+        }
+
+        file.close();
+
+        QJsonParseError err;
+
+        auto r = decompressor::readCompressedFile(bytes, filename);
+
+        QJsonDocument jsonData = QJsonDocument::fromJson(bytes, &err);
+
+        QJsonObject wrapperObj = jsonData.object();
+
+        QClipboard * clip = QGuiApplication::clipboard();
+        QString str(bytes.constData());
+        clip->setText(str);
+
+        try
+        {
+            if (wrapperObj.contains(fileType_listData()))
+            {
+                QFleet_List list(wrapperObj[fileType_listData()].toObject());
+
+
+                drawGUIFromListPart(list);
+            }
+            else
+            {
+                throw std::invalid_argument("Invalid File Type");
+            }
+        }
+        catch (std::invalid_argument err)
+        {
+            QMessageBox msg(this);
+            msg.setText(QString("File read Error! %1").arg(err.what()));
+            msg.setWindowTitle("Load Error");
+            msg.exec();
+            return false;
+        }
+    }
+    else return false;
+
+    return true;
+}
+
+bool MainWindow::saveCompressedListToFile()
+{
+    QFleet_List newList = listWidget->createListPart();
+
+    // save dialog goes here
+
+    QString filename = QFileDialog::getSaveFileName(this, "Save List", QDir::currentPath(),"Compressed QFleet List(*.dfcz);");
+
+    QJsonObject json = newList.toJson();
+
+    QJsonObject wrapperObj;
+
+    wrapperObj.insert(fileType_listData(), json);
+
+    QJsonDocument jsonDoc(wrapperObj);
+
+    QByteArray bytes = jsonDoc.toJson(QJsonDocument::Indented);
+
+    return compressor::writeCompressedFile(bytes, filename);
+
+
 
 }
 
