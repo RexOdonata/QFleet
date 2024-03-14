@@ -108,14 +108,10 @@ bool MainWindow::loadMapFromJsonFile(QWidget * parentWindow, QMap<QString, QFlee
 
     QString filename = QFileDialog::getOpenFileName(parentWindow, "Select Ship Data", QDir::currentPath(),getExtensionFilter(fileType_shipData()));
 
-    QFile file(filename);
+    QByteArray bytes;
 
-    if (file.open(QIODevice::ReadOnly | QIODevice::Text))
+    if (decompressor::readCompressedFile(bytes,filename))
     {
-        QByteArray bytes = file.readAll();
-
-        file.close();
-
         QJsonParseError err;
 
         QJsonDocument jsonData = QJsonDocument::fromJson(bytes, &err);
@@ -212,6 +208,7 @@ bool MainWindow::loadListFromFile()
         return false;
 }
 
+// hidden
 void MainWindow::on_actionLoad_triggered()
 {
     if (loadListFromFile())
@@ -325,6 +322,7 @@ bool MainWindow::saveListToFile()
     else return false;
 }
 
+// hidden
 void MainWindow::on_actionSave_triggered()
 {
 
@@ -724,23 +722,18 @@ bool MainWindow::loadCompressedListFromFile()
 {
     QString filename = QFileDialog::getOpenFileName(this, "Select QFleet List", QDir::currentPath()," Compressed QFleet List(*.dfcz);");
 
-    QFile file(filename);
 
-    if (file.open(QIODevice::ReadOnly))
+    QByteArray bytes;
+
+    if (decompressor::readCompressedFile(bytes, filename))
     {
-        QByteArray bytes = file.readAll();
-
         // if a list is already loaded, delete it
         if (listWidget)
         {
             delete listWidget;
         }
 
-        file.close();
-
         QJsonParseError err;
-
-        auto r = decompressor::readCompressedFile(bytes, filename);
 
         QJsonDocument jsonData = QJsonDocument::fromJson(bytes, &err);
 
@@ -797,8 +790,6 @@ bool MainWindow::saveCompressedListToFile()
     QByteArray bytes = jsonDoc.toJson(QJsonDocument::Indented);
 
     return compressor::writeCompressedFile(bytes, filename);
-
-
 
 }
 

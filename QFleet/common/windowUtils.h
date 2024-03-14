@@ -18,9 +18,9 @@
 
 
 
+
 namespace
 {
-
     template<typename T>
     void loadVectorFromJsonFile(QWidget * parentWindow, QVector<T>& vec, const QString fileType)
     {
@@ -28,34 +28,30 @@ namespace
 
         QString filename = QFileDialog::getOpenFileName(parentWindow, "open content", QDir::currentPath(), getExtensionFilter(fileType));
 
-            QFile file(filename);
+        QByteArray data;
 
-            if (file.open(QIODevice::ReadOnly | QIODevice::Text))
+        if (decompressor::readCompressedFile(data,filename))
+        {
+            QJsonParseError err;
+
+            QJsonDocument jsonData = QJsonDocument::fromJson(data, &err);
+
+            QJsonObject wrapperObj = jsonData.object();
+
+            if (wrapperObj.contains(fileType))
             {
-                QByteArray data = file.readAll();
+                QJsonArray objects = wrapperObj[fileType].toArray();
 
-                file.close();
-
-                QJsonParseError err;
-
-                QJsonDocument jsonData = QJsonDocument::fromJson(data, &err);
-
-                QJsonObject wrapperObj = jsonData.object();
-
-                if (wrapperObj.contains(fileType))
+                for (auto object : objects)
                 {
-                    QJsonArray objects = wrapperObj[fileType].toArray();
-
-                    for (auto object : objects)
-                    {
-                        T obj(object.toObject());
-                        vec.push_back(obj);
-                    }
+                    T obj(object.toObject());
+                    vec.push_back(obj);
                 }
-                else
-                {
-                    throw std::invalid_argument("Invalid File Type");
-                }
+            }
+            else
+            {
+                throw std::invalid_argument("Invalid File Type");
+            }
 
         }
     }
@@ -67,13 +63,10 @@ namespace
 
         QString filename = QFileDialog::getOpenFileName(parentWindow, "open content", QDir::currentPath(), getExtensionFilter(fileType));
 
-        QFile file(filename);
+        QByteArray bytes;
 
-        if (file.open(QIODevice::ReadOnly | QIODevice::Text))
+        if (decompressor::readCompressedFile(bytes, filename))
         {
-            QByteArray bytes = file.readAll();
-
-            file.close();
 
             QJsonParseError err;
 
@@ -118,16 +111,11 @@ namespace
 
         wrapperObj.insert(fileType, jsonData);
 
-        if (file.open(QIODevice::WriteOnly | QIODevice::Text | QIODevice::Truncate))
-        {
-            QJsonDocument json(wrapperObj);
+        QJsonDocument json(wrapperObj);
 
-            QByteArray bytes = json.toJson(QJsonDocument::Indented);
+        QByteArray bytes = json.toJson(QJsonDocument::Indented);
 
-            QTextStream istream(&file);
-            istream << bytes;
-            file.close();
-        }
+        compressor::writeCompressedFile(bytes,filename);
     }
 
 
@@ -142,16 +130,11 @@ namespace
 
         wrapperObj.insert(fileType, obj.toJson());
 
-        if (file.open(QIODevice::WriteOnly | QIODevice::Text | QIODevice::Truncate))
-        {
-            QJsonDocument json(wrapperObj);
+        QJsonDocument json(wrapperObj);
 
-            QByteArray bytes = json.toJson(QJsonDocument::Indented);
+        QByteArray bytes = json.toJson(QJsonDocument::Indented);
 
-            QTextStream istream(&file);
-            istream << bytes;
-            file.close();
-        }
+        compressor::writeCompressedFile(bytes,filename);
 
     }
 
@@ -160,13 +143,10 @@ namespace
     {
         QString filename = QFileDialog::getOpenFileName(parentWindow, "open content", QDir::currentPath(), getExtensionFilter(fileType));
 
-        QFile file(filename);
+        QByteArray data;
 
-        if (file.open(QIODevice::ReadOnly | QIODevice::Text))
+        if (decompressor::readCompressedFile(data,filename))
         {
-            QByteArray data = file.readAll();
-
-            file.close();
 
             QJsonParseError err;
 
@@ -189,8 +169,5 @@ namespace
 
     }
 
-
-
-} // end of namespace
-
+}
 #endif // WINDOWUTILS_H

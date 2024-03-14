@@ -97,8 +97,6 @@
     <property name="title">
      <string>File</string>
     </property>
-    <addaction name="actionSave"/>
-    <addaction name="actionLoad"/>
     <addaction name="actionNew"/>
     <addaction name="actionSave_Compressed"/>
     <addaction name="actionLoad_compressed"/>

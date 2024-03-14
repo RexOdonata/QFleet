@@ -49,7 +49,7 @@ else()
     endif()
 endif()
 
-target_link_libraries(Shipyard PRIVATE Qt${QT_VERSION_MAJOR}::Widgets QF_Components QF_Common)
+target_link_libraries(Shipyard PRIVATE Qt${QT_VERSION_MAJOR}::Widgets QF_Components QF_Common QF_Compression)
 
 set_target_properties(Shipyard PROPERTIES
     MACOSX_BUNDLE_GUI_IDENTIFIER my.example.com
