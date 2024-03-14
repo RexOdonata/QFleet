@@ -13,60 +13,13 @@
 
 #include "fileTypes.h"
 
+#include "../compression/decompressor.h"
+#include "../compression/compressor.h"
 
 
-namespace{
-    template<typename T>
-    struct listModel_Vector_pair
-    {
-        QVector<T> * vec;
-        QStringListModel * listModel;
-        QListView * listView;
-        void refresh();
-        void link(QWidget *, QListView *);
-    };
 
-    template<typename T>
-    void listModel_Vector_pair<T>::refresh()
-    {
-        if (vec && listModel)
-        {
-            QStringList list;
-
-            for (auto& element : *vec)
-            {
-                list.push_back(element.getName());
-            }
-
-            listModel->setStringList(list);
-        }
-    }
-
-    template<typename T>
-    void listModel_Vector_pair<T>::link(QWidget * parent,QListView * set_listView)
-    {
-        listModel = new QStringListModel(parent);
-        listView = set_listView;
-        listView->setModel(listModel);
-
-
-    }
-
-    template<>
-    void listModel_Vector_pair<QString>::refresh()
-    {
-        if (vec && listModel)
-        {
-            QStringList list;
-
-            for (auto& element : *vec)
-            {
-                list.push_back(element);
-            }
-
-            listModel->setStringList(list);
-        }
-    }
+namespace
+{
 
     template<typename T>
     void loadVectorFromJsonFile(QWidget * parentWindow, QVector<T>& vec, const QString fileType)

@@ -26,6 +26,8 @@
 #include "../ListPrinter/qfp_weaponcards.h"
 #include "../ListPrinter/qfp_profilecard.h"
 
+#include "../Components/qfleet_data.h"
+
 
 
 MainWindow::MainWindow(QWidget *parent)
@@ -100,7 +102,11 @@ bool MainWindow::loadMapFromJsonFile(QWidget * parentWindow, QMap<QString, QFlee
 {
     allShipData.clear();
 
-    QString filename = QFileDialog::getOpenFileName(parentWindow, "Select Ship Data", QDir::currentPath(),"QFleet Ship Data(*.qfs)");
+    launchData.clear();
+
+    QFleet_Data loadData;
+
+    QString filename = QFileDialog::getOpenFileName(parentWindow, "Select Ship Data", QDir::currentPath(),getExtensionFilter(fileType_shipData()));
 
     QFile file(filename);
 
@@ -120,15 +126,15 @@ bool MainWindow::loadMapFromJsonFile(QWidget * parentWindow, QMap<QString, QFlee
         {
             if (wrapperObj.contains(fileType_shipData()))
             {
-                QJsonArray objects = wrapperObj[fileType_shipData()].toArray();
+                QJsonObject loadObj = wrapperObj[fileType_shipData()].toObject();
 
-                for (auto object : objects)
-                {
-                    QFleet_Ship_Shipyard newShip(object.toObject());
+                loadData = QFleet_Data(loadObj);
 
-                    if (newShip.factions.contains(*faction))
-                        data.insert(newShip.getName(), newShip);
-                }
+                launchData = loadData.launchData;
+
+                for (auto& ship : loadData.shipData)
+                    data.insert(ship.name, ship);
+
             }
             else
             {
@@ -153,7 +159,7 @@ bool MainWindow::loadMapFromJsonFile(QWidget * parentWindow, QMap<QString, QFlee
 
 bool MainWindow::loadListFromFile()
 {
-    QString filename = QFileDialog::getOpenFileName(this, "Select QFleet List", QDir::currentPath(),"QFleet Lists(*.dfc);");
+    QString filename = QFileDialog::getOpenFileName(this, "Select QFleet List", QDir::currentPath(),getExtensionFilter(fileType_listData()));
 
     QFile file(filename);
 

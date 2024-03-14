@@ -132,6 +132,12 @@ void shipView::loadShip(const QFleet_Ship_Fleet& ship)
         ui->launchLabel->hide();
         ui->launchTableWidget->hide();
     }
+    else
+    {
+        ui->launchLabel->show();
+        ui->launchTableWidget->show();
+    }
+
 
 
 }
