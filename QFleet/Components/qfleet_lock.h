@@ -36,23 +36,11 @@ public:
     {
     }
 
-    QFleet_Lock(QJsonObject in) : qft_enum<QFleet_Lock, lock>(in)
-    {
-    }
+protected:
 
-protected:   
 
-    QJsonObject impl_toJson()
-    {
-        QJsonObject json;
-        json.insert(label, this->toString());
-        return json;
-    }
 
-    QString impl_getLabel()
-    {
-        return label;
-    }
+
 
     lock impl_string_to_enum(const QString in) const
     {
@@ -70,7 +58,7 @@ protected:
        }
 
 private:
-    const static QString label;
+
     const static QString val_2;
     const static QString val_3;
     const static QString val_4;

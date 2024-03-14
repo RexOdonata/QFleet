@@ -30,10 +30,6 @@ public:
     {
     }
 
-    QFleet_AssetType(QJsonObject in) : qft_enum<QFleet_AssetType, assetType>(in)
-    {
-    }
-
     QFleet_AssetType()
     {        
     }
@@ -41,17 +37,6 @@ public:
 
 protected:
 
-    QJsonObject impl_toJson()
-    {
-        QJsonObject json;
-        json.insert(label, this->toString());
-        return json;
-    }
-
-    QString impl_getLabel() const
-    {
-        return label;
-    }
 
     assetType impl_string_to_enum(const QString in) const
     {
@@ -69,7 +54,7 @@ protected:
     }
 
 private:
-    const static QString label;
+
     const static QString val_fighter;
     const static QString val_bomber;
     const static QString val_torpedo;

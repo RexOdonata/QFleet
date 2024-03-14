@@ -8,6 +8,7 @@
 #include "../common/fileTypes.h"
 #include "../common/windowUtils.h"
 #include "../Components/qfleet_launchasset.h"
+#include "../Components/qfleet_data.h"
 #include <iostream>
 
 
@@ -73,11 +74,6 @@ Shipyard::Shipyard(QWidget *parent)
 
     }
 
-    // add Fighter/Bomber generic asset
-
-    QFleet_LaunchAsset strike("Fighters and Bombers");
-    strike.launchCap = true;
-    launchSelectWidget->add(strike);
 
     ui->passiveCombo->setCurrentIndex(5);
 
@@ -175,7 +171,13 @@ void Shipyard::on_deleteWeaponButton_clicked()
 
 void Shipyard::on_actionLoad_triggered()
 {
-    shipWidget->loadFromFile(this, fileType_shipData());
+    QFleet_Data data;
+
+    loadObjectFromJsonFile(this, data, fileType_shipData());
+
+    shipWidget->add(data.shipData);
+
+    launchSelectWidget->add(data.launchData);
 
     shipWidget->manualRefresh();
 }
@@ -183,7 +185,13 @@ void Shipyard::on_actionLoad_triggered()
 
 void Shipyard::on_actionSave_triggered()
 {
-    shipWidget->saveToFile(this, fileType_shipData());
+    QFleet_Data data;
+
+    data.shipData = shipWidget->getData();
+
+    data.launchData = launchSelectWidget->getData();
+
+    saveObjectToJsonFile(this, data, fileType_shipData());
 }
 
 
@@ -320,7 +328,7 @@ void Shipyard::on_saveShipButton_clicked()
 
     newShip.altSig = ui->altSig_spin->value();
 
-    newShip.thrust = ui->sigSpin->value();
+    newShip.thrust = ui->thrustSpin->value();
 
     newShip.hull = ui->hullSpin->value();
 
@@ -477,4 +485,56 @@ void Shipyard::on_loadLaunchAssetsButton_clicked()
     launchSelectWidget->add(assets);
 }
 
+
+
+void Shipyard::on_tonnageCombo_currentIndexChanged(int index)
+{
+    auto tonnage = QFleet_Tonnage(ui->tonnageCombo->currentText());
+
+    auto tVal = tonnage.getIntValue();
+
+    switch(tVal)
+    {
+        case 10:
+        ui->admiralDiscountSpin->setValue(1);
+        break;
+
+        case 15:
+        ui->admiralDiscountSpin->setValue(2);
+        break;
+
+        default:
+        ui->admiralDiscountSpin->setValue(0);
+        break;
+    }
+}
+
+
+void Shipyard::on_launchAddSCButton_clicked()
+{
+    QString nameStr = QString("%1x Fighters & Bombers").arg(QString::number(ui->launchQuantitySpin->value()));
+
+    QFleet_launchProfile lp(nameStr);
+    lp.setCount(ui->launchQuantitySpin->value());
+    lp.setLimited(false);
+    lp.setStrike(true);
+
+    QVector<QString> strs = {"Fighters","Bombers"};
+    lp.setAssetNames(strs);
+
+
+    launchWidget->add(lp);
+}
+
+
+void Shipyard::on_clearWeaponsButton_clicked()
+{
+    weaponWidget->clear();
+}
+
+
+void Shipyard::on_deleteShipButton_clicked()
+{
+    shipWidget->remove();
+}
 

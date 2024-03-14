@@ -27,22 +27,25 @@ public:
 
     QString getSpecialString() const;
 
-protected:
+    static void weaponArrayToJson(QJsonObject&, const QString, QVector<QFleet_Weapon>&);
+    static void weaponArrayFromJson(QJsonObject&, const QString, QVector<QFleet_Weapon>&);
 
+protected:
 
     // STRINGS
 
     const static QString field_lock;
     const static QString field_attacks;
     const static QString field_damage;
-    const static QString field_facing;
     const static QString field_arc;
     const static QString field_specials;
-    const static QString label;
+
 
     // FX
 
     void impl_toJson(QJsonObject& json);
+
+
 
 };
 

@@ -7,12 +7,12 @@ const QString QFleet_Battlegroup::field_type="type";
 
 QFleet_Battlegroup::QFleet_Battlegroup(QJsonObject in) :
     qft_component<QFleet_Battlegroup>(in.value(field_name).toString()),
-    type(in[field_type].toObject()),
+    type(in[field_type].toString()),
     cost(in[field_cost].toObject())
 {
     fieldFromJson(in, field_groups, groups);
     fieldFromJson(in, field_cost, cost);
-    fieldFromJson(in, field_type, type);
+    enumFromJson(in, field_type, type);
 
     updateCost();
 }
@@ -29,7 +29,7 @@ void QFleet_Battlegroup::impl_toJson(QJsonObject& json)
 {
     fieldToJson(json, field_groups, groups);
     fieldToJson(json, field_cost, cost);
-    fieldToJson(json, field_type, type);
+    enumToJson(json, field_type, type);
 }
 
 QVector<QFleet_Group> QFleet_Battlegroup::getGroups() const

@@ -36,11 +36,6 @@ public:
 
     }
 
-    QFleet_Arc(QJsonObject in) : qft_enum<QFleet_Arc, arc>(in)
-    {
-
-    }
-
     QFleet_Arc()
     {
 
@@ -48,18 +43,6 @@ public:
 
 
 protected:
-
-    QJsonObject impl_toJson()
-    {
-        QJsonObject json;
-        json.insert(label, this->toString());
-        return json;
-    }
-
-    QString impl_getLabel() const
-    {
-        return label;
-    }
 
     arc impl_string_to_enum(const QString in) const
     {
@@ -77,7 +60,7 @@ protected:
     }
 
 private:
-    const static QString label;
+
     const static QString val_FN;
     const static QString val_F;
     const static QString val_FS;

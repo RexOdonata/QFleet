@@ -1,6 +1,6 @@
 #include "qfleet_option.h"
 
-const QString QFleet_Option::label="option";
+
 const QString QFleet_Option::field_weapons="weapons";
 const QString QFleet_Option::field_launchProfile="launchProfile";
 const QString QFleet_Option::field_specialRule="specialRule";
@@ -30,7 +30,7 @@ QFleet_Option::QFleet_Option(QJsonObject in) : qft_component<QFleet_Option>
 {
     fieldFromJson(in, field_broadside, broadside);
     fieldFromJson(in, field_oneOnly, oneOnly);
-    fieldFromJson(in, field_optType, type);
+    enumFromJson(in, field_optType, type);
     fieldFromJson(in, field_points, points);
 
     optType lt = type.getVal();
@@ -50,7 +50,7 @@ QFleet_Option::QFleet_Option(QJsonObject in) : qft_component<QFleet_Option>
         statTypePtr= std::make_shared<QFleet_StatID>();
 
         fieldFromJson(in, field_statBonus, *statBonusPtr);
-        fieldFromJson(in, field_statType, *statTypePtr);
+        enumFromJson(in, field_statType, *statTypePtr);
     }
     else if (lt == optType::SPECIAL)
     {
@@ -64,7 +64,7 @@ void QFleet_Option::impl_toJson(QJsonObject& json)
 {
     fieldToJson(json, field_broadside, broadside);
     fieldToJson(json, field_oneOnly, oneOnly);
-    fieldToJson(json, field_optType, type);
+    enumToJson(json, field_optType, type);
     fieldToJson(json, field_points, points);
 
     optType lt = type.getVal();
@@ -79,7 +79,7 @@ void QFleet_Option::impl_toJson(QJsonObject& json)
     else if (lt == optType::STAT)
     {
         fieldToJson(json,field_statBonus,*statBonusPtr);
-        fieldToJson(json,field_statType,*statTypePtr);
+        enumToJson(json,field_statType,*statTypePtr);
     }
     else if (lt == optType::SPECIAL)
     {

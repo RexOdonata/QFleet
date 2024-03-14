@@ -1,7 +1,5 @@
 #include "qfleet_bgt.h"
 
-const QString QFleet_BGT::label="battlegroupType";
-
 const QString QFleet_BGT::val_PF="PF";
 const QString QFleet_BGT::val_LN="LN";
 const QString QFleet_BGT::val_VG="VG";

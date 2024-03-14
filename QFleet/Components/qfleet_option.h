@@ -47,8 +47,6 @@ private:
 
 
     // STRINGS
-
-    const static QString label;
     const static QString field_weapons;
     const static QString field_launchProfile;
     const static QString field_specialRule;

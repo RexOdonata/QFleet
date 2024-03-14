@@ -3,6 +3,8 @@
 
 #include "qfleet_ship.h"
 
+// note that this component is no different from the base ship class, it just has some helper functions
+// keeping these helper functions outside of the base class isn't super important but whatever
 
 // this object is used to store actual ships existing in the fleet, linked to groups
 class QFleet_Ship_Fleet : public QFleet_Ship<QFleet_Ship_Fleet>
@@ -13,9 +15,6 @@ public:
     QFleet_Ship_Fleet(QJsonObject);
 
     QFleet_Ship_Fleet(const QString);
-
-    // all options selected for this ship - this exists to preserve a little bit of info about the options
-    QVector<QString> selectedOptions;
 
 
     QString getArmorString() const;
@@ -32,12 +31,7 @@ public:
 
 protected:
 
-
     void impl_toJson(QJsonObject& json);
-
-
-    const static QString label;
-    const static QString field_selectedOptions;
 
 };
 

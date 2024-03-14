@@ -3,6 +3,8 @@
 #include "fileTypes.h"
 #include "../Components/qfu_specialrules.h"
 
+#include "windowUtils.h"
+
 Hangar::Hangar(QWidget *parent)
     : QMainWindow(parent)
     , ui(new Ui::Hangar),
@@ -102,9 +104,7 @@ void Hangar::on_saveWeapon_button_clicked()
 
 void Hangar::on_loadWeapon_button_clicked()
 {
-    auto launch = rosterWidget->getSelected();
-
-    
+    auto launch = rosterWidget->getSelected();    
 
     if (launch)
     {
@@ -193,13 +193,18 @@ void Hangar::setComboBoxSelection(QComboBox& box, QString item)
 
 void Hangar::on_actionLoad_triggered()
 {
-    rosterWidget->loadFromFile(this, fileType_launchData());
+    QVector<QFleet_LaunchAsset> data;
+
+    loadVectorFromJsonFile(this, data, fileType_launchData());
+
+    rosterWidget->add(data);
 }
 
 
 void Hangar::on_actionSave_triggered()
 {
-    rosterWidget->saveToFile(this, fileType_launchData());
+    auto data = rosterWidget->getData();
+    saveVectorToJsonFile(this, data, fileType_launchData());
 }
 
 

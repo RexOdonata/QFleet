@@ -18,10 +18,10 @@ QFleet_LaunchAsset::QFleet_LaunchAsset(QJsonObject in) : qft_component<QFleet_La
     fieldFromJson(in,field_PD,PD);
     fieldFromJson(in,field_attacks,attacks);
     fieldFromJson(in,field_damage,damage);
-    fieldFromJson(in,field_lock,lock);
+    enumFromJson(in,field_lock,lock);
     fieldFromJson(in,field_special,special);
-    fieldFromJson(in,field_factions,factions);
-    fieldFromJson(in,field_type,type);
+    enumFromJson(in,field_factions,factions);
+    enumFromJson(in,field_type,type);
 }
 
 QFleet_LaunchAsset::QFleet_LaunchAsset(const QString setName) : qft_component<QFleet_LaunchAsset>(setName), lock(QFleet_Lock()), type(QFleet_AssetType())
@@ -43,10 +43,10 @@ void QFleet_LaunchAsset::impl_toJson(QJsonObject& in)
     fieldToJson(in,field_PD,PD);
     fieldToJson(in,field_attacks,attacks);
     fieldToJson(in,field_damage,damage);
-    fieldToJson(in, field_lock,lock);
+    enumToJson(in, field_lock,lock);
     fieldToJson(in,field_special,special);
-    fieldToJson(in,field_factions,factions);
-    fieldToJson(in, field_type,type);
+    enumToJson(in,field_factions,factions);
+    enumToJson(in, field_type,type);
 
 }
 

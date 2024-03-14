@@ -32,6 +32,7 @@ add_library(QF_Components SHARED
   qfu_specialrules.h qfu_specialrules.cpp
   qfu_xrulesub.h xrulesub.cpp
   qfleet_statid.h qfleet_statid.cpp
+  qfleet_data.h qfleet_data.cpp
 )
 
 target_link_libraries(QF_Components PRIVATE Qt${QT_VERSION_MAJOR}::Core)

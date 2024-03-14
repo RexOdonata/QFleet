@@ -29,14 +29,14 @@ public:
         this->fieldFromJson(in,   field_altsig,altSig);
         this->fieldFromJson(in,   field_thrust,thrust);
         this->fieldFromJson(in,   field_hull,hull);
-        this->fieldFromJson(in,   field_armor, armor);
-        this->fieldFromJson(in,   field_passive, passive);
+        this->enumFromJson(in,   field_armor, armor);
+        this->enumFromJson(in,   field_passive, passive);
         this->fieldFromJson(in,   field_PD,PD);
         this->fieldFromJson(in,   field_groupL,groupL);
         this->fieldFromJson(in,   field_groupH,groupH);
-        this->fieldFromJson(in,   field_tonnage, tonnage);
+        this->enumFromJson(in,   field_tonnage, tonnage);
         this->fieldFromJson(in,   field_special, specialRules);
-        this->fieldFromJson(in,   field_weapons, weapons);
+        QFleet_Weapon::weaponArrayFromJson(in,   field_weapons, weapons);
         this->fieldFromJson(in,   field_launch, launch);
         this->fieldFromJson(in,   field_admiralDiscount, admiralDiscount);
     }
@@ -44,6 +44,20 @@ public:
     QFleet_Ship(QString setName) : qft_component<QFleet_Ship>(setName)
     {
 
+    }
+
+    QVector<QString> getFieldStrings()
+    {
+        QVector<QString> vec =
+        {"name", field_points,field_scan,field_signature,field_altsig,field_thrust,
+        field_thrust,field_hull, field_armor, field_passive, field_PD, field_groupH, field_groupL,
+        field_tonnage, field_special, field_weapons, field_launch, field_admiralDiscount};
+
+        QVector<QString> ss = static_cast<T*>(this)->impl_getFieldStrings();
+
+        vec.append(ss);
+
+        return vec;
     }
 
     // VARS
@@ -79,21 +93,21 @@ protected:
         this->fieldToJson(json,   field_altsig,altSig);
         this->fieldToJson(json,   field_thrust,thrust);
         this->fieldToJson(json,   field_hull,hull);
-        this->fieldToJson(json,   field_armor, armor);
-        this->fieldToJson(json,   field_passive, passive);
+        this->enumToJson(json,   field_armor, armor);
+        this->enumToJson(json,   field_passive, passive);
         this->fieldToJson(json,   field_PD,PD);
         this->fieldToJson(json,   field_groupL,groupL);
         this->fieldToJson(json,   field_groupH,groupH);
-        this->fieldToJson(json,   field_tonnage, tonnage);
+        this->enumToJson(json,   field_tonnage, tonnage);
         this->fieldToJson(json,   field_special,specialRules);
-        this->fieldToJson(json,   field_weapons,weapons);
+        QFleet_Weapon::weaponArrayToJson(json,   field_weapons,weapons);
         this->fieldToJson(json,   field_launch,launch);
         this->fieldToJson(json,   field_admiralDiscount,admiralDiscount);
 
 
         // call specialization encode
         static_cast<T*>(this)->impl_toJson(json);
-    }
+    }    
 
     // STRINGS
 
@@ -101,7 +115,7 @@ protected:
     inline const static QString field_points = "points";
     inline const static QString field_scan = "scan";
     inline const static QString field_signature = "signature";
-    inline const static QString field_altsig = "altignature";
+    inline const static QString field_altsig = "altSignature";
     inline const static QString field_thrust = "thrust";
     inline const static QString field_hull = "hull";
     inline const static QString field_armor = "armor";

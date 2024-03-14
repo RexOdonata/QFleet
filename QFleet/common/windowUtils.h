@@ -11,6 +11,8 @@
 
 #include <exception>
 
+#include "fileTypes.h"
+
 
 
 namespace{
@@ -71,7 +73,7 @@ namespace{
     {
         vec.clear();
 
-        QString filename = QFileDialog::getOpenFileName(parentWindow, "open content", QDir::currentPath());
+        QString filename = QFileDialog::getOpenFileName(parentWindow, "open content", QDir::currentPath(), getExtensionFilter(fileType));
 
             QFile file(filename);
 
@@ -110,7 +112,7 @@ namespace{
     {
         data.clear();
 
-        QString filename = QFileDialog::getOpenFileName(parentWindow, "open content", QDir::currentPath());
+        QString filename = QFileDialog::getOpenFileName(parentWindow, "open content", QDir::currentPath(), getExtensionFilter(fileType));
 
         QFile file(filename);
 
@@ -147,7 +149,7 @@ namespace{
     template<typename T>
     void saveVectorToJsonFile(QWidget * parentWindow, QVector<T>& vec, const QString fileType)
     {
-        QString filename = QFileDialog::getSaveFileName(parentWindow, "save content", QDir::currentPath());
+        QString filename = QFileDialog::getSaveFileName(parentWindow, "save content", QDir::currentPath(), getExtensionFilter(fileType));
 
         QFile file(filename);
 
@@ -179,7 +181,7 @@ namespace{
     template<typename T>
     void saveObjectToJsonFile(QWidget * parentWindow, T& obj, const QString fileType)
     {
-        QString filename = QFileDialog::getSaveFileName(parentWindow, "save content", QDir::currentPath());
+        QString filename = QFileDialog::getSaveFileName(parentWindow, "save content", QDir::currentPath(), getExtensionFilter(fileType));
 
         QFile file(filename);
 
@@ -203,7 +205,7 @@ namespace{
     template<typename T>
     void loadObjectFromJsonFile(QWidget * parentWindow, T& obj, const QString fileType)
     {
-        QString filename = QFileDialog::getOpenFileName(parentWindow, "open content", QDir::currentPath());
+        QString filename = QFileDialog::getOpenFileName(parentWindow, "open content", QDir::currentPath(), getExtensionFilter(fileType));
 
         QFile file(filename);
 

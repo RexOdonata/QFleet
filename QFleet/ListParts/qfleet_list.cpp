@@ -10,7 +10,7 @@ const QString QFleet_List::field_faction="faction";
 
 QFleet_List::QFleet_List(QJsonObject json) : qft_component<QFleet_List>(json.value(field_name).toString()), cost(QFleet_Cost("Cost"))
 {
-    fieldFromJson(json, field_faction, listFaction);
+    enumFromJson(json, field_faction, listFaction);
     fieldFromJson(json, field_cards, cards);
     fieldFromJson(json, field_pointsLimit, pointsLimit);
     fieldFromJson(json, field_cost, cost);
@@ -30,7 +30,7 @@ QFleet_List::QFleet_List(const QString setName, QFleet_Faction setFaction, unsig
 
 void QFleet_List::impl_toJson(QJsonObject& json)
 {
-    fieldToJson(json, field_faction, listFaction);
+    enumToJson(json, field_faction, listFaction);
     fieldToJson(json, field_cards, cards);
     fieldToJson(json, field_pointsLimit, pointsLimit);
     fieldToJson(json, field_cost, cost);

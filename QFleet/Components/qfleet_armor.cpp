@@ -1,6 +1,5 @@
 #include "qfleet_armor.h"
 
-const QString QFleet_Armor::label = "armor";
 const QString QFleet_Armor::val_2 = "2+";
 const QString QFleet_Armor::val_3 = "3+";
 const QString QFleet_Armor::val_4 = "4+";

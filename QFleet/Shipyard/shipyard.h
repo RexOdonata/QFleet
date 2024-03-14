@@ -54,6 +54,14 @@ private slots:
 
     void on_loadLaunchAssetsButton_clicked();
 
+    void on_tonnageCombo_currentIndexChanged(int index);
+
+    void on_launchAddSCButton_clicked();
+
+    void on_clearWeaponsButton_clicked();
+
+    void on_deleteShipButton_clicked();
+
 private:
     Ui::Shipyard *ui;
 

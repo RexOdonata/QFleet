@@ -1,6 +1,6 @@
 #include "qfleet_lock.h"
 
-const QString QFleet_Lock::label = "lock";
+
 const QString QFleet_Lock::val_2 = "2+";
 const QString QFleet_Lock::val_3 = "3+";
 const QString QFleet_Lock::val_4 = "4+";

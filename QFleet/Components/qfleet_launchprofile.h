@@ -63,7 +63,6 @@ protected:
 
     QString assetNames;
 
-    const static QString label;
     const static QString field_count;
     const static QString field_strike;
     const static QString field_limited;
