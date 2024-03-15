@@ -82,7 +82,7 @@ private:
 
     void loadShipData();
 
-    bool loadMapFromJsonFile(QWidget * parentWindow, QMap<QString, QFleet_Ship_Shipyard>& data);
+    bool loadMapFromJsonFile(QWidget * parentWindow);
 
     bool loadListFromFile();
 

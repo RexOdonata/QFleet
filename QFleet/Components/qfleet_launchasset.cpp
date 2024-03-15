@@ -34,6 +34,21 @@ QFleet_LaunchAsset::QFleet_LaunchAsset() : qft_component<QFleet_LaunchAsset>("bl
 
 }
 
+QString QFleet_LaunchAsset::getSpecialString() const
+{
+    QString str;
+
+    for (auto& special : special)
+    {
+        str.append(special);
+
+        if (special != special.back())
+            str.append(", ");
+    }
+
+    return str;
+}
+
 
 void QFleet_LaunchAsset::impl_toJson(QJsonObject& in)
 {

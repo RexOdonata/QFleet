@@ -2,6 +2,8 @@
 #define LISTPRINTER_SHORT_H
 
 #include "../ListParts/qfleet_list.h"
+#include "../Components/qfleet_launchasset.h"
+
 #include "NLTemplate.h"
 
 
@@ -11,7 +13,7 @@ class listPrinter_Short
 public:
     listPrinter_Short() = delete;
 
-    static std::string getHTML(const QFleet_List&);
+    static std::string getHTML(const QFleet_List&, const QVector<QFleet_LaunchAsset>&);
 
 private:
 

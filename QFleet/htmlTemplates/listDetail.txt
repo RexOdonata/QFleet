@@ -22,4 +22,5 @@
 </div>
 <p>&nbsp;</p>
 {% include htmlTemplates/battleGroup.txt %}
+{% include htmlTemplates/launchTable.txt %}
 </html>

@@ -39,6 +39,8 @@ public:
 
     void operator=(const QFleet_LaunchAsset&);
 
+    QString getSpecialString() const;
+
 protected:
 
     void impl_toJson(QJsonObject&);

@@ -15,7 +15,7 @@ std::string listPrinter_Short::getTimeStamp()
     return oss.str();
 }
 
-std::string listPrinter_Short::getHTML(const QFleet_List& listObj)
+std::string listPrinter_Short::getHTML(const QFleet_List& listObj, const QVector<QFleet_LaunchAsset>& launchAssets)
 {
 
     NL::Template::LoaderFile templateLoader;
@@ -102,6 +102,44 @@ std::string listPrinter_Short::getHTML(const QFleet_List& listObj)
 
     fillShipBlocks(shipBlock, shipsVec);
 
+
+    listTemplate.block("launchRow").repeat(launchAssets.size());
+
+    auto index = 0;
+    for (auto& la : launchAssets)
+    {
+        NL::Template::Node& rowBlock = listTemplate.block("launchRow")[index];
+
+        rowBlock.set("launchName",la.getName().toStdString());
+
+        rowBlock.set("launchThrust",std::to_string(la.thrust));
+
+        std::string pdstr="-";
+        if (la.type.getVal()==assetType::fighter)
+            pdstr = std::to_string(la.PD);
+        rowBlock.set("launchPD",pdstr);
+
+        std::string lockstr="-";
+        if (la.type.getVal()==assetType::bomber || la.type.getVal()==assetType::torpedo)
+            lockstr = la.lock.toString().toStdString();
+        rowBlock.set("launchLock",lockstr);
+
+        std::string attackstr="-";
+        if (la.type.getVal()==assetType::bomber || la.type.getVal()==assetType::torpedo)
+            attackstr = std::to_string(la.attacks);
+        rowBlock.set("launchAttack",attackstr);
+
+        std::string damagestr="-";
+        if (la.type.getVal()==assetType::bomber || la.type.getVal()==assetType::torpedo)
+            damagestr = std::to_string(la.damage);
+        rowBlock.set("launchDamage",damagestr);
+
+        rowBlock.set("launchSpecial", la.getSpecialString().toStdString());
+
+        index++;
+    }
+
+
     std::stringbuf buffer;
 
     std::ostream sout(&buffer);
@@ -147,6 +185,16 @@ void listPrinter_Short::fillShipBlocks(NL::Template::Block& block, const QVector
         block[index].set("tonnage", ship.tonnage.toString().toStdString());
 
         block[index].set("special", ship.getSpecialString().toStdString());
+
+
+        if (ship.uniqueSpecial.isEmpty())
+        {
+            block[index].block("uniqueSpecialBlock").repeat(0);
+        }
+        else
+        {
+            block[index].block("uniqueSpecialBlock").set("uniqueSpecial", ship.uniqueSpecial.toStdString());
+        }
 
         NL::Template::Block& weaponRowBlock = block[index].block("weaponRow");
 

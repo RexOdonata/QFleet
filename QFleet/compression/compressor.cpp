@@ -11,6 +11,9 @@
 
 bool compressor::writeCompressedFile(QByteArray& src, const QString fn)
 {
+    if (fn.isNull())
+        return false;
+
     FILE * writePtr = NULL;
 
     // open file for binary write

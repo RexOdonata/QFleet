@@ -18,7 +18,7 @@ std::string listPrinter_Legacy::getTimeStamp()
     return oss.str();
 }
 
-std::string listPrinter_Legacy::getHTML(const QFleet_List& listObj)
+std::string listPrinter_Legacy::getHTML(const QFleet_List& listObj, const QVector<QFleet_LaunchAsset>& launchAssets)
 {
 
     NL::Template::LoaderFile templateLoader;
@@ -92,6 +92,43 @@ std::string listPrinter_Legacy::getHTML(const QFleet_List& listObj)
 
     }
 
+
+    listTemplate.block("launchRow").repeat(launchAssets.size());
+
+    auto index = 0;
+    for (auto& la : launchAssets)
+    {
+        NL::Template::Node& rowBlock = listTemplate.block("launchRow")[index];
+
+        rowBlock.set("launchName",la.getName().toStdString());
+
+        rowBlock.set("launchThrust",std::to_string(la.thrust));
+
+        std::string pdstr="-";
+        if (la.type.getVal()==assetType::fighter)
+            pdstr = std::to_string(la.PD);
+        rowBlock.set("launchPD",pdstr);
+
+        std::string lockstr="-";
+        if (la.type.getVal()==assetType::bomber || la.type.getVal()==assetType::torpedo)
+            lockstr = la.lock.toString().toStdString();
+        rowBlock.set("launchLock",lockstr);
+
+        std::string attackstr="-";
+        if (la.type.getVal()==assetType::bomber || la.type.getVal()==assetType::torpedo)
+            attackstr = std::to_string(la.attacks);
+        rowBlock.set("launchAttack",attackstr);
+
+        std::string damagestr="-";
+        if (la.type.getVal()==assetType::bomber || la.type.getVal()==assetType::torpedo)
+            damagestr = std::to_string(la.damage);
+        rowBlock.set("launchAttack",damagestr);
+
+        rowBlock.set("launchSpecial", la.getSpecialString().toStdString());
+
+        index++;
+    }
+
     std::stringbuf buffer;
 
     std::ostream sout(&buffer);
@@ -151,6 +188,16 @@ void listPrinter_Legacy::fillGroupBlocks(NL::Template::Block& groupBlockRef, con
         groupBlockRef[groupIndex].set("tonnage", ship.tonnage.toString().toStdString());
 
         groupBlockRef[groupIndex].set("special", ship.getSpecialString().toStdString());
+
+        if (ship.uniqueSpecial.isEmpty())
+        {
+            groupBlockRef[groupIndex].block("uniqueSpecialBlock").repeat(0);
+        }
+        else
+        {
+            groupBlockRef[groupIndex].block("uniqueSpecialBlock").set("uniqueSpecial", ship.uniqueSpecial.toStdString());
+        }
+
 
         NL::Template::Block& weaponRowBlock = groupBlockRef[groupIndex].block("weaponRow");
 

@@ -72,7 +72,7 @@ void MainWindow::on_actionNew_triggered()
         faction = data.listFaction;
 
         // load ship Data for the faction of the new list
-        if (loadMapFromJsonFile(this, allShipData))
+        if (loadMapFromJsonFile(this))
         {
             listWidget = new QFLW_List(this);
 
@@ -91,14 +91,13 @@ void MainWindow::on_actionNew_triggered()
             msg.exec();
         }
 
-
     }
 
 }
 
 
 // loads ships from a file into the shipdata map and filters out ships from other factions
-bool MainWindow::loadMapFromJsonFile(QWidget * parentWindow, QMap<QString, QFleet_Ship_Shipyard>& data)
+bool MainWindow::loadMapFromJsonFile(QWidget * parentWindow)
 {
     allShipData.clear();
 
@@ -126,10 +125,13 @@ bool MainWindow::loadMapFromJsonFile(QWidget * parentWindow, QMap<QString, QFlee
 
                 loadData = QFleet_Data(loadObj);
 
-                launchData = loadData.launchData;
+                for (auto& la : loadData.launchData)
+                    if (la.factions.contains(*this->faction))
+                        launchData.push_back(la);
 
                 for (auto& ship : loadData.shipData)
-                    data.insert(ship.name, ship);
+                    if (ship.factions.contains(*this->faction))
+                            allShipData.insert(ship.name, ship);
 
             }
             else
@@ -228,7 +230,7 @@ void MainWindow::drawGUIFromListPart(const QFleet_List& list)
     this->faction = list.getFaction();
 
     // Load ships for the faction matching the loaded list
-    if (loadMapFromJsonFile(this, allShipData))
+    if (loadMapFromJsonFile(this))
     {
         this->pointsLimit = list.getPointsLimit();
 
@@ -295,7 +297,7 @@ bool MainWindow::saveListToFile()
 
     // save dialog goes here
 
-    QString filename = QFileDialog::getSaveFileName(this, "save list", QDir::currentPath(), "QFleet_List (*.dfc)");
+    QString filename = QFileDialog::getSaveFileName(this, "save list", QDir::currentPath(), getExtensionFilter(fileType_listData()));
 
     QFile file(filename);
 
@@ -548,7 +550,7 @@ bool MainWindow::writeHTML_Legacy()
 
         QString stub;
 
-        std::string htmlString = listPrinter_Legacy::getHTML(listObj);
+        std::string htmlString = listPrinter_Legacy::getHTML(listObj, launchData);
 
         QByteArray bytes = htmlString.c_str();
 
@@ -575,7 +577,7 @@ bool MainWindow::writeHTML_Short()
 
         QString stub;
 
-        std::string htmlString = listPrinter_Short::getHTML(listObj);
+        std::string htmlString = listPrinter_Short::getHTML(listObj, launchData);
 
         QByteArray bytes = htmlString.c_str();
 
@@ -720,8 +722,7 @@ void MainWindow::on_actionLoad_compressed_triggered()
 
 bool MainWindow::loadCompressedListFromFile()
 {
-    QString filename = QFileDialog::getOpenFileName(this, "Select QFleet List", QDir::currentPath()," Compressed QFleet List(*.dfcz);");
-
+    QString filename = QFileDialog::getOpenFileName(this, "Select QFleet List", QDir::currentPath(),getExtensionFilter(fileType_listData()));
 
     QByteArray bytes;
 
@@ -777,7 +778,7 @@ bool MainWindow::saveCompressedListToFile()
 
     // save dialog goes here
 
-    QString filename = QFileDialog::getSaveFileName(this, "Save List", QDir::currentPath(),"Compressed QFleet List(*.dfcz);");
+    QString filename = QFileDialog::getSaveFileName(this, "Save List", QDir::currentPath(),getExtensionFilter(fileType_listData()));
 
     QJsonObject json = newList.toJson();
 

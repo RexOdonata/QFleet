@@ -1,7 +1,7 @@
 #include "qfu_specialrules.h"
 
 qfu_specialRules::qfu_specialRules() :
-    weaponRules(populateWeaponRules()), shipRules(populateShipRules())
+    weaponRules(populateWeaponRules()), shipRules(populateShipRules()), launchRules(populateLaunchRules())
 {
 
 }
@@ -39,6 +39,17 @@ QVector<QString> qfu_specialRules::populateWeaponRules()
     "Unstable"};
 };
 
+QVector<QString> qfu_specialRules::populateLaunchRules()
+{
+ return QVector<QString>
+    {
+        "Can only drop infantry assets",
+        "Corruptor",
+        "Flash",
+        "May not Double Thrust",
+        "Scald"
+    };
+}
 QVector<QString> qfu_specialRules::populateShipRules()
 {
     return QVector<QString>

@@ -344,6 +344,8 @@ void Shipyard::on_saveShipButton_clicked()
 
     newShip.passive = QFleet_Armor(ui->passiveCombo->currentText());
 
+    newShip.uniqueSpecial = ui->uniqueSpecialTextBox->toPlainText();
+
     {
     auto weapons = weaponWidget->getData();
 
@@ -440,6 +442,8 @@ void Shipyard::on_loadShipButton_clicked()
         ui->tonnageCombo->setCurrentText(loadShip->tonnage.toString());
 
         specialWidget->add(loadShip->specialRules);
+
+        ui->uniqueSpecialTextBox->setText(loadShip->uniqueSpecial);
 
         weaponWidget->add(loadShip->weapons);
 

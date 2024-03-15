@@ -5,13 +5,14 @@
 
 
 #include "../ListParts/qfleet_list.h"
+#include "../Components/qfleet_launchasset.h"
 
 class listPrinter_Legacy
 {
 public:
     listPrinter_Legacy() = delete;
 
-    static std::string getHTML(const QFleet_List&);
+    static std::string getHTML(const QFleet_List&, const QVector<QFleet_LaunchAsset>&);
 
 private:
 

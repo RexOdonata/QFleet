@@ -36,6 +36,7 @@ public:
         this->fieldFromJson(in,   field_groupH,groupH);
         this->enumFromJson(in,   field_tonnage, tonnage);
         this->fieldFromJson(in,   field_special, specialRules);
+        this->fieldFromJson(in,   field_uniqueSpecial, uniqueSpecial);
         QFleet_Weapon::weaponArrayFromJson(in,   field_weapons, weapons);
         this->fieldFromJson(in,   field_launch, launch);
         this->fieldFromJson(in,   field_admiralDiscount, admiralDiscount);
@@ -45,21 +46,6 @@ public:
     {
 
     }
-
-    QVector<QString> getFieldStrings()
-    {
-        QVector<QString> vec =
-        {"name", field_points,field_scan,field_signature,field_altsig,field_thrust,
-        field_thrust,field_hull, field_armor, field_passive, field_PD, field_groupH, field_groupL,
-        field_tonnage, field_special, field_weapons, field_launch, field_admiralDiscount};
-
-        QVector<QString> ss = static_cast<T*>(this)->impl_getFieldStrings();
-
-        vec.append(ss);
-
-        return vec;
-    }
-
     // VARS
 
     unsigned int points;
@@ -75,7 +61,7 @@ public:
     unsigned int groupH;
     QFleet_Tonnage tonnage;
     QVector<QString> specialRules;
-
+    QString uniqueSpecial;
     QVector<QFleet_Weapon> weapons;
     QVector<QFleet_launchProfile> launch;
 
@@ -100,6 +86,7 @@ protected:
         this->fieldToJson(json,   field_groupH,groupH);
         this->enumToJson(json,   field_tonnage, tonnage);
         this->fieldToJson(json,   field_special,specialRules);
+        this->fieldToJson(json,   field_uniqueSpecial, uniqueSpecial);
         QFleet_Weapon::weaponArrayToJson(json,   field_weapons,weapons);
         this->fieldToJson(json,   field_launch,launch);
         this->fieldToJson(json,   field_admiralDiscount,admiralDiscount);
@@ -125,6 +112,7 @@ protected:
     inline const static QString field_groupH = "groupH";
     inline const static QString field_tonnage = "tonnage";
     inline const static QString field_special = "special";
+    inline const static QString field_uniqueSpecial = "uniqueSpecial";
     inline const static QString field_weapons = "weapons";
     inline const static QString field_launch = "launch";
     inline const static QString field_admiralDiscount = "admiralDiscount";

@@ -55,6 +55,15 @@
 </tbody>
 </table>
 <p>&nbsp;</p>
+{% block uniqueSpecialBlock %}
+<table border="1">
+<tbody>
+<tr>
+<td>{{ uniqueSpecial }}</td>
+</tr>
+</tbody>
+</table>
+{% endblock %}
 {% block launchTable %}
 <table style="height: 41px; width: 346px;" border="1">
 <tbody>

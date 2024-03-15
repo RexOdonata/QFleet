@@ -16,9 +16,6 @@
 #include "../compression/decompressor.h"
 #include "../compression/compressor.h"
 
-
-
-
 namespace
 {
     template<typename T>
@@ -97,8 +94,6 @@ namespace
     {
         QString filename = QFileDialog::getSaveFileName(parentWindow, "save content", QDir::currentPath(), getExtensionFilter(fileType));
 
-        QFile file(filename);
-
         QJsonArray jsonData;
 
         for (auto& element : vec)
@@ -123,8 +118,6 @@ namespace
     void saveObjectToJsonFile(QWidget * parentWindow, T& obj, const QString fileType)
     {
         QString filename = QFileDialog::getSaveFileName(parentWindow, "save content", QDir::currentPath(), getExtensionFilter(fileType));
-
-        QFile file(filename);
 
         QJsonObject wrapperObj;
 

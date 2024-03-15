@@ -23,4 +23,5 @@
 <p>&nbsp;</p>
 {% include htmlTemplates/shortListTree.txt %}
 {% include htmlTemplates/shipProfile.txt %}
+{% include htmlTemplates/launchTable.txt %}
 </html>

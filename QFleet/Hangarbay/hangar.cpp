@@ -17,7 +17,7 @@ Hangar::Hangar(QWidget *parent)
     {
         qfu_specialRules specialRules;
 
-        for (auto& rule : specialRules.weaponRules)
+        for (auto& rule : specialRules.launchRules)
             ui->special_combo->addItem(rule);
 
     }
@@ -91,6 +91,7 @@ QFleet_LaunchAsset Hangar::saveLaunch()
 
     newAsset.factions = factions;
 
+    newAsset.special =specialWidget->getData();
 
     return newAsset;
 }
@@ -178,7 +179,7 @@ void Hangar::on_specialAdd_button_clicked()
 
 void Hangar::on_specialRemove_button_clicked()
 {
-    specialWidget->remove();
+    specialWidget->clear();
 }
 
 void Hangar::setComboBoxSelection(QComboBox& box, QString item)

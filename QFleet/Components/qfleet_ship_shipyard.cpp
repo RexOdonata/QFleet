@@ -58,6 +58,7 @@ void QFleet_Ship_Shipyard::shipArrayToJson(QJsonObject& json, const QString fiel
     QJsonArray groupHArray;
     QJsonArray tonnageArray;
     QJsonArray specialsArray;
+    QJsonArray uniqueSpecialArray;
     QJsonArray weaponArray;
     QJsonArray launchArray;
     QJsonArray admiralDiscountArray;
@@ -103,6 +104,8 @@ void QFleet_Ship_Shipyard::shipArrayToJson(QJsonObject& json, const QString fiel
 
         specialsArray.append(specials);
 
+        uniqueSpecialArray.append(ship.uniqueSpecial);
+
         // resuing functions for convinience but stripping out the arrays to save text in the output
 
         QJsonObject weaponObj;
@@ -146,6 +149,7 @@ void QFleet_Ship_Shipyard::shipArrayToJson(QJsonObject& json, const QString fiel
     shipArrayObj.insert(field_groupH,groupHArray);
     shipArrayObj.insert(field_tonnage,tonnageArray);
     shipArrayObj.insert(field_special,specialsArray);
+    shipArrayObj.insert(field_uniqueSpecial,uniqueSpecialArray);
     shipArrayObj.insert(field_weapons,weaponArray);
     shipArrayObj.insert(field_launch,launchArray);
     shipArrayObj.insert(field_admiralDiscount,admiralDiscountArray);
@@ -184,6 +188,7 @@ void QFleet_Ship_Shipyard::shipArrayFromJson(QJsonObject& json, const QString fi
             indexObj.insert(field_groupH, shipArrayObj.value(field_groupH).toArray().at(index));
             indexObj.insert(field_tonnage, shipArrayObj.value(field_tonnage).toArray().at(index));
             indexObj.insert(field_special, shipArrayObj.value(field_special).toArray().at(index));
+            indexObj.insert(field_uniqueSpecial, shipArrayObj.value(field_uniqueSpecial).toArray().at(index));
             indexObj.insert(field_weapons, shipArrayObj.value(field_weapons).toArray().at(index));
             indexObj.insert(field_launch, shipArrayObj.value(field_launch).toArray().at(index));
             indexObj.insert(field_admiralDiscount, shipArrayObj.value(field_admiralDiscount).toArray().at(index));

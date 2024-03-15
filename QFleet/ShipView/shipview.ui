@@ -7,7 +7,7 @@
     <x>0</x>
     <y>0</y>
     <width>1859</width>
-    <height>412</height>
+    <height>442</height>
    </rect>
   </property>
   <property name="windowTitle">
@@ -643,7 +643,23 @@
          </layout>
         </item>
         <item>
+         <layout class="QVBoxLayout" name="verticalLayout_3">
+          <item>
+           <widget class="QLabel" name="uniqueSpecialLabel">
+            <property name="text">
+             <string>TextLabel</string>
+            </property>
+           </widget>
+          </item>
+         </layout>
+        </item>
+        <item>
          <widget class="QLabel" name="label_25">
+          <property name="font">
+           <font>
+            <underline>true</underline>
+           </font>
+          </property>
           <property name="text">
            <string>Weapons</string>
           </property>
@@ -687,6 +703,11 @@
         </item>
         <item>
          <widget class="QLabel" name="launchLabel">
+          <property name="font">
+           <font>
+            <underline>true</underline>
+           </font>
+          </property>
           <property name="text">
            <string>Launch</string>
           </property>
@@ -729,6 +750,19 @@
          </layout>
         </item>
        </layout>
+      </item>
+      <item row="1" column="0">
+       <spacer name="verticalSpacer">
+        <property name="orientation">
+         <enum>Qt::Vertical</enum>
+        </property>
+        <property name="sizeHint" stdset="0">
+         <size>
+          <width>20</width>
+          <height>40</height>
+         </size>
+        </property>
+       </spacer>
       </item>
      </layout>
     </widget>

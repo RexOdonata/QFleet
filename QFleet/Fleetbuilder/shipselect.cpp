@@ -185,6 +185,7 @@ QFleet_Ship_Fleet shipSelect::createShip(const QFleet_Ship_Shipyard& shipSrc, QV
     newShip.weapons = shipSrc.weapons;
     newShip.launch = shipSrc.launch;
     newShip.admiralDiscount = shipSrc.admiralDiscount;
+    newShip.uniqueSpecial = shipSrc.uniqueSpecial;
 
     // extract options into the ship
     for (auto& opt : opts)

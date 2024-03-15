@@ -138,6 +138,16 @@ void shipView::loadShip(const QFleet_Ship_Fleet& ship)
         ui->launchTableWidget->show();
     }
 
+    if (ship.uniqueSpecial.isNull())
+    {
+        ui->uniqueSpecialLabel->setVisible(false);
+    }
+    else
+    {
+        ui->uniqueSpecialLabel->setText(ship.uniqueSpecial);
+        ui->uniqueSpecialLabel->setVisible(true);
+    }
+
 
 
 }

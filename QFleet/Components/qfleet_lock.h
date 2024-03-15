@@ -6,12 +6,13 @@
 
 enum class lock
 {
-    lk2=0,
-    lk3=1,
-    lk4=2,
-    lk5=3,
-    lk6=4,
-    lkX=5
+    lkX=0,
+    lk2=1,
+    lk3=2,
+    lk4=3,
+    lk5=4,
+    lk6=5
+
 };
 
 inline uint qHash(lock key, uint seed)
@@ -37,10 +38,6 @@ public:
     }
 
 protected:
-
-
-
-
 
     lock impl_string_to_enum(const QString in) const
     {
