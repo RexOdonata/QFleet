@@ -1,6 +1,6 @@
 {% block ship %}
-<div id="ship">
-<h4> {{ shipName }} - {{ cost }} points </h4>
+<div id="shipProfile" style="border:thin solid">
+<h3><strong>{{ shipName }} - {{ shipPoints }} points</strong></h3>
 <table style="height: 75px; " border="1" width="100%">
 <tbody>
 <tr>
@@ -17,21 +17,29 @@
 </tr>
 <tr>
 <td style="width: 81.7667px; text-align: left;">{{ shipName }}</td>
-<td style="width: 48.3px;text-align: center">{{ scan }}</td>
-<td style="width: 76.3167px;text-align: center">{{ signature }}</td>
-<td style="width: 53.7333px;text-align: center">{{ thrust }}</td>
-<td style="width: 40.5333px;text-align: center">{{ hull }}</td>
-<td style="width: 55.3px;text-align: center">{{ armor }}</td>
-<td style="width: 34.3px;text-align: center">{{ pd }}</td>
-<td style="width: 54.5333px;text-align: center">{{ group }}</td>
-<td style="width: 69.3167px;text-align: center">{{ tonnage }}</td>
-<td style="width: 62.3167px;text-align: center">{{ special }}</td>
+<td style="width: 48.3px;text-align: center">{{ shipScan }}</td>
+<td style="width: 76.3167px;text-align: center">{{ shipSignature }}</td>
+<td style="width: 53.7333px;text-align: center">{{ shipThrust }}</td>
+<td style="width: 40.5333px;text-align: center">{{ shipHull }}</td>
+<td style="width: 55.3px;text-align: center">{{ shipArmor }}</td>
+<td style="width: 34.3px;text-align: center">{{ shipPD }}</td>
+<td style="width: 54.5333px;text-align: center">{{ shipGroup }}</td>
+<td style="width: 69.3167px;text-align: center">{{ shipTonnage }}</td>
+<td style="width: 62.3167px;text-align: center">{{ shipSpecial }}</td>
 </tr>
 </tbody>
 </table>
 <p>&nbsp;</p>
-</div>
-<div id="arsenal">
+{% block uniqueSpecialBlock %}
+<table border="1">
+<tbody>
+<tr>
+<td>{{ uniqueSpecial }}</td>
+</tr>
+</tbody>
+</table>
+{% endblock %}
+<p>&nbsp;</p>
 <table style="height: 10px;" border="1" width="100%">
 <tbody>
 <tr>
@@ -55,15 +63,6 @@
 </tbody>
 </table>
 <p>&nbsp;</p>
-{% block uniqueSpecialBlock %}
-<table border="1">
-<tbody>
-<tr>
-<td>{{ uniqueSpecial }}</td>
-</tr>
-</tbody>
-</table>
-{% endblock %}
 {% block launchTable %}
 <table style="height: 41px; width: 346px;" border="1">
 <tbody>
