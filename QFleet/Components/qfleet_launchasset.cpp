@@ -38,11 +38,11 @@ QString QFleet_LaunchAsset::getSpecialString() const
 {
     QString str;
 
-    for (auto& special : special)
+    for (auto& ss : special)
     {
-        str.append(special);
+        str.append(ss);
 
-        if (special != special.back())
+        if (ss != special.back())
             str.append(", ");
     }
 

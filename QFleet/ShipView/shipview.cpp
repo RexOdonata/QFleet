@@ -140,12 +140,12 @@ void shipView::loadShip(const QFleet_Ship_Fleet& ship)
 
     if (ship.uniqueSpecial.isNull())
     {
-        ui->uniqueSpecialLabel->setVisible(false);
+        ui->uniqueSpecialText->setVisible(false);
     }
     else
     {
-        ui->uniqueSpecialLabel->setText(ship.uniqueSpecial);
-        ui->uniqueSpecialLabel->setVisible(true);
+        ui->uniqueSpecialText->setHtml(ship.uniqueSpecial);
+        ui->uniqueSpecialText->setVisible(true);
     }
 
 

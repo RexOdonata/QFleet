@@ -100,7 +100,7 @@
             <item>
              <widget class="QLabel" name="label_20">
               <property name="text">
-               <string>Unique Special:</string>
+               <string>Unique Special: past HTML here</string>
               </property>
              </widget>
             </item>
