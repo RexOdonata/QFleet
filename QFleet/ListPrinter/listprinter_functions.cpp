@@ -47,7 +47,7 @@ void listprinter_functions::fillListHeader(NL::Template::Block& headerBlock, con
 
     // set Validity Tag (NEEDS WORK!)
 
-    std::string validStr = (listObj.getValid()) ? "True" : "false";
+    std::string validStr = (listObj.getValid()) ? "True" : "FALSE!";
 
     headerBlock.set("listValid",validStr);
 }
@@ -192,7 +192,7 @@ void listprinter_functions::fillLaunchAssets(NL::Template::Block& assetTableBloc
 
         rowBlock.set("assetName",la.getName().toStdString());
 
-        rowBlock.set("assetThrust",std::to_string(la.thrust));
+        rowBlock.set("assetThrust",std::to_string(la.thrust)+"\"");
 
         std::string pdstr="-";
         if (la.type.getVal()==assetType::fighter)

@@ -470,14 +470,24 @@ void Shipyard::on_loadShipButton_clicked()
 
             if (factionMap.contains(faction::UCM))
                 ui->ucmCheck->setCheckState(Qt::Checked);
+            else
+                ui->ucmCheck->setCheckState(Qt::Unchecked);
             if (factionMap.contains(faction::SCOURGE))
                 ui->scourgeCheck->setCheckState(Qt::Checked);
+            else
+                ui->ucmCheck->setCheckState(Qt::Unchecked);
             if (factionMap.contains(faction::PHR))
                 ui->phrCheck->setCheckState(Qt::Checked);
+            else
+                ui->ucmCheck->setCheckState(Qt::Unchecked);
             if (factionMap.contains(faction::SHALTARI))
                 ui->shaltariCheck->setCheckState(Qt::Checked);
+            else
+                ui->ucmCheck->setCheckState(Qt::Unchecked);
             if (factionMap.contains(faction::RESISTANCE))
                 ui->resistanceCheck->setCheckState(Qt::Checked);
+            else
+                ui->ucmCheck->setCheckState(Qt::Unchecked);
         }
     }
 }
