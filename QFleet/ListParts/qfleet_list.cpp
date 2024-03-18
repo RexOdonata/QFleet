@@ -5,23 +5,27 @@ const QString QFleet_List::field_cards="cards";
 const QString QFleet_List::field_cost="cost";
 const QString QFleet_List::field_pointsLimit="pointsLimit";
 const QString QFleet_List::field_faction="faction";
+const QString QFleet_List::field_valid="valid";
 
 
 
-QFleet_List::QFleet_List(QJsonObject json) : qft_component<QFleet_List>(json.value(field_name).toString()), cost(QFleet_Cost("Cost"))
+QFleet_List::QFleet_List(QJsonObject json) :
+    qft_component<QFleet_List>(json.value(field_name).toString()), cost(QFleet_Cost("Cost"))
 {
     enumFromJson(json, field_faction, listFaction);
     fieldFromJson(json, field_cards, cards);
     fieldFromJson(json, field_pointsLimit, pointsLimit);
     fieldFromJson(json, field_cost, cost);
+    fieldFromJson(json, field_valid, validity);
+
 
 
     updateCost();
 }
 
-QFleet_List::QFleet_List(const QString setName, QFleet_Faction setFaction, unsigned int setLimit) :
+QFleet_List::QFleet_List(const QString setName, QFleet_Faction setFaction, unsigned int setLimit, bool valid) :
     qft_component<QFleet_List>(setName), cost(QFleet_Cost("listCost")),
-    listFaction(setFaction), pointsLimit(setLimit)
+    listFaction(setFaction), pointsLimit(setLimit), validity(valid)
 
 {
     if (this->name.isEmpty())
@@ -34,6 +38,7 @@ void QFleet_List::impl_toJson(QJsonObject& json)
     fieldToJson(json, field_cards, cards);
     fieldToJson(json, field_pointsLimit, pointsLimit);
     fieldToJson(json, field_cost, cost);
+    fieldToJson(json, field_valid, validity);
 }
 
 // updates cost and included groups
@@ -93,6 +98,11 @@ faction QFleet_List::getFaction() const
     return listFaction.getVal();
 }
 
+bool QFleet_List::getValid() const
+{
+    return validity;
+}
+
 QFleet_Cost QFleet_List::getCost() const
 {
     return cost;
@@ -100,15 +110,12 @@ QFleet_Cost QFleet_List::getCost() const
 
 QString QFleet_List::getListString()
 {
-    QString nameStr = this->name;
+    auto ptsStr = QString::number(this->getCost().points);
 
-    nameStr.append(", ");
+    auto facStr = QFleet_Faction(this->getFaction()).toString();
 
-    nameStr.append(QString::number(this->getCost().points));
+    QString nameStr = QString("%1, %2 pts %3").arg(this->name, ptsStr, facStr);
 
-    nameStr.append(" pts, ");
-
-    nameStr.append(QFleet_Faction(this->getFaction()).toString());
 
     for (auto& card : cards)
     {
@@ -119,8 +126,7 @@ QString QFleet_List::getListString()
 
         nameStr.append(cardStr);
 
-
     }
 
-        return nameStr;
+    return nameStr;
 }

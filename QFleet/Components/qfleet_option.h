@@ -33,7 +33,7 @@ public:
 
     std::shared_ptr<QVector<QFleet_Weapon>> weaponVecPtr = NULL;
 
-    std::shared_ptr<QFleet_launchProfile> launchProfilePtr = NULL;
+    std::shared_ptr<QFleet_LaunchProfile> launchProfilePtr = NULL;
 
     std::shared_ptr<unsigned int> statBonusPtr = NULL;
     std::shared_ptr<QFleet_StatID> statTypePtr = NULL;

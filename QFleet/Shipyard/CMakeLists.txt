@@ -24,6 +24,12 @@ set(PROJECT_SOURCES
         scrapyard.cpp
         scrapyard.ui
         dvsz_widget.h
+        customspecialdialog.h
+        customspecialdialog.cpp
+        customspecialdialog.ui
+        confirmdialog.h
+        confirmdialog.cpp
+        confirmdialog.ui
 )
 
 if(${QT_VERSION_MAJOR} GREATER_EQUAL 6)

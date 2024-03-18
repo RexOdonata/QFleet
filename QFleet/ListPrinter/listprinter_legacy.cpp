@@ -28,6 +28,8 @@ std::string listPrinter_Legacy::getHTML(const QFleet_List& listObj, const QVecto
 
     listTemplate.block("battlegroupHeader").repeat(cards.size());
 
+    QMap<QString,QFleet_Ship_Fleet> shipMap;
+
     for (int cardIndex = 0; cardIndex < cards.size(); cardIndex++)
     {
         auto card = cards.at(cardIndex);
@@ -50,14 +52,24 @@ std::string listPrinter_Legacy::getHTML(const QFleet_List& listObj, const QVecto
         // fill out the group
         fillGroupBlocks(groupProfiles, groups);
 
+        for (auto& group : groups)
+        {
+            if (!shipMap.contains(group.getShip().name))
+                shipMap.insert(group.getShip().name, group.getShip());
+        }
+
     }
 
-    // DRAW LAUNCH ASSETS
+    // DRAW LAUNCH ASSETS    
 
-    NL::Template::Block& launchAssetBlock = listTemplate.block("launchAssets");
+    {
+        auto launchVec = listprinter_functions::filterLaunchAssets(&launchAssets, shipMap);
 
-    listprinter_functions::fillLaunchAssets(launchAssetBlock,launchAssets);
+        NL::Template::Block& launchAssetBlock = listTemplate.block("launchAssets");
 
+        listprinter_functions::fillLaunchAssets(launchAssetBlock,launchVec);
+
+    }
 
     std::stringbuf buffer;
 

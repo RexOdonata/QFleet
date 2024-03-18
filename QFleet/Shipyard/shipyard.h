@@ -56,11 +56,11 @@ private slots:
 
     void on_tonnageCombo_currentIndexChanged(int index);
 
-    void on_launchAddSCButton_clicked();
-
     void on_clearWeaponsButton_clicked();
 
     void on_deleteShipButton_clicked();
+
+    void on_customSpecialRuleButton_clicked();
 
 private:
     Ui::Shipyard *ui;
@@ -74,7 +74,7 @@ private:
 
     dvs_Widget<QString> * specialWidget;
 
-    dvs_Widget<QFleet_launchProfile> * launchWidget;
+    dvs_Widget<QFleet_LaunchProfile> * launchWidget;
 
     dvs_Widget<QFleet_LaunchAsset> * launchSelectWidget;
 

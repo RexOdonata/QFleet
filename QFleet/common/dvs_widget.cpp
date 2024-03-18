@@ -17,6 +17,11 @@ dvs_WidgetBase::dvs_WidgetBase(QWidget *parent) :
 
 }
 
+void dvs_WidgetBase::setMultiSelect()
+{
+    ui->treeView->setSelectionMode(QAbstractItemView::MultiSelection);
+}
+
 dvs_WidgetBase::~dvs_WidgetBase()
 {
     if (completer)

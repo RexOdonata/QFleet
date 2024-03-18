@@ -39,6 +39,10 @@ Hangar::Hangar(QWidget *parent)
 Hangar::~Hangar()
 {
     delete ui;
+
+    delete rosterWidget;
+
+    delete specialWidget;
 }
 
 QFleet_LaunchAsset Hangar::saveLaunch()

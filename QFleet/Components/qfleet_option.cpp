@@ -41,7 +41,7 @@ QFleet_Option::QFleet_Option(QJsonObject in) : qft_component<QFleet_Option>
     }
     else if (lt == optType::LAUNCH)
     {
-        launchProfilePtr = std::make_shared<QFleet_launchProfile>();
+        launchProfilePtr = std::make_shared<QFleet_LaunchProfile>();
         fieldFromJson(in, field_launchProfile, *launchProfilePtr);
     }
     else if (lt == optType::STAT)

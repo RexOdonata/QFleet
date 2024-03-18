@@ -101,7 +101,7 @@ void QFleet_Weapon::weaponArrayFromJson(QJsonObject& json, const QString field, 
             indexObj.insert(field_name, weaponArrayObj.value(field_name).toArray().at(i));
             indexObj.insert(field_lock, weaponArrayObj.value(field_lock).toArray().at(i));
             indexObj.insert(field_attacks, weaponArrayObj.value(field_attacks).toArray().at(i));
-            indexObj.insert(field_damage, weaponArrayObj.value(field_lock).toArray().at(i));
+            indexObj.insert(field_damage, weaponArrayObj.value(field_damage).toArray().at(i));
             indexObj.insert(field_arc, weaponArrayObj.value(field_arc).toArray().at(i));
             indexObj.insert(field_specials, weaponArrayObj.value(field_specials).toArray().at(i));
 

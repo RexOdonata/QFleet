@@ -63,7 +63,7 @@ public:
     QVector<QString> specialRules;
     QString uniqueSpecial;
     QVector<QFleet_Weapon> weapons;
-    QVector<QFleet_launchProfile> launch;
+    QVector<QFleet_LaunchProfile> launch;
 
     unsigned int admiralDiscount;
 

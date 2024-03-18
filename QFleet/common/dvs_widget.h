@@ -36,6 +36,8 @@ public:
 
     void setLabel(const QString);
 
+    void setMultiSelect();
+
 
 protected:
 

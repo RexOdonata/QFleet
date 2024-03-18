@@ -17,9 +17,11 @@ public:
 
     static void fillWeaponTable(NL::Template::Block&, const QVector<QFleet_Weapon>&);
 
-    static void fillLaunchTable(NL::Template::Block&, const QVector<QFleet_launchProfile>&);
+    static void fillLaunchTable(NL::Template::Block&, const QVector<QFleet_LaunchProfile>&);
 
     static void fillLaunchAssets(NL::Template::Block&, const QVector<QFleet_LaunchAsset>&);
+
+    static QVector<QFleet_LaunchAsset> filterLaunchAssets(const QVector<QFleet_LaunchAsset> *, QMap<QString,QFleet_Ship_Fleet>&);
 
     static std::string getTimeStamp();
 };

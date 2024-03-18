@@ -11,7 +11,7 @@ Scrapyard::Scrapyard(QWidget *parent, std::shared_ptr<QFleet_Option> optionPtr, 
     ui(new Ui::Scrapyard),
     weaponWidget(new dvs_Widget<QFleet_Weapon>(parent)),
     launchAssetWidget(new dvs_Widget<QFleet_LaunchAsset>(parent)),
-    launchProfileWidget(new dvs_Widget<QFleet_launchProfile>(parent)),
+    launchProfileWidget(new dvs_Widget<QFleet_LaunchProfile>(parent)),
     specialWidget(new dvs_Widget<QString>(parent)),
     option(optionPtr)
 
@@ -122,7 +122,7 @@ void Scrapyard::on_launchAddButton_clicked()
     QVector<QFleet_LaunchAsset> assets = launchAssetWidget->getMultiSelected();
 
 
-    QFleet_launchProfile lp("newLP");
+    QFleet_LaunchProfile lp("newLP");
 
     lp.setCount(ui->launchQuantitySpin->value());
 
@@ -146,7 +146,7 @@ void Scrapyard::on_launchAddButton_clicked()
 
     lp.setAssetNames(names);
 
-    QString newName = lp.getAssetString();
+    QString newName = lp.getDisplayName();
 
     newName.replace(" & ", ",");
 
@@ -194,7 +194,7 @@ void Scrapyard::on_saveButton_clicked()
     {
         type = QFleet_OptType(optType::LAUNCH);
 
-        newOpt.launchProfilePtr = std::make_shared<QFleet_launchProfile>("blank");
+        newOpt.launchProfilePtr = std::make_shared<QFleet_LaunchProfile>("blank");
 
         auto lp = launchProfileWidget->getData().front();
 

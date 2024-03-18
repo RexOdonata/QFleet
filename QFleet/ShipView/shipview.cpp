@@ -109,7 +109,7 @@ void shipView::loadShip(const QFleet_Ship_Fleet& ship)
         auto index = ui->launchTableWidget->rowCount();
         ui->launchTableWidget->insertRow(index);
 
-        QTableWidgetItem * item = new QTableWidgetItem(element.getAssetString());
+        QTableWidgetItem * item = new QTableWidgetItem(element.getDisplayName());
         item->setTextAlignment(Qt::AlignHCenter);
         ui->launchTableWidget->setItem(index, NAME, item);
 
@@ -138,7 +138,7 @@ void shipView::loadShip(const QFleet_Ship_Fleet& ship)
         ui->launchTableWidget->show();
     }
 
-    if (ship.uniqueSpecial.isNull())
+    if (ship.uniqueSpecial.isEmpty())
     {
         ui->uniqueSpecialText->setVisible(false);
     }

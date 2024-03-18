@@ -67,9 +67,15 @@ std::string listPrinter_Short::getHTML(const QFleet_List& listObj, const QVector
 
     // DRAW LAUNCH ASSET TABLE
 
-    NL::Template::Block& launchAssetBlock = listTemplate.block("launchAssets");
+    {
 
-    listprinter_functions::fillLaunchAssets(launchAssetBlock,launchAssets);
+        NL::Template::Block& launchAssetBlock = listTemplate.block("launchAssets");
+
+        auto launchVec = listprinter_functions::filterLaunchAssets(&launchAssets,shipMap);
+
+        listprinter_functions::fillLaunchAssets(launchAssetBlock,launchVec);
+
+    }
 
 
     std::stringbuf buffer;

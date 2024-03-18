@@ -39,7 +39,6 @@ QFP_ProfileCard::QFP_ProfileCard(QWidget *parent, std::optional<QFleet_Ship_Flee
         ui->countLaunchLabel->setVisible(false);
         ui->launchLimitedLabel->setVisible(false);
     }
-
     else
     for (int row=0; row < lps.size(); row++)
     {
@@ -48,7 +47,7 @@ QFP_ProfileCard::QFP_ProfileCard(QWidget *parent, std::optional<QFleet_Ship_Flee
         QLabel * nameLabel = new QLabel(this);
         if (row % 2 == 1)
             nameLabel->setStyleSheet("color: black; background-color: Gainsboro");
-        nameLabel->setText(lps.at(row).getAssetString());
+        nameLabel->setText(lps.at(row).getDisplayName());
         nameLabel->setAlignment(Qt::AlignHCenter);
         ui->launchLayout->addWidget(nameLabel, lRow, 0);
         launchLabels.push_back(nameLabel);

@@ -3,6 +3,8 @@
 #include "../Components/qfu_specialrules.h"
 #include "../Components/qfu_xrulesub.h"
 
+#include "customspecialdialog.h"
+
 Arsenal::Arsenal(QWidget *parent, std::shared_ptr<QFleet_Weapon> weaponPtr) :
     QDialog(parent),
     ui(new Ui::Arsenal), weapon(weaponPtr),
@@ -92,7 +94,6 @@ Arsenal::Arsenal(QWidget *parent, std::shared_ptr<QFleet_Weapon> weaponPtr) :
         specialWidget->add(weapon->specials);
     }
 
-    ui->damageSpin->setValue(1);
 }
 
 Arsenal::~Arsenal()
@@ -171,5 +172,21 @@ void Arsenal::on_saveButton_clicked()
     this->done(QDialog::Accepted);
 
 
+}
+
+
+void Arsenal::on_customButton_clicked()
+{
+    customSpecialDialog dialog(this);
+    QString result;
+
+    dialog.setReturn(&result);
+
+    int r = dialog.exec();
+
+    if (r == QDialog::Accepted)
+    {
+        specialWidget->add(result);
+    }
 }
 

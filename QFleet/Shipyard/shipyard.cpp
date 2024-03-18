@@ -9,6 +9,11 @@
 #include "../common/windowUtils.h"
 #include "../Components/qfleet_launchasset.h"
 #include "../Components/qfleet_data.h"
+
+#include "customspecialdialog.h"
+
+#include "confirmdialog.h"
+
 #include <iostream>
 
 
@@ -19,7 +24,7 @@ Shipyard::Shipyard(QWidget *parent)
     , shipWidget(new dvsz_Widget(parent))
     , optionWidget(new dvsx_Widget<QFleet_Option>(parent))
     , specialWidget(new dvs_Widget<QString>(parent))
-    , launchWidget(new dvs_Widget<QFleet_launchProfile>(parent))
+    , launchWidget(new dvs_Widget<QFleet_LaunchProfile>(parent))
     , launchSelectWidget(new dvs_Widget<QFleet_LaunchAsset>(parent))
 {
     ui->setupUi(this);
@@ -74,8 +79,9 @@ Shipyard::Shipyard(QWidget *parent)
 
     }
 
-
     ui->passiveCombo->setCurrentIndex(5);
+
+    launchSelectWidget->setMultiSelect();
 
 }
 
@@ -102,11 +108,9 @@ void Shipyard::on_newWeaponButton_clicked()
 
     std::shared_ptr<QFleet_Weapon> newWeaponPtr = std::make_shared<QFleet_Weapon>("New Weapon");
 
-    Arsenal * arsenalWindow = new Arsenal(this, newWeaponPtr);
+    Arsenal arsenalWindow(this, newWeaponPtr);
 
-    arsenalWindow->setAttribute(Qt::WA_DeleteOnClose);
-
-    int r = arsenalWindow->exec();    
+    int r = arsenalWindow.exec();
 
     if (r == QDialog::Accepted)
         weaponWidget->add(*newWeaponPtr);
@@ -122,11 +126,9 @@ void Shipyard::on_copyWeaponButton_clicked()
     {
         std::shared_ptr<QFleet_Weapon> clonedWeaponPtr = std::make_shared<QFleet_Weapon>(*sel);
 
-        Arsenal * arsenalWindow = new Arsenal(this, clonedWeaponPtr);
+        Arsenal arsenalWindow(this, clonedWeaponPtr);
 
-        arsenalWindow->setAttribute(Qt::WA_DeleteOnClose);
-
-        int r = arsenalWindow->exec();        
+        int r = arsenalWindow.exec();
 
         if (r == QDialog::Accepted)
             weaponWidget->add(*clonedWeaponPtr);
@@ -145,12 +147,9 @@ void Shipyard::on_editWeaponButton_clicked()
 
         std::shared_ptr<QFleet_Weapon> newWeaponPtr = std::make_shared<QFleet_Weapon>(*sel);
 
-        Arsenal * arsenalWindow = new Arsenal(this, newWeaponPtr);
+        Arsenal arsenalWindow(this, newWeaponPtr);
 
-        arsenalWindow->setAttribute(Qt::WA_DeleteOnClose);
-
-        int r = arsenalWindow->exec();
-
+        int r = arsenalWindow.exec();
 
         if (r == QDialog::Accepted)
             weaponWidget->add(*newWeaponPtr);
@@ -199,7 +198,7 @@ void Shipyard::on_launchAddButton_clicked()
 {
     QVector<QFleet_LaunchAsset> assets = launchSelectWidget->getMultiSelected();
 
-    QFleet_launchProfile lp("newLP");
+    QFleet_LaunchProfile lp("newLP");
 
     lp.setCount(ui->launchQuantitySpin->value());
 
@@ -221,7 +220,7 @@ void Shipyard::on_launchAddButton_clicked()
 
     lp.setAssetNames(names);
 
-    QString newName = lp.getAssetString();
+    QString newName = lp.getDisplayName();
 
     newName.replace(" & ", ",");
 
@@ -267,13 +266,11 @@ void Shipyard::on_newOptionButton_clicked()
     std::shared_ptr<QFleet_Option> newOptionPtr = std::make_shared<QFleet_Option>("newOption");
 
     auto launchAssetData = launchSelectWidget->getData();
-    Scrapyard * scrapyardWindow = new Scrapyard(this, newOptionPtr, &launchAssetData);
+    Scrapyard scrapyardWindow(this, newOptionPtr, &launchAssetData);
 
-    scrapyardWindow->setAttribute(Qt::WA_DeleteOnClose);
+    scrapyardWindow.setAttribute(Qt::WA_DeleteOnClose);
 
-    int r = scrapyardWindow->exec();
-
-    scrapyardWindow->setAttribute(Qt::WA_DeleteOnClose);
+    int r = scrapyardWindow.exec();
 
     if (r == QDialog::Accepted)
         optionWidget->add(*newOptionPtr);
@@ -292,11 +289,9 @@ void Shipyard::on_editOptionButton_clicked()
         std::shared_ptr<QFleet_Option> newOptionPtr = std::make_shared<QFleet_Option>(*sel);
 
         auto launchAssetData = launchSelectWidget->getData();
-        Scrapyard * scrapyardWindow = new Scrapyard(this, newOptionPtr, &launchAssetData);
+        Scrapyard scrapyardWindow(this, newOptionPtr, &launchAssetData);
 
-        scrapyardWindow->setAttribute(Qt::WA_DeleteOnClose);
-
-        int r = scrapyardWindow->exec();
+        int r = scrapyardWindow.exec();
 
         if (r == QDialog::Accepted)
             optionWidget->add(*newOptionPtr);
@@ -344,10 +339,15 @@ void Shipyard::on_saveShipButton_clicked()
 
     newShip.passive = QFleet_Armor(ui->passiveCombo->currentText());
 
-    newShip.uniqueSpecial = ui->uniqueSpecialTextBox->toHtml();
+    if (ui->uniqueSpecialTextBox->toPlainText().isEmpty())
+    {
+        newShip.uniqueSpecial = "";
+    }
+    else
+        newShip.uniqueSpecial = ui->uniqueSpecialTextBox->toHtml();
 
     {
-    auto weapons = weaponWidget->getData();
+        auto weapons = weaponWidget->getData();
 
         for (auto& weapon : weapons)
             newShip.weapons.push_back(weapon);
@@ -443,7 +443,10 @@ void Shipyard::on_loadShipButton_clicked()
 
         specialWidget->add(loadShip->specialRules);
 
-        ui->uniqueSpecialTextBox->setHtml(loadShip->uniqueSpecial);
+        if (loadShip->uniqueSpecial.isEmpty())
+            ui->uniqueSpecialTextBox->setPlainText("");
+        else
+            ui->uniqueSpecialTextBox->setHtml(loadShip->uniqueSpecial);
 
         weaponWidget->add(loadShip->weapons);
 
@@ -513,24 +516,6 @@ void Shipyard::on_tonnageCombo_currentIndexChanged(int index)
     }
 }
 
-
-void Shipyard::on_launchAddSCButton_clicked()
-{
-    QString nameStr = QString("%1x Fighters & Bombers").arg(QString::number(ui->launchQuantitySpin->value()));
-
-    QFleet_launchProfile lp(nameStr);
-    lp.setCount(ui->launchQuantitySpin->value());
-    lp.setLimited(false);
-    lp.setStrike(true);
-
-    QVector<QString> strs = {"Fighters","Bombers"};
-    lp.setAssetNames(strs);
-
-
-    launchWidget->add(lp);
-}
-
-
 void Shipyard::on_clearWeaponsButton_clicked()
 {
     weaponWidget->clear();
@@ -539,6 +524,31 @@ void Shipyard::on_clearWeaponsButton_clicked()
 
 void Shipyard::on_deleteShipButton_clicked()
 {
-    shipWidget->remove();
+    confirmDialog dialog(this);
+    dialog.setMsg("Confirm Delete?");
+
+    int r = dialog.exec();
+
+    if (r == QDialog::Accepted)
+    {
+        shipWidget->remove();
+    }
+
+}
+
+
+void Shipyard::on_customSpecialRuleButton_clicked()
+{
+    customSpecialDialog dialog(this);
+    QString result;
+
+    dialog.setReturn(&result);
+
+    int r = dialog.exec();
+
+    if (r == QDialog::Accepted)
+    {
+        specialWidget->add(result);
+    }
 }
 

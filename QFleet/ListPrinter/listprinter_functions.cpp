@@ -47,7 +47,9 @@ void listprinter_functions::fillListHeader(NL::Template::Block& headerBlock, con
 
     // set Validity Tag (NEEDS WORK!)
 
-    headerBlock.set("listvalid","?");
+    std::string validStr = (listObj.getValid()) ? "True" : "false";
+
+    headerBlock.set("listValid",validStr);
 }
 
 void listprinter_functions::fillShip(NL::Template::Block& shipsBlock, const size_t index, const QFleet_Ship_Fleet& ship)
@@ -116,7 +118,40 @@ void listprinter_functions::fillWeaponTable(NL::Template::Block& weaponRowBlock,
     }
 }
 
-void listprinter_functions::fillLaunchTable(NL::Template::Block& launchTableBlock, const QVector<QFleet_launchProfile>& launch)
+QVector<QFleet_LaunchAsset> listprinter_functions::filterLaunchAssets(const QVector<QFleet_LaunchAsset> * srcAssets, QMap<QString,QFleet_Ship_Fleet>& srcShips)
+{
+    QMap<QString, bool> assetStrings;
+
+    QMap<QString, QFleet_LaunchAsset> assetMap;
+
+    for (auto& asset : *srcAssets)
+    {
+        assetMap.insert(asset.name, asset);
+    }
+
+    for (auto& ship : srcShips)
+    {
+        for (auto& lp : ship.launch)
+        {
+            for (auto laStr : lp.getAssetNames())
+            {
+                if (!assetStrings.contains(laStr))
+                    assetStrings.insert(laStr, true);
+            }
+        }
+    }
+
+    QVector<QFleet_LaunchAsset> output;
+
+    for (auto& laStr : assetStrings.keys())
+    {
+        output.push_back(assetMap.value(laStr));
+    }
+
+    return output;
+}
+
+void listprinter_functions::fillLaunchTable(NL::Template::Block& launchTableBlock, const QVector<QFleet_LaunchProfile>& launch)
 {
     if (launch.size() == 0)
     {
@@ -132,7 +167,7 @@ void listprinter_functions::fillLaunchTable(NL::Template::Block& launchTableBloc
         {
             auto lp = launch.at(launchIndex);
 
-            launchTableBlock.block("launchRow")[launchIndex].set("launchName",lp.getAssetString().toStdString());
+            launchTableBlock.block("launchRow")[launchIndex].set("launchName",lp.getDisplayName().toStdString());
 
             launchTableBlock.block("launchRow")[launchIndex].set("launchCount",QString::number(lp.getCount()).toStdString());
 
