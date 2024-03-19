@@ -93,7 +93,13 @@ Arsenal::Arsenal(QWidget *parent, std::shared_ptr<QFleet_Weapon> weaponPtr) :
 
         specialWidget->add(weapon->specials);
     }
+    else
+    {
+        ui->damageSpin->setValue(1);
+        ui->attackSpin->setValue(1);
+    }
 
+    ui->specialNumSpin->setValue(1);
 }
 
 Arsenal::~Arsenal()

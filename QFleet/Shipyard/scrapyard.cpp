@@ -23,14 +23,15 @@ Scrapyard::Scrapyard(QWidget *parent, std::shared_ptr<QFleet_Option> optionPtr, 
     launchAssetWidget->setLabel("Launch Assets ");
 
     launchAssetWidget->add(*assetVec);
+    launchAssetWidget->setMultiSelect();
 
     // create the LaunchProfile container
     ui->launchProfileLayout->addWidget(launchProfileWidget);
-    launchProfileWidget->setLabel("Special Rules");
+    launchProfileWidget->setLabel("Launch Profiles");
 
     // create the special rules container
     ui->specialRosterLayout->addWidget(specialWidget);
-    specialWidget->setLabel("Launch profile");
+    specialWidget->setLabel("Special Rules ");
 
     // create the weapon container
     ui->weaponLayout->addWidget(weaponWidget);
@@ -56,17 +57,23 @@ Scrapyard::Scrapyard(QWidget *parent, std::shared_ptr<QFleet_Option> optionPtr, 
 
             optType type = option->type.getVal();
 
+            ui->pointSpin->setValue(option->points);
+
             if (type == optType::WEAPONS)
             {
                 weaponWidget->add(*option->weaponVecPtr);
+                ui->typeWeaponRadio->setChecked(true);
             }
             else if (type == optType::LAUNCH)
             {
                 launchProfileWidget->add(*option->launchProfilePtr);
+                ui->typeLaunchRadio->setChecked(true);
             }
             else if (type == optType::STAT)
             {
                 statID statType = option->statTypePtr->getVal();
+
+                ui->typeStatRadio->setChecked(true);
 
                 if (statType==statID::scan)
                     ui->scanRadio->setChecked(true);
@@ -84,6 +91,7 @@ Scrapyard::Scrapyard(QWidget *parent, std::shared_ptr<QFleet_Option> optionPtr, 
             else if (type == optType::SPECIAL)
             {
                 specialWidget->add(*option->specialPtr);
+                ui->typeSpecialRadio->setChecked(true);
             }
         }
 
@@ -222,11 +230,11 @@ void Scrapyard::on_saveButton_clicked()
     {
         type = QFleet_OptType(optType::SPECIAL);
 
-        newOpt.specialPtr =  std::make_shared<QString>();
+        newOpt.specialPtr =  std::make_shared<QVector<QString>>();
 
-        QString special = specialWidget->getData().front();
+        auto specials = specialWidget->getData();
 
-        *(newOpt.specialPtr) = special;
+        *(newOpt.specialPtr) = specials;
     }
 
     newOpt.type = type;
@@ -246,11 +254,9 @@ void Scrapyard::on_newWeaponButton_clicked()
 {
     std::shared_ptr<QFleet_Weapon> newWeaponPtr = std::make_shared<QFleet_Weapon>("New Weapon");
 
-    Arsenal * arsenalWindow = new Arsenal(this, newWeaponPtr);
+    Arsenal arsenalWindow(this, newWeaponPtr);
 
-    arsenalWindow->setAttribute(Qt::WA_DeleteOnClose);
-
-    int r = arsenalWindow->exec();
+    int r = arsenalWindow.exec();
 
     if (r == QDialog::Accepted)
         weaponWidget->add(*newWeaponPtr);
@@ -276,11 +282,9 @@ void Scrapyard::on_editWeaponbutton_clicked()
 
         std::shared_ptr<QFleet_Weapon> newWeaponPtr = std::make_shared<QFleet_Weapon>(*sel);
 
-        Arsenal * arsenalWindow = new Arsenal(this, newWeaponPtr);
+        Arsenal arsenalWindow(this, newWeaponPtr);
 
-        arsenalWindow->setAttribute(Qt::WA_DeleteOnClose);
-
-        int r = arsenalWindow->exec();
+        int r = arsenalWindow.exec();
 
         if (r == QDialog::Accepted)
             weaponWidget->add(*newWeaponPtr);
@@ -299,11 +303,9 @@ void Scrapyard::on_CopyWeaponButton_clicked()
     {
         std::shared_ptr<QFleet_Weapon> clonedWeaponPtr = std::make_shared<QFleet_Weapon>(*sel);
 
-        Arsenal * arsenalWindow = new Arsenal(this, clonedWeaponPtr);
+        Arsenal arsenalWindow(this, clonedWeaponPtr);
 
-        int r = arsenalWindow->exec();
-
-        arsenalWindow->setAttribute(Qt::WA_DeleteOnClose);
+        int r = arsenalWindow.exec();
 
         if (r == QDialog::Accepted)
             weaponWidget->add(*clonedWeaponPtr);
@@ -320,8 +322,6 @@ void Scrapyard::on_specialAddButton_clicked()
     unsigned int num = ui->specialNumSpin->value();
 
     str = xrulesub(str,num);
-
-    specialWidget->clear();
 
     specialWidget->add(str);
 }

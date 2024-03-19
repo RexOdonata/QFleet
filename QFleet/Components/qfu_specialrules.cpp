@@ -15,6 +15,7 @@ QVector<QString> qfu_specialRules::populateWeaponRules()
     "Bombardment",
     "Burnthrough-X",
     "Caliber-L",
+    "Caliber-M",
     "Caliber-HS",
     "Close Action",
     "Close Action(Swarmer)",
@@ -45,6 +46,7 @@ QVector<QString> qfu_specialRules::populateLaunchRules()
     {
         "Can only drop infantry assets",
         "Corruptor",
+        "Copies Faction Strikecraft",
         "Flash",
         "May not Double Thrust",
         "Scald"
@@ -69,6 +71,7 @@ QVector<QString> qfu_specialRules::populateShipRules()
     "Reinforced Armor",
     "Regenerate-X",
     "Stealth",
+    "Subsystem Network",
     "Vectored"};
 };
 

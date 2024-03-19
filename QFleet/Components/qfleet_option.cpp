@@ -54,7 +54,7 @@ QFleet_Option::QFleet_Option(QJsonObject in) : qft_component<QFleet_Option>
     }
     else if (lt == optType::SPECIAL)
     {
-        specialPtr = std::make_shared<QString>();
+        specialPtr = std::make_shared<QVector<QString>>();
         fieldFromJson(in, field_specialRule, *specialPtr);
     }
 

@@ -67,6 +67,8 @@ void shipView::loadShip(const QFleet_Ship_Fleet& ship)
 
     ui->costLabel->setText(QString::number(ship.points));
 
+    ui->specialLabel->setText(ship.getSpecialString());
+
     while (ui->weaponTableWidget->rowCount() > 0)
         ui->weaponTableWidget->removeRow(0);
     for (auto& element : ship.weapons)
@@ -104,6 +106,7 @@ void shipView::loadShip(const QFleet_Ship_Fleet& ship)
 
     while (ui->launchTableWidget->rowCount() > 0)
         ui->launchTableWidget->removeRow(0);
+
     for (auto& element : ship.launch)
     {
         auto index = ui->launchTableWidget->rowCount();

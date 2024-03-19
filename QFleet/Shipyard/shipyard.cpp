@@ -268,8 +268,6 @@ void Shipyard::on_newOptionButton_clicked()
     auto launchAssetData = launchSelectWidget->getData();
     Scrapyard scrapyardWindow(this, newOptionPtr, &launchAssetData);
 
-    scrapyardWindow.setAttribute(Qt::WA_DeleteOnClose);
-
     int r = scrapyardWindow.exec();
 
     if (r == QDialog::Accepted)
@@ -391,7 +389,7 @@ void Shipyard::on_saveShipButton_clicked()
 
     newShip.maxOptions = ui->maxOptionsSpin->value();
 
-    newShip.minOptions = ui->maxOptionsSpin->value();
+    newShip.minOptions = ui->minOptionsSpin->value();
 
     {
         QVector<QString> specials = specialWidget->getData();
@@ -472,22 +470,26 @@ void Shipyard::on_loadShipButton_clicked()
                 ui->ucmCheck->setCheckState(Qt::Checked);
             else
                 ui->ucmCheck->setCheckState(Qt::Unchecked);
+
             if (factionMap.contains(faction::SCOURGE))
                 ui->scourgeCheck->setCheckState(Qt::Checked);
             else
-                ui->ucmCheck->setCheckState(Qt::Unchecked);
+                ui->scourgeCheck->setCheckState(Qt::Unchecked);
+
             if (factionMap.contains(faction::PHR))
                 ui->phrCheck->setCheckState(Qt::Checked);
             else
-                ui->ucmCheck->setCheckState(Qt::Unchecked);
+                ui->phrCheck->setCheckState(Qt::Unchecked);
+
             if (factionMap.contains(faction::SHALTARI))
                 ui->shaltariCheck->setCheckState(Qt::Checked);
             else
-                ui->ucmCheck->setCheckState(Qt::Unchecked);
+                ui->shaltariCheck->setCheckState(Qt::Unchecked);
+
             if (factionMap.contains(faction::RESISTANCE))
                 ui->resistanceCheck->setCheckState(Qt::Checked);
             else
-                ui->ucmCheck->setCheckState(Qt::Unchecked);
+                ui->resistanceCheck->setCheckState(Qt::Unchecked);
         }
     }
 }

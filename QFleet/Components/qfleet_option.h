@@ -38,7 +38,7 @@ public:
     std::shared_ptr<unsigned int> statBonusPtr = NULL;
     std::shared_ptr<QFleet_StatID> statTypePtr = NULL;
 
-    std::shared_ptr<QString> specialPtr = NULL;
+    std::shared_ptr<QVector<QString>> specialPtr = NULL;
 
 
 

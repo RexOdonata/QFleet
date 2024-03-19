@@ -229,7 +229,10 @@ QFleet_Ship_Fleet shipSelect::createShip(const QFleet_Ship_Shipyard& shipSrc, QV
                     break;
 
                 case optType::SPECIAL:
-                    newShip.specialRules.push_back(*opt.specialPtr);
+                    for (auto& optSpec : *opt.specialPtr)
+                    {
+                        newShip.specialRules.push_back(optSpec);
+                    }
                     break;
             }
     }
