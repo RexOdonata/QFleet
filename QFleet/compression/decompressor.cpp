@@ -12,8 +12,13 @@
 
 #include <lz4file.h>
 
+#include <exception>
+
 bool decompressor::readCompressedFile(QByteArray& dest, const QString fn)
 {
+    try
+    {
+
     if (fn.isNull())
         return false;
 
@@ -26,7 +31,7 @@ bool decompressor::readCompressedFile(QByteArray& dest, const QString fn)
     if (readPtr == NULL)
     {
         qCritical()<<"Read File Open Failed";
-        exit(1);
+        throw std::runtime_error("File Open Error");
     }
 
     LZ4_readFile_t * lz4Read;
@@ -36,7 +41,7 @@ bool decompressor::readCompressedFile(QByteArray& dest, const QString fn)
     if (LZ4F_isError(r))
     {
         qCritical()<<"LZ4f Read File Open Failed";
-        exit(1);
+        throw std::runtime_error("LZ4F Open Error");
     }
 
 
@@ -50,8 +55,8 @@ bool decompressor::readCompressedFile(QByteArray& dest, const QString fn)
 
         if (LZ4F_isError(r))
         {
-            qCritical()<<QString("LZ4f rear error %1").arg(LZ4F_getErrorName(r));
-            exit(1);
+            qCritical()<<QString("LZ4f read error %1").arg(LZ4F_getErrorName(r));
+            throw std::runtime_error("LZ4 Read Error");
         }
 
         if (r == 0)
@@ -79,8 +84,8 @@ bool decompressor::readCompressedFile(QByteArray& dest, const QString fn)
     r = LZ4F_readClose(lz4Read);
     if (LZ4F_isError(r))
     {
-        qCritical()<<QString("LZ4f rear close error %1").arg(LZ4F_getErrorName(r));
-        exit(1);
+        qCritical()<<QString("LZ4f read close error %1").arg(LZ4F_getErrorName(r));
+        throw std::runtime_error("LZ4F Read Close Error");
     }
 
     fclose(readPtr);
@@ -90,5 +95,10 @@ bool decompressor::readCompressedFile(QByteArray& dest, const QString fn)
 
 
     return true;
+    }
+    catch (std::runtime_error)
+    {
+        return false;
+    }
 }
 

@@ -9,8 +9,12 @@
 
 #include <stdio.h>
 
+#include <exception>
+
 bool compressor::writeCompressedFile(QByteArray& src, const QString fn)
 {
+    try{
+
     if (fn.isNull())
         return false;
 
@@ -23,7 +27,7 @@ bool compressor::writeCompressedFile(QByteArray& src, const QString fn)
     if (writePtr == NULL)
     {
         qCritical()<<"Write File Open Failed";
-        exit(1);
+        throw std::runtime_error("Write File Open Failed");
     }
 
     LZ4_writeFile_t * lz4Write;
@@ -35,7 +39,7 @@ bool compressor::writeCompressedFile(QByteArray& src, const QString fn)
     if (LZ4F_isError(r))
     {
         qCritical()<<"LZ4f Write File Open Failed";
-        exit(1);
+        throw std::runtime_error("LZ4F Write Open Error");
     }
 
 
@@ -56,7 +60,7 @@ bool compressor::writeCompressedFile(QByteArray& src, const QString fn)
             if (LZ4F_isError(r))
             {
                 qCritical()<<QString("LZ4f write error %1").arg(LZ4F_getErrorName(r));
-                exit(1);
+                throw std::runtime_error("LZ4F Write Error");
             }
 
         }
@@ -69,12 +73,18 @@ bool compressor::writeCompressedFile(QByteArray& src, const QString fn)
     if (LZ4F_isError(r))
     {
         qCritical()<<QString("LZ4f write close error %1").arg(LZ4F_getErrorName(r));
-        exit(1);
+        throw std::runtime_error("LZ4F Write Close Error");
     }
 
     fclose(writePtr);
 
     return true;
+
+    }
+    catch (std::runtime_error)
+    {
+        return false;
+    }
 }
 
 // read a chunk of data at a time into buffer

@@ -30,7 +30,6 @@ set(PROJECT_SOURCES
         admiralselectdialog.h admiralselectdialog.cpp admiralselectdialog.ui
         confirmdialog.h confirmdialog.cpp confirmdialog.ui
         rsc/icons.qrc
-
 )
 
 if(${QT_VERSION_MAJOR} GREATER_EQUAL 6)

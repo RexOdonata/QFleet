@@ -86,7 +86,7 @@ void MainWindow::on_actionNew_triggered()
         else
         {
             QMessageBox msg(this);
-            msg.setText("Couldn't ship data");
+            msg.setText("Couldn't load ship data");
             msg.setWindowTitle("Error");
             msg.exec();
         }
@@ -105,7 +105,7 @@ bool MainWindow::loadMapFromJsonFile(QWidget * parentWindow)
 
     QFleet_Data loadData;
 
-    QString filename = QFileDialog::getOpenFileName(parentWindow, "Select Ship Data", QDir::currentPath(),getExtensionFilter(fileType_shipData()));
+    QString filename = QString("%1%2%3").arg("data",QDir::separator(),"ships.qfs");
 
     QByteArray bytes;
 
@@ -241,7 +241,7 @@ void MainWindow::drawGUIFromListPart(const QFleet_List& list)
     else
     {
         QMessageBox msg(this);
-        msg.setText("Couldn't ship data");
+        msg.setText("Couldn't load ship data");
         msg.setWindowTitle("Error");
         msg.exec();
     }
