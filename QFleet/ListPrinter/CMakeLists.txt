@@ -20,6 +20,7 @@ add_library(ListPrinter SHARED
   NLTemplate.cpp
   listprinter_legacy.h listprinter_legacy.cpp
   listprinter_short.h listprinter_short.cpp
+  listprinter_functions.h listprinter_functions.cpp
   qfp_profilecard.h qfp_profilecard.cpp qfp_profilecard.ui
   qfp_weaponcards.h qfp_weaponcards.cpp qfp_weaponcards.ui
 )

@@ -14,6 +14,9 @@
 
 bool decompressor::readCompressedFile(QByteArray& dest, const QString fn)
 {
+    if (fn.isNull())
+        return false;
+
     FILE * readPtr = NULL;
 
     // open file for binary read

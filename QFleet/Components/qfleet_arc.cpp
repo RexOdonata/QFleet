@@ -1,10 +1,8 @@
 #include "qfleet_arc.h"
 
-const QString QFleet_Arc::label = "arc";
-
 const QString QFleet_Arc::val_FN = "FN";
 const QString QFleet_Arc::val_F = "F";
-const QString QFleet_Arc::val_FS = "FS";
+const QString QFleet_Arc::val_FS = "F/S";
 const QString QFleet_Arc::val_FSl = "F/S(l)";
 const QString QFleet_Arc::val_FSr = "F/S(r)";
 const QString QFleet_Arc::val_FSR = "F/S/R";

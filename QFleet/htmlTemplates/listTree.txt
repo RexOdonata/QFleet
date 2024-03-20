@@ -1,10 +1,11 @@
+{% block listTree %}
 <div id="listTree">
 <ul>
-{% block battlegroup %}
+{% block battlegroupLine %}
 <li>
     <h3>{{ cardName }} - {{ SR }} SR</h3>
 <ul>
-{% block group %}
+{% block groupLine %}
     <li>
         <h4> {{ count }}x {{ shipName }}{{ admiral }} </h4>
     </li>
@@ -14,3 +15,4 @@
 {% endblock %}
 </ul>
 </div>
+{% endblock %}

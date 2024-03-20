@@ -67,6 +67,8 @@ void shipView::loadShip(const QFleet_Ship_Fleet& ship)
 
     ui->costLabel->setText(QString::number(ship.points));
 
+    ui->specialLabel->setText(ship.getSpecialString());
+
     while (ui->weaponTableWidget->rowCount() > 0)
         ui->weaponTableWidget->removeRow(0);
     for (auto& element : ship.weapons)
@@ -104,12 +106,13 @@ void shipView::loadShip(const QFleet_Ship_Fleet& ship)
 
     while (ui->launchTableWidget->rowCount() > 0)
         ui->launchTableWidget->removeRow(0);
+
     for (auto& element : ship.launch)
     {
         auto index = ui->launchTableWidget->rowCount();
         ui->launchTableWidget->insertRow(index);
 
-        QTableWidgetItem * item = new QTableWidgetItem(element.getAssetString());
+        QTableWidgetItem * item = new QTableWidgetItem(element.getDisplayName());
         item->setTextAlignment(Qt::AlignHCenter);
         ui->launchTableWidget->setItem(index, NAME, item);
 
@@ -132,6 +135,22 @@ void shipView::loadShip(const QFleet_Ship_Fleet& ship)
         ui->launchLabel->hide();
         ui->launchTableWidget->hide();
     }
+    else
+    {
+        ui->launchLabel->show();
+        ui->launchTableWidget->show();
+    }
+
+    if (ship.uniqueSpecial.isEmpty())
+    {
+        ui->uniqueSpecialText->setVisible(false);
+    }
+    else
+    {
+        ui->uniqueSpecialText->setHtml(ship.uniqueSpecial);
+        ui->uniqueSpecialText->setVisible(true);
+    }
+
 
 
 }

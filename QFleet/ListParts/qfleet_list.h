@@ -14,7 +14,7 @@ public:
     QFleet_List(QJsonObject);
 
     // used during UI->object encoding
-    QFleet_List(const QString, QFleet_Faction, unsigned int);
+    QFleet_List(const QString, QFleet_Faction, unsigned int, bool valid);
 
     void addCard(QFleet_Battlegroup&);
 
@@ -26,6 +26,8 @@ public:
     faction getFaction() const;
 
     QFleet_Cost getCost() const;
+
+    bool getValid() const;
 
     QVector<QFleet_Battlegroup> getCards() const;
 
@@ -49,10 +51,13 @@ private:
 
     QVector<QFleet_Battlegroup> cards;
 
+    bool validity;
+
     const static QString field_pointsLimit;
     const static QString field_cost;
     const static QString field_cards;
     const static QString field_faction;
+    const static QString field_valid;
 
 };
 

@@ -1,7 +1,5 @@
 #include "qfleet_statid.h"
 
-const QString QFleet_StatID::label="statID";
-
 const QString QFleet_StatID::val_scan="scan";
 const QString QFleet_StatID::val_sig="sig";
 const QString QFleet_StatID::val_thrust="thrust";

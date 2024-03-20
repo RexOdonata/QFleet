@@ -6,16 +6,16 @@
 // Represents a launch profile element of ship stats.
 // Does not contain the actual launch stats
 
-class QFleet_launchProfile : public qft_component<QFleet_launchProfile>
+class QFleet_LaunchProfile : public qft_component<QFleet_LaunchProfile>
 {
-    friend class qft_component<QFleet_launchProfile>;
+    friend class qft_component<QFleet_LaunchProfile>;
 
 public:
-    QFleet_launchProfile(const QString setName);
+    QFleet_LaunchProfile(const QString setName);
 
-    QFleet_launchProfile(QJsonObject in);
+    QFleet_LaunchProfile(QJsonObject in);
 
-    QFleet_launchProfile();
+    QFleet_LaunchProfile();
 
     void setCount(const unsigned int);
 
@@ -41,18 +41,13 @@ public:
         return limited;
     }
 
-    inline QString getAssetString() const
-    {
-        return assetNames;
-    }
+    QVector<QString> getAssetNames() const;
 
-    inline QString getLimString() const
-    {
-        if (limited)
-            return QString("%1").arg(QString::number(limited));
-        else
-            return "-";
-    }
+    QString getDisplayName() const;
+
+    QString getLimString() const;
+
+
 
 protected:
 
@@ -61,9 +56,8 @@ protected:
     bool strike = false;
     unsigned int limited = 0;
 
-    QString assetNames;
+    QVector<QString> assetNames;
 
-    const static QString label;
     const static QString field_count;
     const static QString field_strike;
     const static QString field_limited;

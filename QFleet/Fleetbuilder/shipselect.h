@@ -62,7 +62,7 @@ private:
 
     // UI ELEMENTS
 
-    shipView * shipViewWidget;
+    shipView * shipViewWidget = NULL;
 
     // FXs
 

@@ -27,6 +27,8 @@ private slots:
 
     void on_saveButton_clicked();
 
+    void on_customButton_clicked();
+
 private:
     Ui::Arsenal *ui;
 

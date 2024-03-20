@@ -250,7 +250,9 @@ bool QFLW_List::checkValid() const
 
 QFleet_List QFLW_List::createListPart() const
 {
-    QFleet_List newList(ui->fleetNameEdit->text(), *this->listFaction, this->pointsLimit);
+    bool valid = this->checkValid();
+
+    QFleet_List newList(ui->fleetNameEdit->text(), *this->listFaction, this->pointsLimit, valid);
 
     for (auto& battlegroup : cards)
     {
@@ -290,6 +292,21 @@ QWidget * QFLW_List::getMainWindowPtr() const
 QFLW_List::~QFLW_List()
 {
     delete ui;
+
+    delete pointsStatusWidget;
+
+    delete launchStatusWidget;
+
+    delete pfStatusWidget;
+
+    delete lnStatusWidget;
+
+    delete vgStatusWidget;
+
+    delete flStatusWidget;
+
+    for (auto& ptr : cards)
+            delete ptr;
 }
 
 

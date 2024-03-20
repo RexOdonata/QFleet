@@ -34,24 +34,7 @@ public:
     {
     }
 
-    QFleet_OptType(QJsonObject in) : qft_enum<QFleet_OptType, optType>(in)
-    {
-    }
-
-
 protected:
-
-    QJsonObject impl_toJson()
-    {
-        QJsonObject json;
-        json.insert(label, this->toString());
-        return json;
-    }
-
-    QString impl_getLabel() const
-    {
-        return label;
-    }
 
     QVector<QString> impl_getEnumStrings() const
     {
@@ -70,7 +53,6 @@ protected:
 
 private:
 
-    const static QString label;
     const static QString val_weapon;
     const static QString val_launch;
     const static QString val_stat;

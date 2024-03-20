@@ -3,6 +3,8 @@
 #include "fileTypes.h"
 #include "../Components/qfu_specialrules.h"
 
+#include "windowUtils.h"
+
 Hangar::Hangar(QWidget *parent)
     : QMainWindow(parent)
     , ui(new Ui::Hangar),
@@ -15,7 +17,7 @@ Hangar::Hangar(QWidget *parent)
     {
         qfu_specialRules specialRules;
 
-        for (auto& rule : specialRules.weaponRules)
+        for (auto& rule : specialRules.launchRules)
             ui->special_combo->addItem(rule);
 
     }
@@ -37,6 +39,10 @@ Hangar::Hangar(QWidget *parent)
 Hangar::~Hangar()
 {
     delete ui;
+
+    delete rosterWidget;
+
+    delete specialWidget;
 }
 
 QFleet_LaunchAsset Hangar::saveLaunch()
@@ -89,6 +95,7 @@ QFleet_LaunchAsset Hangar::saveLaunch()
 
     newAsset.factions = factions;
 
+    newAsset.special =specialWidget->getData();
 
     return newAsset;
 }
@@ -102,9 +109,7 @@ void Hangar::on_saveWeapon_button_clicked()
 
 void Hangar::on_loadWeapon_button_clicked()
 {
-    auto launch = rosterWidget->getSelected();
-
-    
+    auto launch = rosterWidget->getSelected();    
 
     if (launch)
     {
@@ -178,7 +183,7 @@ void Hangar::on_specialAdd_button_clicked()
 
 void Hangar::on_specialRemove_button_clicked()
 {
-    specialWidget->remove();
+    specialWidget->clear();
 }
 
 void Hangar::setComboBoxSelection(QComboBox& box, QString item)
@@ -193,13 +198,18 @@ void Hangar::setComboBoxSelection(QComboBox& box, QString item)
 
 void Hangar::on_actionLoad_triggered()
 {
-    rosterWidget->loadFromFile(this, fileType_launchData());
+    QVector<QFleet_LaunchAsset> data;
+
+    loadVectorFromJsonFile(this, data, fileType_launchData());
+
+    rosterWidget->add(data);
 }
 
 
 void Hangar::on_actionSave_triggered()
 {
-    rosterWidget->saveToFile(this, fileType_launchData());
+    auto data = rosterWidget->getData();
+    saveVectorToJsonFile(this, data, fileType_launchData());
 }
 
 

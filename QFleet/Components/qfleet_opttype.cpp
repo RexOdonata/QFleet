@@ -1,6 +1,6 @@
 #include "qfleet_opttype.h"
 
-const QString QFleet_OptType::label ="OptionType";
+
 const QString QFleet_OptType::val_weapon ="weapon";
 const QString QFleet_OptType::val_launch ="launch";
 const QString QFleet_OptType::val_stat ="stat";

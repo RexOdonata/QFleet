@@ -1,7 +1,5 @@
 #include "qfleet_assettype.h"
 
-const QString QFleet_AssetType::label = "LaunchAssetType";
-
 const QString QFleet_AssetType::val_fighter="fighter";
 const QString QFleet_AssetType::val_bomber="bomber";
 const QString QFleet_AssetType::val_torpedo="torpedo";

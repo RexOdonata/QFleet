@@ -35,28 +35,12 @@ public:
     {
     }
 
-    QFleet_Armor(QJsonObject in) : qft_enum<QFleet_Armor, armor>(in)
-    {
-    }
-
     QFleet_Armor()
     {
     }
 
 
-protected:    
-
-    QJsonObject impl_toJson()
-    {
-        QJsonObject json;
-        json.insert(label, this->toString());
-        return json;
-    }
-
-    QString impl_getLabel() const
-    {
-        return label;
-    }
+protected:
 
     armor impl_string_to_enum(const QString in) const
     {
@@ -74,7 +58,7 @@ protected:
     }
 
 private:
-    const static QString label;
+
     const static QString val_2;
     const static QString val_3;
     const static QString val_4;

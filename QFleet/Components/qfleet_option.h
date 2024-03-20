@@ -33,12 +33,12 @@ public:
 
     std::shared_ptr<QVector<QFleet_Weapon>> weaponVecPtr = NULL;
 
-    std::shared_ptr<QFleet_launchProfile> launchProfilePtr = NULL;
+    std::shared_ptr<QFleet_LaunchProfile> launchProfilePtr = NULL;
 
     std::shared_ptr<unsigned int> statBonusPtr = NULL;
     std::shared_ptr<QFleet_StatID> statTypePtr = NULL;
 
-    std::shared_ptr<QString> specialPtr = NULL;
+    std::shared_ptr<QVector<QString>> specialPtr = NULL;
 
 
 
@@ -47,8 +47,6 @@ private:
 
 
     // STRINGS
-
-    const static QString label;
     const static QString field_weapons;
     const static QString field_launchProfile;
     const static QString field_specialRule;

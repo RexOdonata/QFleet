@@ -11,24 +11,12 @@ class qft_enum
 {
 public:
 
-    // creates a json object out of this enum
-    QJsonObject toJson()
-    {
-        return static_cast<T*>(this)->impl_toJson();
-    }
-
-    qft_enum(QJsonObject json)
-    {
-        QString label = static_cast<T*>(this)->impl_getLabel();
-
-        val = static_cast<T*>(this)->impl_string_to_enum(json.value(label).toString());
-    }
-
     QVector<QString> getEnumStrings()
     {
         return static_cast<T*>(this)->impl_getEnumStrings();
     }
 
+    // this is the constructor used to load from  json
     qft_enum(const QString in)
     {
         val = static_cast<T*>(this)->impl_string_to_enum(in);
@@ -41,7 +29,7 @@ public:
     qft_enum() : val(std::nullopt)
     {
 
-    }
+    }   
 
     bool hasVal() const
     {
@@ -65,8 +53,6 @@ public:
             {
                 return static_cast<const T*>(this)->impl_enum_to_string(*val);
             }
-
-
         else
             return "{empty}";
     }
@@ -74,20 +60,6 @@ public:
 protected:
 
     std::optional<B> val;
-
-    QJsonObject impl_toJson()
-    {       
-        qFatal("enum skeleton call to json impl");
-
-        return QJsonObject();
-    }
-
-    QString impl_getLabel()
-    {
-        qFatal("enum skeleton call to label get impl");
-
-        return "whoops";
-    }
 
     QVector<QString> impl_getEnumStrings()
     {
@@ -104,11 +76,6 @@ protected:
     {
         qFatal("enum skeleton call to s2e");
     }
-
-
-
-
-
 
 
 };

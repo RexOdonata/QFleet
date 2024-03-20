@@ -38,10 +38,6 @@ public:
     {
     }
 
-    QFleet_Tonnage(QJsonObject in) : qft_enum<QFleet_Tonnage, tonnage>(in)
-    {
-    }
-
     unsigned int getIntValue() const
     {
         if (val)
@@ -100,18 +96,6 @@ public:
 
 protected:
 
-    QJsonObject impl_toJson()
-    {
-        QJsonObject json;
-        json.insert(label, this->toString());
-        return json;
-    }
-
-    QString impl_getLabel() const
-    {
-        return label;
-    }
-
     QVector<QString> impl_getEnumStrings() const
     {
         return QVector<QString>{val_L,val_L2,val_M,val_H,val_S,val_S2};
@@ -128,7 +112,7 @@ protected:
     }
 
 private:
-    const static QString label;
+
     const static QString val_L;
     const static QString val_L2;
     const static QString val_M;

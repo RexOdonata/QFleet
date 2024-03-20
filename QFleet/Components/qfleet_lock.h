@@ -6,12 +6,13 @@
 
 enum class lock
 {
-    lk2=0,
-    lk3=1,
-    lk4=2,
-    lk5=3,
-    lk6=4,
-    lkX=5
+    lkX=0,
+    lk2=1,
+    lk3=2,
+    lk4=3,
+    lk5=4,
+    lk6=5
+
 };
 
 inline uint qHash(lock key, uint seed)
@@ -36,23 +37,7 @@ public:
     {
     }
 
-    QFleet_Lock(QJsonObject in) : qft_enum<QFleet_Lock, lock>(in)
-    {
-    }
-
-protected:   
-
-    QJsonObject impl_toJson()
-    {
-        QJsonObject json;
-        json.insert(label, this->toString());
-        return json;
-    }
-
-    QString impl_getLabel()
-    {
-        return label;
-    }
+protected:
 
     lock impl_string_to_enum(const QString in) const
     {
@@ -70,7 +55,7 @@ protected:
        }
 
 private:
-    const static QString label;
+
     const static QString val_2;
     const static QString val_3;
     const static QString val_4;

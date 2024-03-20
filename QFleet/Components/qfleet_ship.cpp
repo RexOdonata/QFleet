@@ -16,7 +16,7 @@ const QString QFleet_Ship::field_weapons = "weapons";
 const QString QFleet_Ship::field_launch = "launch";
 
 
-QFleet_Ship::QFleet_Ship(QJsonObject in) : qft_component<QFleet_Ship>(in.value(field_name()).toString())
+QFleet_Ship<T>::QFleet_Ship(QJsonObject in) : qft_component<QFleet_Ship>(in.value(field_name()).toString())
 {
     fieldFromJson(in, field_points, points);
     fieldFromJson(in, field_scan, scan);
@@ -47,12 +47,12 @@ void QFleet_Ship::ShipToJson(QJsonObject& json)
     fieldToJson(json, field_signature,signature);
     fieldToJson(json, field_thrust,thrust);
     fieldToJson(json, field_hull,hull);
-    fieldToJson(json, field_armor, armor);
-    fieldToJson(json, field_passive, passive);
+    enumToJson(json, field_armor, armor);
+    enumToJson(json, field_passive, passive);
     fieldToJson(json,field_PD,PD);
     fieldToJson(json,field_groupL,groupL);
     fieldToJson(json,field_groupH,groupH);
-    fieldToJson(json, field_tonnage, tonnage);
+    enumToJson(json, field_tonnage, tonnage);
     fieldToJson(json,field_special,specialRules);
     fieldToJson(json,field_weapons,weapons);
     fieldToJson(json,field_launch,launch);
@@ -65,12 +65,12 @@ void QFleet_Ship::impl_toJson(QJsonObject& json)
     fieldToJson(json, field_signature,signature);
     fieldToJson(json, field_thrust,thrust);
     fieldToJson(json, field_hull,hull);
-    fieldToJson(json, field_armor, armor);
-    fieldToJson(json, field_passive, passive);
+    enumToJson(json, field_armor, armor);
+    enumToJson(json, field_passive, passive);
     fieldToJson(json,field_PD,PD);
     fieldToJson(json,field_groupL,groupL);
     fieldToJson(json,field_groupH,groupH);
-    fieldToJson(json, field_tonnage, tonnage);
+    enumToJson(json, field_tonnage, tonnage);
     fieldToJson(json,field_special,specialRules);
     fieldToJson(json,field_weapons,weapons);
     fieldToJson(json,field_launch,launch);

@@ -24,6 +24,12 @@ set(PROJECT_SOURCES
         scrapyard.cpp
         scrapyard.ui
         dvsz_widget.h
+        customspecialdialog.h
+        customspecialdialog.cpp
+        customspecialdialog.ui
+        confirmdialog.h
+        confirmdialog.cpp
+        confirmdialog.ui
 )
 
 if(${QT_VERSION_MAJOR} GREATER_EQUAL 6)
@@ -49,7 +55,7 @@ else()
     endif()
 endif()
 
-target_link_libraries(Shipyard PRIVATE Qt${QT_VERSION_MAJOR}::Widgets QF_Components QF_Common)
+target_link_libraries(Shipyard PRIVATE Qt${QT_VERSION_MAJOR}::Widgets QF_Components QF_Common QF_Compression)
 
 set_target_properties(Shipyard PROPERTIES
     MACOSX_BUNDLE_GUI_IDENTIFIER my.example.com

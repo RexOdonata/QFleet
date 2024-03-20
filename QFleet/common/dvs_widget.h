@@ -36,6 +36,8 @@ public:
 
     void setLabel(const QString);
 
+    void setMultiSelect();
+
 
 protected:
 
@@ -162,6 +164,7 @@ class dvs_Widget : public dvs_WidgetBase
     QVector<T> getData() const
     {
         QVector<T> output;
+        output.reserve(data.size());
 
         for (auto& element : data)
             output.push_back(element);
@@ -212,79 +215,7 @@ class dvs_Widget : public dvs_WidgetBase
                 objs.push_back(data[str]);
 
         return objs;
-    }
-
-    void loadFromFile(QWidget * parent, const QString fileType)
-    {
-        data.clear();
-
-        QString filename = QFileDialog::getOpenFileName(parent, "open content", QDir::currentPath(), getExtensionFilter(fileType));
-
-        QFile file(filename);
-
-        if (file.open(QIODevice::ReadOnly | QIODevice::Text))
-        {
-            QByteArray bytes = file.readAll();
-
-            file.close();
-
-            QJsonParseError err;
-
-            QJsonDocument jsonData = QJsonDocument::fromJson(bytes, &err);
-
-            QJsonObject wrapperObj = jsonData.object();
-
-            if (wrapperObj.contains(fileType))
-            {
-                QJsonArray objects = wrapperObj[fileType].toArray();
-
-                for (auto object : objects)
-                {
-                    T newObj(object.toObject());
-                    data.insert(newObj.getName(), newObj);
-                }
-            }
-            else
-            {
-                throw std::invalid_argument("Invalid File Type");
-            }
-
-        }
-
-        refresh();
-    }
-
-    void saveToFile(QWidget * parent, const QString fileType)
-    {
-
-
-        QString filename = QFileDialog::getSaveFileName(parent, "save content", QDir::currentPath(), getExtensionFilter(fileType));
-
-        QFile file(filename);
-
-        QJsonArray jsonData;
-
-        for (auto& element : data)
-        {
-            jsonData.append(QJsonValue(element.toJson()));
-
-        }
-
-        QJsonObject wrapperObj;
-
-        wrapperObj.insert(fileType, jsonData);
-
-        if (file.open(QIODevice::WriteOnly | QIODevice::Text | QIODevice::Truncate))
-        {
-            QJsonDocument json(wrapperObj);
-
-            QByteArray bytes = json.toJson(QJsonDocument::Indented);
-
-            QTextStream istream(&file);
-            istream << bytes;
-            file.close();
-        }
-    }
+    }    
 
     protected:
 

@@ -1,4 +1,4 @@
-<html>
+{% block listHeader %}
 <div id="listHeader">
 <h2>Dropfleet Commander: {{ listName }}</h2>
 <table style="height: 60px;" border="1" width="567">
@@ -20,7 +20,4 @@
 </tbody>
 </table>
 </div>
-<p>&nbsp;</p>
-{% include htmlTemplates/shortListTree.txt %}
-{% include htmlTemplates/shipProfile.txt %}
-</html>
+{% endblock %}

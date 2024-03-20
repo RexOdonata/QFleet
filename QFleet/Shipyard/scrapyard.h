@@ -48,7 +48,7 @@ private:
 
     dvs_Widget<QFleet_LaunchAsset> * launchAssetWidget;
 
-    dvs_Widget<QFleet_launchProfile> * launchProfileWidget;
+    dvs_Widget<QFleet_LaunchProfile> * launchProfileWidget;
 
     dvs_Widget<QString> * specialWidget;
 

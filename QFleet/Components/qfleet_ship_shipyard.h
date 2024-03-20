@@ -28,14 +28,14 @@ public:
     unsigned int minOptions;
     unsigned int maxBroadsides;
 
+    static void shipArrayToJson(QJsonObject&, const QString, QVector<QFleet_Ship_Shipyard>&);
+    static void shipArrayFromJson(QJsonObject&, const QString, QVector<QFleet_Ship_Shipyard>&);
+
 
 protected:
 
 
     void impl_toJson(QJsonObject& json);
-
-    const static QString label;
-    const static QString field_admiralDiscount;
 
     const static QString field_options;
     const static QString field_factions;

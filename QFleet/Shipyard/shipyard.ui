@@ -18,7 +18,7 @@
     <item row="0" column="0">
      <layout class="QHBoxLayout" name="horizontalLayout">
       <item>
-       <layout class="QVBoxLayout" name="verticalLayout_5">
+       <layout class="QVBoxLayout" name="verticalLayout_5" stretch="1,1,1,1,0,4">
         <item>
          <layout class="QVBoxLayout" name="statBox">
           <item>
@@ -52,43 +52,60 @@
          </layout>
         </item>
         <item>
+         <layout class="QHBoxLayout" name="horizontalLayout_2">
+          <item>
+           <widget class="QCheckBox" name="resistanceCheck">
+            <property name="text">
+             <string>Resistance</string>
+            </property>
+           </widget>
+          </item>
+          <item>
+           <widget class="QCheckBox" name="shaltariCheck">
+            <property name="text">
+             <string>Shaltari</string>
+            </property>
+           </widget>
+          </item>
+          <item>
+           <widget class="QCheckBox" name="phrCheck">
+            <property name="text">
+             <string>PHR</string>
+            </property>
+           </widget>
+          </item>
+          <item>
+           <widget class="QCheckBox" name="scourgeCheck">
+            <property name="text">
+             <string>Scourge</string>
+            </property>
+           </widget>
+          </item>
+          <item>
+           <widget class="QCheckBox" name="ucmCheck">
+            <property name="text">
+             <string>UCM</string>
+            </property>
+           </widget>
+          </item>
+         </layout>
+        </item>
+        <item>
          <layout class="QHBoxLayout" name="horizontalLayout_14">
           <item>
-           <layout class="QVBoxLayout" name="verticalLayout_4">
+           <layout class="QVBoxLayout" name="verticalLayout_4" stretch="1,2">
+            <property name="spacing">
+             <number>2</number>
+            </property>
             <item>
-             <widget class="QCheckBox" name="ucmCheck">
+             <widget class="QLabel" name="label_20">
               <property name="text">
-               <string>UCM</string>
+               <string>Unique Special: paste HTML here</string>
               </property>
              </widget>
             </item>
             <item>
-             <widget class="QCheckBox" name="scourgeCheck">
-              <property name="text">
-               <string>Scourge</string>
-              </property>
-             </widget>
-            </item>
-            <item>
-             <widget class="QCheckBox" name="phrCheck">
-              <property name="text">
-               <string>PHR</string>
-              </property>
-             </widget>
-            </item>
-            <item>
-             <widget class="QCheckBox" name="shaltariCheck">
-              <property name="text">
-               <string>Shaltari</string>
-              </property>
-             </widget>
-            </item>
-            <item>
-             <widget class="QCheckBox" name="resistanceCheck">
-              <property name="text">
-               <string>Resistance</string>
-              </property>
-             </widget>
+             <widget class="QTextEdit" name="uniqueSpecialTextBox"/>
             </item>
            </layout>
           </item>
@@ -304,36 +321,51 @@
         <item>
          <layout class="QHBoxLayout" name="periBox">
           <item>
-           <layout class="QVBoxLayout" name="weaponBox">
+           <layout class="QVBoxLayout" name="weaponBox" stretch="1,3">
             <item>
              <layout class="QHBoxLayout" name="horizontalLayout_3">
               <item>
-               <widget class="QPushButton" name="newWeaponButton">
-                <property name="text">
-                 <string>New</string>
-                </property>
-               </widget>
+               <layout class="QVBoxLayout" name="verticalLayout_15">
+                <item>
+                 <widget class="QPushButton" name="newWeaponButton">
+                  <property name="text">
+                   <string>New</string>
+                  </property>
+                 </widget>
+                </item>
+                <item>
+                 <widget class="QPushButton" name="editWeaponButton">
+                  <property name="text">
+                   <string>Edit</string>
+                  </property>
+                 </widget>
+                </item>
+                <item>
+                 <widget class="QPushButton" name="copyWeaponButton">
+                  <property name="text">
+                   <string>Copy</string>
+                  </property>
+                 </widget>
+                </item>
+               </layout>
               </item>
               <item>
-               <widget class="QPushButton" name="copyWeaponButton">
-                <property name="text">
-                 <string>Copy</string>
-                </property>
-               </widget>
-              </item>
-              <item>
-               <widget class="QPushButton" name="editWeaponButton">
-                <property name="text">
-                 <string>Edit</string>
-                </property>
-               </widget>
-              </item>
-              <item>
-               <widget class="QPushButton" name="deleteWeaponButton">
-                <property name="text">
-                 <string>Delete</string>
-                </property>
-               </widget>
+               <layout class="QVBoxLayout" name="verticalLayout_16">
+                <item>
+                 <widget class="QPushButton" name="deleteWeaponButton">
+                  <property name="text">
+                   <string>Delete</string>
+                  </property>
+                 </widget>
+                </item>
+                <item>
+                 <widget class="QPushButton" name="clearWeaponsButton">
+                  <property name="text">
+                   <string>Clear</string>
+                  </property>
+                 </widget>
+                </item>
+               </layout>
               </item>
              </layout>
             </item>
@@ -350,22 +382,33 @@
            </widget>
           </item>
           <item>
-           <layout class="QVBoxLayout" name="specialBox">
+           <layout class="QVBoxLayout" name="specialBox" stretch="2,1,4">
             <item>
              <layout class="QHBoxLayout" name="horizontalLayout_8">
               <item>
-               <widget class="QPushButton" name="addSpecialButton">
-                <property name="text">
-                 <string>Add</string>
-                </property>
-               </widget>
-              </item>
-              <item>
-               <widget class="QPushButton" name="deleteSpecialCombo">
-                <property name="text">
-                 <string>Delete</string>
-                </property>
-               </widget>
+               <layout class="QVBoxLayout" name="verticalLayout_17">
+                <item>
+                 <widget class="QPushButton" name="addSpecialButton">
+                  <property name="text">
+                   <string>Add</string>
+                  </property>
+                 </widget>
+                </item>
+                <item>
+                 <widget class="QPushButton" name="deleteSpecialCombo">
+                  <property name="text">
+                   <string>Delete</string>
+                  </property>
+                 </widget>
+                </item>
+                <item>
+                 <widget class="QPushButton" name="customSpecialRuleButton">
+                  <property name="text">
+                   <string>Custom</string>
+                  </property>
+                 </widget>
+                </item>
+               </layout>
               </item>
               <item>
                <widget class="QSpinBox" name="specialNumSpin"/>
@@ -401,7 +444,7 @@
           <item>
            <widget class="QPushButton" name="launchAddButton">
             <property name="text">
-             <string>Add</string>
+             <string>Add Selected</string>
             </property>
            </widget>
           </item>
@@ -528,22 +571,25 @@
       <item>
        <layout class="QVBoxLayout" name="verticalLayout">
         <item>
-         <layout class="QHBoxLayout" name="horizontalLayout_2">
-          <item>
-           <widget class="QPushButton" name="saveShipButton">
-            <property name="text">
-             <string>Save</string>
-            </property>
-           </widget>
-          </item>
-          <item>
-           <widget class="QPushButton" name="loadShipButton">
-            <property name="text">
-             <string>Load</string>
-            </property>
-           </widget>
-          </item>
-         </layout>
+         <widget class="QPushButton" name="saveShipButton">
+          <property name="text">
+           <string>Save</string>
+          </property>
+         </widget>
+        </item>
+        <item>
+         <widget class="QPushButton" name="deleteShipButton">
+          <property name="text">
+           <string>Delete</string>
+          </property>
+         </widget>
+        </item>
+        <item>
+         <widget class="QPushButton" name="loadShipButton">
+          <property name="text">
+           <string>Load</string>
+          </property>
+         </widget>
         </item>
         <item>
          <layout class="QVBoxLayout" name="shipRosterLayout"/>

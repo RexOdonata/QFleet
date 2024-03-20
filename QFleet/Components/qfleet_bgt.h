@@ -33,10 +33,6 @@ public:
     {
     }
 
-    QFleet_BGT(QJsonObject in) : qft_enum<QFleet_BGT, bgt>(in)
-    {
-    }
-
     QFleet_BGT()
     {
     }
@@ -103,18 +99,6 @@ public:
 protected:
 
 
-    QJsonObject impl_toJson()
-    {
-        QJsonObject json;
-        json.insert(label, this->toString());
-        return json;
-    }
-
-    QString impl_getLabel() const
-    {
-        return label;
-    }
-
     bgt impl_string_to_enum(const QString in) const
     {
         return s2e[in];
@@ -134,7 +118,6 @@ protected:
 
 private:
 
-    const static QString label;
     const static QString val_PF;
     const static QString val_LN;
     const static QString val_VG;

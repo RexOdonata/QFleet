@@ -25,11 +25,22 @@ inline const QString getExtensionFilter(const QString in)
         return "QFleet List (*.dfc)";
     else if (in==fileType_shipData())
         return "QFleet Ships (*.qfs)";
-    else if (in==fileType_shipData())
+    else if (in==fileType_launchData())
         return "QFleet Launch (*.qfl)";
     else
         return "";
+}
 
+inline const QString getExtension(const QString in)
+{
+    if (in==fileType_listData())
+        return "*.dfc";
+    else if (in==fileType_shipData())
+        return "*.qfs";
+    else if (in==fileType_launchData())
+        return "*.qfl";
+    else
+        return "";
 }
 
 

@@ -34,29 +34,12 @@ public:
 
     }
 
-    QFleet_StatID(QJsonObject in) : qft_enum<QFleet_StatID, statID>(in)
-    {
-
-    }
-
     QFleet_StatID()
     {
 
     }
 
 protected:
-
-    QJsonObject impl_toJson()
-    {
-        QJsonObject json;
-        json.insert(label, this->toString());
-        return json;
-    }
-
-    QString impl_getLabel() const
-    {
-        return label;
-    }
 
     statID impl_string_to_enum(const QString in) const
     {
@@ -75,7 +58,6 @@ protected:
 
 private:
 
-    const static QString label;
     const static QString val_scan;
     const static QString val_sig;
     const static QString val_thrust;

@@ -1,6 +1,5 @@
 #include "qfleet_tonnage.h"
 
-const QString QFleet_Tonnage::label = "tonnage";
 const QString QFleet_Tonnage::val_L = "L";
 const QString QFleet_Tonnage::val_L2 = "L2";
 const QString QFleet_Tonnage::val_M = "M";

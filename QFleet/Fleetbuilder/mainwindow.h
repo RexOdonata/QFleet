@@ -11,6 +11,8 @@
 #include "qflw_list.h"
 #include "qflw_battlegroup.h"
 
+#include "../Components/qfleet_launchasset.h"
+
 QT_BEGIN_NAMESPACE
 namespace Ui { class MainWindow; }
 QT_END_NAMESPACE
@@ -69,6 +71,7 @@ private:
     unsigned int pointsLimit;
 
     QMap<QString,QFleet_Ship_Shipyard> allShipData;
+    QVector<QFleet_LaunchAsset> launchData;
 
     // FXs
 
@@ -79,7 +82,7 @@ private:
 
     void loadShipData();
 
-    bool loadMapFromJsonFile(QWidget * parentWindow, QMap<QString, QFleet_Ship_Shipyard>& data);
+    bool loadMapFromJsonFile(QWidget * parentWindow);
 
     bool loadListFromFile();
 

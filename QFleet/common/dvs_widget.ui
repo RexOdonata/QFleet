@@ -38,7 +38,11 @@
       <layout class="QHBoxLayout" name="factionFilterLayout"/>
      </item>
      <item>
-      <widget class="QTreeView" name="treeView"/>
+      <widget class="QTreeView" name="treeView">
+       <property name="selectionMode">
+        <enum>QAbstractItemView::SingleSelection</enum>
+       </property>
+      </widget>
      </item>
     </layout>
    </item>

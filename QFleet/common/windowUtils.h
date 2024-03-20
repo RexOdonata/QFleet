@@ -11,96 +11,44 @@
 
 #include <exception>
 
+#include "fileTypes.h"
 
+#include "../compression/decompressor.h"
+#include "../compression/compressor.h"
 
-namespace{
-    template<typename T>
-    struct listModel_Vector_pair
-    {
-        QVector<T> * vec;
-        QStringListModel * listModel;
-        QListView * listView;
-        void refresh();
-        void link(QWidget *, QListView *);
-    };
-
-    template<typename T>
-    void listModel_Vector_pair<T>::refresh()
-    {
-        if (vec && listModel)
-        {
-            QStringList list;
-
-            for (auto& element : *vec)
-            {
-                list.push_back(element.getName());
-            }
-
-            listModel->setStringList(list);
-        }
-    }
-
-    template<typename T>
-    void listModel_Vector_pair<T>::link(QWidget * parent,QListView * set_listView)
-    {
-        listModel = new QStringListModel(parent);
-        listView = set_listView;
-        listView->setModel(listModel);
-
-
-    }
-
-    template<>
-    void listModel_Vector_pair<QString>::refresh()
-    {
-        if (vec && listModel)
-        {
-            QStringList list;
-
-            for (auto& element : *vec)
-            {
-                list.push_back(element);
-            }
-
-            listModel->setStringList(list);
-        }
-    }
-
+namespace
+{
     template<typename T>
     void loadVectorFromJsonFile(QWidget * parentWindow, QVector<T>& vec, const QString fileType)
     {
         vec.clear();
 
-        QString filename = QFileDialog::getOpenFileName(parentWindow, "open content", QDir::currentPath());
+        QString filename = QFileDialog::getOpenFileName(parentWindow, "open content", QDir::currentPath(), getExtensionFilter(fileType));
 
-            QFile file(filename);
+        QByteArray data;
 
-            if (file.open(QIODevice::ReadOnly | QIODevice::Text))
+        if (decompressor::readCompressedFile(data,filename))
+        {
+            QJsonParseError err;
+
+            QJsonDocument jsonData = QJsonDocument::fromJson(data, &err);
+
+            QJsonObject wrapperObj = jsonData.object();
+
+            if (wrapperObj.contains(fileType))
             {
-                QByteArray data = file.readAll();
+                QJsonArray objects = wrapperObj[fileType].toArray();
 
-                file.close();
-
-                QJsonParseError err;
-
-                QJsonDocument jsonData = QJsonDocument::fromJson(data, &err);
-
-                QJsonObject wrapperObj = jsonData.object();
-
-                if (wrapperObj.contains(fileType))
+                for (auto object : objects)
                 {
-                    QJsonArray objects = wrapperObj[fileType].toArray();
-
-                    for (auto object : objects)
-                    {
-                        T obj(object.toObject());
-                        vec.push_back(obj);
-                    }
+                    T obj(object.toObject());
+                    vec.push_back(obj);
                 }
-                else
-                {
-                    throw std::invalid_argument("Invalid File Type");
-                }
+            }
+            else
+            {
+                throw std::invalid_argument("Invalid File Type");
+            }
 
         }
     }
@@ -110,15 +58,12 @@ namespace{
     {
         data.clear();
 
-        QString filename = QFileDialog::getOpenFileName(parentWindow, "open content", QDir::currentPath());
+        QString filename = QFileDialog::getOpenFileName(parentWindow, "open content", QDir::currentPath(), getExtensionFilter(fileType));
 
-        QFile file(filename);
+        QByteArray bytes;
 
-        if (file.open(QIODevice::ReadOnly | QIODevice::Text))
+        if (decompressor::readCompressedFile(bytes, filename))
         {
-            QByteArray bytes = file.readAll();
-
-            file.close();
 
             QJsonParseError err;
 
@@ -147,9 +92,7 @@ namespace{
     template<typename T>
     void saveVectorToJsonFile(QWidget * parentWindow, QVector<T>& vec, const QString fileType)
     {
-        QString filename = QFileDialog::getSaveFileName(parentWindow, "save content", QDir::currentPath());
-
-        QFile file(filename);
+        QString filename = QFileDialog::getSaveFileName(parentWindow, "save content", QDir::currentPath(), getExtensionFilter(fileType));
 
         QJsonArray jsonData;
 
@@ -163,55 +106,40 @@ namespace{
 
         wrapperObj.insert(fileType, jsonData);
 
-        if (file.open(QIODevice::WriteOnly | QIODevice::Text | QIODevice::Truncate))
-        {
-            QJsonDocument json(wrapperObj);
+        QJsonDocument json(wrapperObj);
 
-            QByteArray bytes = json.toJson(QJsonDocument::Indented);
+        QByteArray bytes = json.toJson(QJsonDocument::Indented);
 
-            QTextStream istream(&file);
-            istream << bytes;
-            file.close();
-        }
+        compressor::writeCompressedFile(bytes,filename);
     }
 
 
     template<typename T>
     void saveObjectToJsonFile(QWidget * parentWindow, T& obj, const QString fileType)
     {
-        QString filename = QFileDialog::getSaveFileName(parentWindow, "save content", QDir::currentPath());
-
-        QFile file(filename);
+        QString filename = QFileDialog::getSaveFileName(parentWindow, "save content", QDir::currentPath(), getExtensionFilter(fileType));
 
         QJsonObject wrapperObj;
 
         wrapperObj.insert(fileType, obj.toJson());
 
-        if (file.open(QIODevice::WriteOnly | QIODevice::Text | QIODevice::Truncate))
-        {
-            QJsonDocument json(wrapperObj);
+        QJsonDocument json(wrapperObj);
 
-            QByteArray bytes = json.toJson(QJsonDocument::Indented);
+        QByteArray bytes = json.toJson(QJsonDocument::Indented);
 
-            QTextStream istream(&file);
-            istream << bytes;
-            file.close();
-        }
+        compressor::writeCompressedFile(bytes,filename);
 
     }
 
     template<typename T>
     void loadObjectFromJsonFile(QWidget * parentWindow, T& obj, const QString fileType)
     {
-        QString filename = QFileDialog::getOpenFileName(parentWindow, "open content", QDir::currentPath());
+        QString filename = QFileDialog::getOpenFileName(parentWindow, "open content", QDir::currentPath(), getExtensionFilter(fileType));
 
-        QFile file(filename);
+        QByteArray data;
 
-        if (file.open(QIODevice::ReadOnly | QIODevice::Text))
+        if (decompressor::readCompressedFile(data,filename))
         {
-            QByteArray data = file.readAll();
-
-            file.close();
 
             QJsonParseError err;
 
@@ -234,8 +162,5 @@ namespace{
 
     }
 
-
-
-} // end of namespace
-
+}
 #endif // WINDOWUTILS_H
