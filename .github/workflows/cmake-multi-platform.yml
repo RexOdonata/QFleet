@@ -4,9 +4,9 @@ name: Build Validation
 
 on:
   push:
-    branches: [ "main" ]
+    branches: [ "buildAction" ]
   pull_request:
-    branches: [ "main" ]
+    branches: [ "buildAction" ]
 
 jobs:
   build:
