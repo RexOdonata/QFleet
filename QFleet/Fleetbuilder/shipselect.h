@@ -22,7 +22,12 @@ public:
     explicit shipSelect(QWidget *parent = nullptr, const QMap<QString, QFleet_Ship_Shipyard> * shipData = NULL);
     ~shipSelect();
 
-    std::optional<QFleet_Ship_Fleet> getSelectedShip() const;
+signals:
+
+    void signalSendShip(QFleet_Ship_Fleet&);
+
+    void signalResetShip(const QString);
+
 
 public slots:
 
@@ -59,6 +64,10 @@ private:
     bool valid = false;
 
     QString customNameRx="";
+
+    // CONSTS
+
+    const QString selectMinOptionsMsg="Selected ship requires options";
 
     // UI ELEMENTS
 

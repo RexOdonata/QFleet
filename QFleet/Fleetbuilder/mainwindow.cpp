@@ -36,6 +36,8 @@ MainWindow::MainWindow(QWidget *parent)
 {
     ui->setupUi(this);
 
+    setSelectionLabels("");
+
 }
 
 MainWindow::~MainWindow()
@@ -62,6 +64,7 @@ void MainWindow::on_actionNew_triggered()
 
     listInit data;
     initListDialog * newListData = new initListDialog(this,&data);
+
 
     newListData->setAttribute(Qt::WA_DeleteOnClose);
 
@@ -102,6 +105,8 @@ bool MainWindow::loadMapFromJsonFile(QWidget * parentWindow)
     allShipData.clear();
 
     launchData.clear();
+
+    selectedShip.reset();
 
     QFleet_Data loadData;
 
@@ -257,6 +262,10 @@ void MainWindow::on_shipMenuButton_clicked()
         shipSelectDialog = new shipSelect(this, &allShipData);
         shipSelectDialog->setAttribute(Qt::WA_DeleteOnClose);
 
+        connect(shipSelectDialog, &shipSelect::signalSendShip, this, &MainWindow::slotShipSet);
+
+        connect(shipSelectDialog, &shipSelect::signalResetShip, this, &MainWindow::slotShipReset);
+
         shipSelectDialog->show();
     }
 }
@@ -264,30 +273,17 @@ void MainWindow::on_shipMenuButton_clicked()
 void MainWindow::slotShipPull(QFLW_Battlegroup * cardPtr)
 {
 
-
-    if ( shipSelectDialog.isNull() )
+    if (!selectedShip.has_value())
     {
         QMessageBox msg(this);
-        msg.setText("Select a ship to add in the Ship Menu");
+        msg.setText("No valid ship selected \n Make a selection in the ship menu.");
         msg.exec();
-    }
-    else if (!shipSelectDialog.isNull() && !shipSelectDialog->getSelectedShip().has_value())
-    {
-        QMessageBox msg(this);
-        msg.setText("Select options for current ship");
-        msg.exec();
-    }
-    else if (!shipSelectDialog.isNull() && shipSelectDialog->getSelectedShip().has_value())
-    {        
-        QFleet_Ship_Fleet selectedShip = *shipSelectDialog->getSelectedShip();
-        cardPtr->recieveSelectedShip(selectedShip);
     }
     else
-    {
-        QMessageBox msg(this);
-        msg.setText("Error: Unknown ship select state");
-        msg.exec();
-    }
+
+        cardPtr->recieveSelectedShip(selectedShip.value());
+
+
 }
 
 
@@ -824,5 +820,39 @@ void MainWindow::on_actionProfile_Cards_triggered()
         msg.setWindowTitle("Error");
         msg.exec();
     }
+}
+
+void MainWindow::setSelectionLabels(const QString str)
+{
+    if (str.isEmpty())
+    {
+        ui->selectedShipLabel->setText("No Selected Ship");
+        ui->selectedShipNameLabel->setVisible(false);
+    }
+    else if (str.isEmpty() && !selectedShip.has_value())
+    {
+        ui->selectedShipLabel->setText(str);
+        ui->selectedShipNameLabel->setVisible(false);
+    }
+    else
+    {
+        ui->selectedShipLabel->setText("Selected Ship:");
+        ui->selectedShipNameLabel->setVisible(true);
+        ui->selectedShipNameLabel->setText(str);
+    }
+}
+
+void MainWindow::slotShipSet(QFleet_Ship_Fleet& ship)
+{
+    selectedShip = ship;
+
+    setSelectionLabels(ship.name);
+}
+
+void MainWindow::slotShipReset(const QString str)
+{
+    selectedShip.reset();
+
+    setSelectionLabels(str);
 }
 

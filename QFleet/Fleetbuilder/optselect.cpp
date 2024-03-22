@@ -76,6 +76,8 @@ optSelect::optSelect(QWidget *parent, const QFleet_Ship_Shipyard * refShip, QVec
         ui->optionTableWidget->setItem(index,COST,item);
     }
     ui->optionTableWidget->resizeColumnToContents(0);
+
+    updateCounts();
 }
 
 // check how many total options are selected and update counts, do same for broadside count

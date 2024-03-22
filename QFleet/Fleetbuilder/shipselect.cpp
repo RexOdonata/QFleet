@@ -3,6 +3,8 @@
 
 #include "optselect.h"
 
+#include <QMessageBox>
+
 shipSelect::shipSelect(QWidget *parent, const QMap<QString,QFleet_Ship_Shipyard> * setShipData) :
     QDialog(parent),
     ui(new Ui::shipSelect),
@@ -113,14 +115,6 @@ shipSelect::~shipSelect()
     delete ui;
 }
 
-std::optional<QFleet_Ship_Fleet> shipSelect::getSelectedShip() const
-{
-    if (valid)
-            return ship;
-    else
-            return {};
-}
-
 // given the selected ship, load the ship view andset that ship to be selected
 void shipSelect::on_treeView_activated(const QModelIndex &index)
 {
@@ -147,11 +141,15 @@ void shipSelect::selectShip(QString shipName)
         {
             this->valid = true;
             ui->validCheck->setChecked(Qt::Checked);
+            emit signalSendShip(fleetShip);
+            ui->selectOptionsButton->setEnabled(false);
         }
         else
         {
             this->valid = false;
             ui->validCheck->setChecked(Qt::Unchecked);
+            emit signalResetShip(selectMinOptionsMsg);
+            ui->selectOptionsButton->setEnabled(true);
         }
 
 
@@ -288,11 +286,15 @@ void shipSelect::on_selectOptionsButton_clicked()
                 this->ship = fleetShip;
                 this->valid = true;
                 ui->validCheck->setChecked(Qt::Checked);
+
+                emit signalSendShip(fleetShip);
+
             }
             else
             {
                 this->valid = false;
                 ui->validCheck->setChecked(Qt::Unchecked);
+                emit signalResetShip("selectMinOptionsMsg");
             }
     }
 }

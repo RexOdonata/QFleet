@@ -30,6 +30,10 @@ public:
 public slots:
     void slotShipPull(QFLW_Battlegroup *);
 
+    void slotShipSet(QFleet_Ship_Fleet&);
+
+    void slotShipReset(const QString);
+
 
 private slots:
     void on_actionNew_triggered();   
@@ -73,6 +77,8 @@ private:
     QMap<QString,QFleet_Ship_Shipyard> allShipData;
     QVector<QFleet_LaunchAsset> launchData;
 
+    std::optional<QFleet_Ship_Fleet> selectedShip;
+
     // FXs
 
 
@@ -101,6 +107,8 @@ private:
     bool writeHTML_Short();
 
     bool checkListValidity();
+
+    void setSelectionLabels(const QString);
 
 
 
