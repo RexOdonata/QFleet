@@ -6,7 +6,7 @@ set(CMAKE_AUTORCC ON)
 
 
 add_library(
-    LZ4 SHARED
+    LZ4 STATIC
     lz4.c
     lz4.h
     lz4file.h

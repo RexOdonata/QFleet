@@ -1,5 +1,5 @@
 add_library(
-    QF_Common SHARED
+    QF_Common STATIC
     dvs_widget.h
     dvs_widget.cpp
     dvs_widget.ui

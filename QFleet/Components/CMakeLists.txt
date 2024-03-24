@@ -11,7 +11,7 @@ set(CMAKE_CXX_STANDARD_REQUIRED ON)
 find_package(QT NAMES Qt6 Qt5 REQUIRED COMPONENTS Core)
 find_package(Qt${QT_VERSION_MAJOR} REQUIRED COMPONENTS Core)
 
-add_library(QF_Components SHARED
+add_library(QF_Components STATIC
   qft_component.h
   qft_enum.h
   qfleet_tonnage.h qfleet_tonnage.cpp

@@ -14,7 +14,7 @@ find_package(QT NAMES Qt6 Qt5 REQUIRED COMPONENTS Core)
 find_package(Qt${QT_VERSION_MAJOR} REQUIRED COMPONENTS Core)
 
 add_library(
-    QF_Compression  SHARED
+    QF_Compression  STATIC
     compressor.h
     compressor.cpp
     decompressor.h

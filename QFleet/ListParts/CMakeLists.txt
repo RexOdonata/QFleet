@@ -13,7 +13,7 @@ set(CMAKE_CXX_STANDARD_REQUIRED ON)
 find_package(QT NAMES Qt6 Qt5 REQUIRED COMPONENTS Core)
 find_package(Qt${QT_VERSION_MAJOR} REQUIRED COMPONENTS Core)
 
-add_library(QF_ListParts SHARED
+add_library(QF_ListParts STATIC
   qfleet_cost.h qfleet_cost.cpp
   qfleet_group.h qfleet_group.cpp
   qfleet_battlegroup.h qfleet_battlegroup.cpp

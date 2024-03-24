@@ -116,14 +116,6 @@ shipSelect::~shipSelect()
 }
 
 // given the selected ship, load the ship view andset that ship to be selected
-void shipSelect::on_treeView_activated(const QModelIndex &index)
-{
-    QString shipName = shipTreeModel->itemFromIndex(index)->text();
-
-    ui->shipSearchEdit->clear();
-
-    selectShip(shipName);
-}
 
 void shipSelect::selectShip(QString shipName)
 {
@@ -241,7 +233,11 @@ QFleet_Ship_Fleet shipSelect::createShip(const QFleet_Ship_Shipyard& shipSrc, QV
 
 void shipSelect::on_treeView_clicked(const QModelIndex &index)
 {
-    // this is just here to stop a compilation error, resetting moc files is annoying
+    QString shipName = shipTreeModel->itemFromIndex(index)->text();
+
+    ui->shipSearchEdit->clear();
+
+    selectShip(shipName);
 }
 
 bool shipSelect::checkMinOpts(const QFleet_Ship_Shipyard& ship)
