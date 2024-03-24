@@ -245,7 +245,10 @@ bool QFLW_List::checkValid() const
     if (ui->cardOverweightWarnLabel->isVisible())
         return false;
 
-    if (ui->minCardsWarnLabel->isVisible())
+    if (!checkMinimumcards())
+        return false;
+
+    if (cards.size() > maxBattleGroups)
         return false;
 
     for (auto card : cards)
@@ -253,6 +256,8 @@ bool QFLW_List::checkValid() const
         if (!card->validityCheck())
             return false;
     }
+
+
 
     return true;
 }
