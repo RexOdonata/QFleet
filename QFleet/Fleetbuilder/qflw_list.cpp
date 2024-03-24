@@ -175,6 +175,16 @@ void QFLW_List::updateValidityLabels()
         }
         else
             ui->minCardsWarnLabel->setVisible(false);
+
+        if (cards.size() > maxBattleGroups)
+        {
+            QString cardWarning = QString("!: Too many battlegroups, max is %1").arg(QString::number(maxBattleGroups));
+
+            ui->tooManyBattlegroupsLabel->setVisible(true);
+            ui->tooManyBattlegroupsLabel->setText(cardWarning);
+        }
+        else
+            ui->tooManyBattlegroupsLabel->setVisible(false);
     }
 
     {
