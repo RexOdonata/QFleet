@@ -15,6 +15,7 @@
 #include "confirmdialog.h"
 
 #include <iostream>
+#include <QDate>
 
 
 Shipyard::Shipyard(QWidget *parent)
@@ -178,13 +179,17 @@ void Shipyard::on_actionLoad_triggered()
 
     launchSelectWidget->add(data.launchData);
 
+    ui->versionEdit->setText(data.getVersionStr());
+
     shipWidget->manualRefresh();
 }
 
 
 void Shipyard::on_actionSave_triggered()
 {
-    QFleet_Data data;
+    QString verStr = ui->versionEdit->text();
+
+    QFleet_Data data(QDateTime::currentDateTime().date().toString(),verStr);
 
     data.shipData = shipWidget->getData();
 
