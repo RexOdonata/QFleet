@@ -94,7 +94,7 @@ void MainWindow::on_actionNew_triggered()
     else
     {
         QMessageBox msg(this);
-        msg.setText("Couldn't load ship data");
+        msg.setText("Invalid list parameters");
         msg.setWindowTitle("Error");
         msg.exec();
     }
