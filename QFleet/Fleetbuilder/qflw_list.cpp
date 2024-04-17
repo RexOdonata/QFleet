@@ -129,6 +129,7 @@ void QFLW_List::updateCardLimits()
 bool QFLW_List::checkMinimumcards() const
 {
     unsigned int minL = 1;
+
     if (pointsLimit < 1000)
         minL = 0;
 
