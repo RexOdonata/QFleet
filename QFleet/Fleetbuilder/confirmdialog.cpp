@@ -28,4 +28,3 @@ void confirmDialog::setMsg(const QString msg)
 {
     ui->msgLabel->setText(msg);
 }
-

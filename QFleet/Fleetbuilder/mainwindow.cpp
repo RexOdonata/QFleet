@@ -5,7 +5,7 @@
 
 #include "../common/fileTypes.h"
 #include "qmessagebox.h"
-#include <iostream>
+
 
 #include "../ListParts/qfleet_list.h"
 
@@ -27,6 +27,8 @@
 #include "../ListPrinter/qfp_profilecard.h"
 
 #include "../Components/qfleet_data.h"
+
+#include "confirmdialog.h"
 
 
 
@@ -58,6 +60,17 @@ MainWindow::~MainWindow()
 
 void MainWindow::on_actionNew_triggered()
 {
+    if (!listWidget.isNull())
+    {
+        confirmDialog dialog(this);
+        dialog.setMsg("Discard list in progress?");
+        int ret = dialog.exec();
+
+        if (ret == QDialog::Rejected)
+        {
+            return;
+        }
+    }
 
     // if a list is already loaded, delete it
     if (listWidget)
@@ -97,6 +110,8 @@ void MainWindow::on_actionNew_triggered()
         msg.setText("Invalid list parameters");
         msg.setWindowTitle("Error");
         msg.exec();
+
+        setSelectionLabels("");
     }
 
 }
@@ -226,6 +241,19 @@ bool MainWindow::loadListFromFile()
 // hidden
 void MainWindow::on_actionLoad_triggered()
 {
+
+    if (!listWidget.isNull())
+    {
+        confirmDialog dialog(this);
+        dialog.setMsg("Discard list in progress?");
+        int ret = dialog.exec();
+
+        if (ret == QDialog::Rejected)
+        {
+            return;
+        }
+    }
+
     if (loadListFromFile())
     {
         // (-:
@@ -630,7 +658,7 @@ bool MainWindow::checkListValidity()
         return true;
     {
         confirmDialog msg(this);
-        msg.setMsg("One or more list validty checks has failed, print/save anyways?");
+        msg.setMsg("One or more list validity checks has failed, print/save anyways?");
         int r = msg.exec();
 
         if (r == QDialog::Accepted)
