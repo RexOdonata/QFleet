@@ -62,6 +62,8 @@ private slots:
 
     void on_customSpecialRuleButton_clicked();
 
+    void on_actionSave_Uncompressed_triggered();
+
 private:
     Ui::Shipyard *ui;
 

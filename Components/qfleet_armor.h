@@ -16,9 +16,9 @@ enum class armor
     none=5
 };
 
-inline uint qHash(armor key, uint seed)
+inline uint qHash(armor key, size_t seed)
 {
-    return qHash(static_cast<uint>(key),seed);
+    return qHash(static_cast<size_t>(key),seed);
 }
 
 

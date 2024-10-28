@@ -37,7 +37,8 @@ public:
         this->enumFromJson(in,   field_tonnage, tonnage);
         this->fieldFromJson(in,   field_special, specialRules);
         this->fieldFromJson(in,   field_uniqueSpecial, uniqueSpecial);
-        QFleet_Weapon::weaponArrayFromJson(in,   field_weapons, weapons);
+        //QFleet_Weapon::weaponArrayFromJson(in,   field_weapons, weapons);
+        this->fieldFromJson(in,   field_weapons, weapons);
         this->fieldFromJson(in,   field_launch, launch);
         this->fieldFromJson(in,   field_admiralDiscount, admiralDiscount);
     }
@@ -87,7 +88,8 @@ protected:
         this->enumToJson(json,   field_tonnage, tonnage);
         this->fieldToJson(json,   field_special,specialRules);
         this->fieldToJson(json,   field_uniqueSpecial, uniqueSpecial);
-        QFleet_Weapon::weaponArrayToJson(json,   field_weapons,weapons);
+        //QFleet_Weapon::weaponArrayToJson(json,   field_weapons,weapons);
+        this->fieldToJson(json, field_weapons, weapons);
         this->fieldToJson(json,   field_launch,launch);
         this->fieldToJson(json,   field_admiralDiscount,admiralDiscount);
 

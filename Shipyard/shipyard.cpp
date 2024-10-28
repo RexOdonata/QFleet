@@ -383,6 +383,10 @@ void Shipyard::on_saveShipButton_clicked()
             factions.push_back(QFleet_Faction(faction::SHALTARI));
         if (ui->resistanceCheck->isChecked())
             factions.push_back(QFleet_Faction(faction::RESISTANCE));
+        if (ui->bioficersCheck->isChecked())
+            factions.push_back(QFleet_Faction(faction::BIOFICERS));
+        if (ui->cfCheck->isChecked())
+            factions.push_back(QFleet_Faction(faction::CUSTOM));
 
         newShip.factions = factions;
 
@@ -495,6 +499,16 @@ void Shipyard::on_loadShipButton_clicked()
                 ui->resistanceCheck->setCheckState(Qt::Checked);
             else
                 ui->resistanceCheck->setCheckState(Qt::Unchecked);
+
+            if (factionMap.contains(faction::BIOFICERS))
+                ui->bioficersCheck->setCheckState(Qt::Checked);
+            else
+                ui->bioficersCheck->setCheckState(Qt::Unchecked);
+
+            if (factionMap.contains(faction::CUSTOM))
+                ui->cfCheck->setCheckState(Qt::Checked);
+            else
+                ui->cfCheck->setCheckState(Qt::Unchecked);
         }
     }
 }
@@ -526,6 +540,10 @@ void Shipyard::on_tonnageCombo_currentIndexChanged(int index)
         case 15:
         ui->admiralDiscountSpin->setValue(2);
         break;
+
+        case 30:
+            ui->admiralDiscountSpin->setValue(2);
+            break;
 
         default:
         ui->admiralDiscountSpin->setValue(0);
@@ -566,6 +584,41 @@ void Shipyard::on_customSpecialRuleButton_clicked()
     if (r == QDialog::Accepted)
     {
         specialWidget->add(result);
+    }
+}
+
+
+void Shipyard::on_actionSave_Uncompressed_triggered()
+{
+    QString verStr = ui->versionEdit->text();
+
+    QFleet_Data data(QDateTime::currentDateTime().date().toString(),verStr);
+
+    data.shipData = shipWidget->getData();
+
+    data.launchData = launchSelectWidget->getData();
+
+    QString filename = QFileDialog::getSaveFileName(this, "save content", QDir::currentPath(), getExtensionFilter(fileType_shipData()));
+
+    QJsonObject wrapperObj;
+
+    wrapperObj.insert(fileType_shipData(), data.toJson());
+
+    QJsonDocument json(wrapperObj);
+
+    QByteArray bytes = json.toJson(QJsonDocument::Indented);
+
+    QFile file(filename);
+
+    if (file.open(QIODevice::WriteOnly))
+    {
+        QDataStream out(&file);
+        out.writeRawData(bytes.constData(), bytes.size());
+        file.close();
+    }
+    else
+    {
+        qDebug() <<"Error opening output file" << file.errorString();
     }
 }
 

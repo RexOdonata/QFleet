@@ -8,7 +8,8 @@ const QString QFleet_Data::field_version="version";
 QFleet_Data::QFleet_Data(QJsonObject& json) :
     qft_component<QFleet_Data>("QFleet Source Data")
 {
-    QFleet_Ship_Shipyard::shipArrayFromJson(json, field_shipData, shipData);
+    //QFleet_Ship_Shipyard::shipArrayFromJson(json, field_shipData, shipData);
+    fieldFromJson(json, field_shipData,shipData);
 
     fieldFromJson(json, field_launchData, launchData);
 
@@ -51,7 +52,8 @@ QString QFleet_Data::getDateStr() const
 void QFleet_Data::impl_toJson(QJsonObject& json)
 {
 
-    QFleet_Ship_Shipyard::shipArrayToJson(json, field_shipData, shipData);
+    //QFleet_Ship_Shipyard::shipArrayToJson(json, field_shipData, shipData);
+    fieldToJson(json, field_shipData, shipData);
 
     fieldToJson(json, field_launchData, launchData);
 

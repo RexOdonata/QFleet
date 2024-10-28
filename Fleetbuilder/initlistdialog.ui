@@ -92,6 +92,26 @@
      </widget>
     </item>
     <item>
+     <widget class="QRadioButton" name="bioficersRadio">
+      <property name="text">
+       <string>Bioficers</string>
+      </property>
+      <attribute name="buttonGroup">
+       <string notr="true">factionRadioGroup</string>
+      </attribute>
+     </widget>
+    </item>
+    <item>
+     <widget class="QRadioButton" name="cfRadio">
+      <property name="text">
+       <string>Custom</string>
+      </property>
+      <attribute name="buttonGroup">
+       <string notr="true">factionRadioGroup</string>
+      </attribute>
+     </widget>
+    </item>
+    <item>
      <widget class="QPushButton" name="saveButton">
       <property name="text">
        <string>New List</string>

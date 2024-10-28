@@ -12,9 +12,9 @@ enum class assetType
     drop=3
 };
 
-inline uint qHash(assetType key, uint seed)
+inline uint qHash(assetType key, size_t seed)
 {
-    return qHash(static_cast<uint>(key),seed);
+    return qHash(static_cast<size_t>(key),seed);
 }
 
 class QFleet_AssetType : public qft_enum<QFleet_AssetType, assetType>

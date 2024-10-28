@@ -11,9 +11,9 @@ enum class optType
     SPECIAL=3
 };
 
-inline uint qHash(optType key, uint seed)
+inline uint qHash(optType key, size_t seed)
 {
-    return qHash(static_cast<uint>(key),seed);
+    return qHash(static_cast<size_t>(key),seed);
 }
 
 class QFleet_OptType : public qft_enum<QFleet_OptType, optType>

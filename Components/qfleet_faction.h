@@ -12,12 +12,14 @@ enum class faction
     SCOURGE=1,
     PHR=2,
     SHALTARI=3,
-    RESISTANCE=4
+    RESISTANCE=4,
+    BIOFICERS=5,
+    CUSTOM=6
 };
 
-inline uint qHash(faction key, uint seed)
+inline uint qHash(faction key, size_t seed)
 {
-    return qHash(static_cast<uint>(key),seed);
+    return qHash(static_cast<size_t>(key),seed);
 }
 
 
@@ -56,7 +58,7 @@ protected:
 
     QVector<QString> impl_getEnumStrings() const
     {
-        return QVector<QString>{val_ucm, val_scourge, val_phr, val_shaltari, val_resistance};
+        return QVector<QString>{val_ucm, val_scourge, val_phr, val_shaltari, val_resistance,val_bioficer, val_custom};
     }
 
 private:
@@ -66,6 +68,8 @@ private:
     const static QString val_phr;
     const static QString val_shaltari;
     const static QString val_resistance;
+    const static QString val_bioficer;
+    const static QString val_custom;
 
     const static QHash<QString, faction> s2e;
     const static QHash<faction, QString> e2s;

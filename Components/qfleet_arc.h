@@ -16,9 +16,9 @@ enum class arc
     R=7,
 };
 
-inline uint qHash(arc key, uint seed)
+inline uint qHash(arc key, size_t seed)
 {
-    return qHash(static_cast<uint>(key),seed);
+    return qHash(static_cast<size_t>(key),seed);
 }
 
 class QFleet_Arc : public qft_enum<QFleet_Arc, arc>

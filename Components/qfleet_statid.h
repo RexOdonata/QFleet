@@ -14,9 +14,9 @@ enum class statID
     PD=4
 };
 
-inline uint qHash(statID key, uint seed)
+inline uint qHash(statID key, size_t seed)
 {
-    return qHash(static_cast<uint>(key),seed);
+    return qHash(static_cast<size_t>(key),seed);
 }
 
 class QFleet_StatID : public qft_enum<QFleet_StatID, statID>

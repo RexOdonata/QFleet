@@ -15,9 +15,9 @@ enum class lock
 
 };
 
-inline uint qHash(lock key, uint seed)
+inline uint qHash(lock key, size_t seed)
 {
-    return qHash(static_cast<uint>(key),seed);
+    return qHash(static_cast<size_t>(key),seed);
 }
 
 class QFleet_Lock : public qft_enum<QFleet_Lock, lock>

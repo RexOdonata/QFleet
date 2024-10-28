@@ -92,6 +92,10 @@ QFleet_LaunchAsset Hangar::saveLaunch()
         factions.push_back(QFleet_Faction(faction::SCOURGE));
     if (ui->shaltari_check->isChecked())
         factions.push_back(QFleet_Faction(faction::SHALTARI));
+    if (ui->Bioficer_check->isChecked())
+        factions.push_back(QFleet_Faction(faction::BIOFICERS));
+    if (ui->CF_check->isChecked())
+        factions.push_back(QFleet_Faction(faction::CUSTOM));
 
     newAsset.factions = factions;
 
@@ -146,7 +150,9 @@ void Hangar::on_loadWeapon_button_clicked()
             {faction::PHR, Qt::CheckState::Unchecked},
             {faction::RESISTANCE, Qt::CheckState::Unchecked},
             {faction::SCOURGE, Qt::CheckState::Unchecked},
-            {faction::SHALTARI, Qt::CheckState::Unchecked}
+            {faction::SHALTARI, Qt::CheckState::Unchecked},
+            {faction::BIOFICERS, Qt::CheckState::Unchecked},
+            {faction::CUSTOM, Qt::CheckState::Unchecked}
         };
 
        for (auto& faction : launchValues.factions)
@@ -159,6 +165,8 @@ void Hangar::on_loadWeapon_button_clicked()
        ui->Resistance_check->setCheckState(factionMap[faction::RESISTANCE]);
        ui->Scourge_check->setCheckState(factionMap[faction::SCOURGE]);
        ui->shaltari_check->setCheckState(factionMap[faction::SHALTARI]);
+       ui->Bioficer_check->setCheckState(factionMap[faction::BIOFICERS]);
+       ui->CF_check->setCheckState(factionMap[faction::CUSTOM]);
 
        specialWidget->add(launchValues.special);
 

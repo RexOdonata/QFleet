@@ -13,9 +13,9 @@ enum class bgt
     FL=3
 };
 
-inline uint qHash(bgt key, uint seed)
+inline uint qHash(bgt key, size_t seed)
 {
-    return qHash(static_cast<uint>(key),seed);
+    return qHash(static_cast<size_t>(key),seed);
 }
 
 
